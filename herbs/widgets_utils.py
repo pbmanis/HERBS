@@ -4,7 +4,7 @@ import numpy as np
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-from pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtGui, QtCore, QtWidgets
 from .uuuuuu import hsv2rgb, gamma_line, get_qhsv_from_czi_hsv, make_hist_data
 from .styles import Styles
 
@@ -33,7 +33,7 @@ QLabel {
 
 
 color_combo_style = '''
-/*---------------------- QComboBox -----------------------*/
+/*---------------------- QtWidgets.QComboBox -----------------------*/
 QComboBox {
     border-left: 1px solid gray;
     border-right: 1px solid gray;
@@ -67,7 +67,7 @@ QComboBox:editable {
     background: transparent;
 }
 
-QComboBox:!editable, QComboBox::drop-down:editable {
+QComboBox:!editable, QtWidgets.QComboBox::drop-down:editable {
     background: transparent;
     border-left: 1px solid gray;
     border-right: 1px solid gray;
@@ -81,8 +81,8 @@ QComboBox:!editable, QComboBox::drop-down:editable {
 
 
 
-/* QComboBox gets the "on" state when the popup is open */
-QComboBox:!editable:on, QComboBox::drop-down:editable:on {
+/* QtWidgets.QComboBox gets the "on" state when the popup is open */
+QComboBox:!editable:on, QtWidgets.QComboBox::drop-down:editable:on {
     background: transparent;
 }
 
@@ -101,7 +101,7 @@ QComboBox::drop-down {
     border-left-width: 1px;
     border-left-color: transparent;
     border-left-style: solid; /* just a single line */
-    border-top-right-radius: 3px; /* same radius as the QComboBox */
+    border-top-right-radius: 3px; /* same radius as the QtWidgets.QComboBox */
     border-bottom-right-radius: 3px;
 }
 
@@ -159,33 +159,35 @@ text_combo_list_style = '''
 '''
 
 
-class BWSpin(QWidget):
+class BWSpin(QtWidgets.QWidget):
     def __init__(self, parent=None):
-        QWidget.__init__(self)
-        # wrap_frame = QFrame()
-        wrap_layout = QVBoxLayout(self)
+        QtWidgets.QWidget.__init__(self)
+        # wrap_frame = QtWidgets.QFrame()
+        wrap_layout = QtWidgets.QVBoxLayout(self)
         wrap_layout.setContentsMargins(0, 0, 0, 0)
         wrap_layout.setSpacing(0)
 
-        self.spin_nam = QLabel()
-        self.spin_nam.setAlignment(Qt.AlignCenter)
+        self.spin_nam = QtWidgets.QLabel()
+        self.spin_nam.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter
+)
         self.spin_val = QSpinBox()
 
         wrap_layout.addWidget(self.spin_nam)
         wrap_layout.addWidget(self.spin_val)
 
 
-class GammaSpin(QWidget):
+class GammaSpin(QtWidgets.QWidget):
     def __init__(self, parent=None):
-        QWidget.__init__(self)
-        # wrap_frame = QFrame()
-        wrap_layout = QVBoxLayout(self)
+        QtWidgets.QWidget.__init__(self)
+        # wrap_frame = QtWidgets.QFrame()
+        wrap_layout = QtWidgets.QVBoxLayout(self)
         wrap_layout.setContentsMargins(0, 0, 0, 0)
         wrap_layout.setSpacing(0)
 
-        self.spin_nam = QLabel()
-        self.spin_nam.setAlignment(Qt.AlignCenter)
-        self.spin_val = QDoubleSpinBox()
+        self.spin_nam = QtWidgets.QLabel()
+        self.spin_nam.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter
+)
+        self.spin_val = QtWidgets.QDoubleSpinBox()
         self.spin_val.setDecimals(2)
 
         wrap_layout.addWidget(self.spin_nam)
@@ -194,10 +196,10 @@ class GammaSpin(QWidget):
 
 class ColorCombo(QComboBox):
     def __init__(self, parent=None):
-        QComboBox.__init__(self)
+        QtWidgets.QComboBox.__init__(self)
         # styles = Styles()
         self.setStyleSheet(color_combo_style)
-        self.px = QPixmap(80, 30)
+        self.px = QtGui.QPixmap(80, 30)
         n_vals = ['Light Blue', 'Blue', 'Green', 'Lime Green', 'Yellow', 'Olive', 'Red', 'Dark Red', 'Violet', 'Purple',
                   'Orange', 'Dark Orange', 'Turquoise', 'Blue Green']
         h_vals = [199, 235, 103, 115, 60, 60, 5, 4, 295, 279, 21, 20, 181, 151]
@@ -210,15 +212,15 @@ class ColorCombo(QComboBox):
         self.hsv_color_list = []
         for i in range(len(h_vals)):
             self.hsv_color_list.append((h_vals[i] / 360., s_vals[i] / 255., v_vals[i] / 255.))
-            self.px.fill(QColor.fromHsv(h_vals[i], s_vals[i], v_vals[i]))
-            self.addItem(QIcon(self.px), n_vals[i])
+            self.px.fill(QtGui.QColor.fromHsv(h_vals[i], s_vals[i], v_vals[i]))
+            self.addItem(QtGui.QIcon(self.px), n_vals[i])
 
         combo_list = QListView(self)
         combo_list.setStyleSheet(text_combo_list_style)
         self.setView(combo_list)
 
 
-class ChannelSelector(QWidget):
+class ChannelSelector(QtWidgets.QWidget):
     class SignalProxy(QtCore.QObject):
         visChannels = QtCore.Signal(object, object)
         changeColors = QtCore.Signal(object, object)
@@ -228,25 +230,25 @@ class ChannelSelector(QWidget):
         self.sig_vis_channels = self._sigprox.visChannels
         self.sig_change_color = self._sigprox.changeColors
 
-        QWidget.__init__(self)
+        QtWidgets.QWidget.__init__(self)
 
         self.vis = True
         self.setFixedSize(60, 60)
         self.setStyleSheet(channel_button_style)
 
-        # wrap_frame = QFrame()
-        wrap_layout = QVBoxLayout(self)
+        # wrap_frame = QtWidgets.QFrame()
+        wrap_layout = QtWidgets.QVBoxLayout(self)
         wrap_layout.setContentsMargins(0, 0, 0, 0)
         wrap_layout.setSpacing(0)
 
-        self.vis_btn = QPushButton()
+        self.vis_btn = QtWidgets.QPushButton()
         self.vis_btn.setFixedSize(60, 30)
         self.vis_btn.setCheckable(True)
         self.vis_btn.clicked.connect(self.change_vis)
         self.color_combo = ColorCombo()
         self.color_combo.setFixedSize(60, 28)
         self.color_combo.currentIndexChanged.connect(self.selection_change)
-        self.color_label = QLabel()
+        self.color_label = QtWidgets.QLabel()
 
         self.color_label.setVisible(False)
 
@@ -282,8 +284,8 @@ class ChannelSelector(QWidget):
     def add_item(self, hsv_color):
         self.color_combo.hsv_color_list.append((hsv_color[0], hsv_color[1], hsv_color[2]))
         q_hsv = get_qhsv_from_czi_hsv(hsv_color)
-        self.color_combo.px.fill(QColor.fromHsv(q_hsv[0], q_hsv[1], q_hsv[2]))
-        self.color_combo.addItem(QIcon(self.color_combo.px), '')
+        self.color_combo.px.fill(QtGui.QColor.fromHsv(q_hsv[0], q_hsv[1], q_hsv[2]))
+        self.color_combo.addItem(QtGui.QIcon(self.color_combo.px), '')
         self.color_combo.setCurrentIndex(len(self.color_combo.hsv_color_list) - 1)
 
     def delete_item(self):

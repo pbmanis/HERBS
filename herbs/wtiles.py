@@ -16,7 +16,7 @@ QLabel {
 '''
 
 
-class LayerSettingDialog(QDialog):
+class LayerSettingDialog(QtWidgets.QDialog):
     def __init__(self, window_name, min_val, max_val, val):
         super().__init__()
 
@@ -25,7 +25,7 @@ class LayerSettingDialog(QDialog):
 
         self.val = val
 
-        self.val_slider = QSlider(Qt.Horizontal)
+        self.val_slider = QtWidgets.QSlider(QtCore.Qt.Orientation.Horizontal)
         self.val_slider.setValue(val)
         self.val_slider.setMinimum(min_val)
         self.val_slider.setMaximum(max_val)
@@ -40,11 +40,11 @@ class LayerSettingDialog(QDialog):
         self.val_spinbox.valueChanged.connect(self.value_changed)
 
         # ok button, used to close window
-        ok_btn = QDialogButtonBox(QDialogButtonBox.Ok)
+        ok_btn = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.StandardButton.OK)
         ok_btn.accepted.connect(self.accept)
 
         # add widget to layout
-        layout = QHBoxLayout()
+        layout = QtWidgets.QHBoxLayout()
         layout.addWidget(self.val_slider)
         layout.addWidget(self.val_spinbox)
         layout.addSpacing(10)
@@ -65,7 +65,7 @@ class LayerSettingDialog(QDialog):
         self.val_slider.setValue(val)
 
 
-class SliceSettingDialog(QDialog):
+class SliceSettingDialog(QtWidgets.QDialog):
     def __init__(self):
         super().__init__()
 
@@ -77,34 +77,34 @@ class SliceSettingDialog(QDialog):
         self.height = 0
         self.distance = 0
 
-        self.cut_combo = QComboBox()
+        self.cut_combo = QtWidgets.QComboBox()
         self.cut_combo.addItems(['Coronal', 'Sagittal', 'Horizontal'])
         self.cut_combo.currentIndexChanged.connect(self.cut_changed)
 
-        width_label = QLabel('Width (mm):')
-        height_label = QLabel('Height (mm):')
-        distance_label = QLabel('Distance w.r.t. Bregma (mm):')
+        width_label = QtWidgets.QLabel('Width (mm):')
+        height_label = QtWidgets.QLabel('Height (mm):')
+        distance_label = QtWidgets.QLabel('Distance w.r.t. Bregma (mm):')
 
-        self.width_val = QDoubleSpinBox()
+        self.width_val = QtWidgets.QDoubleSpinBox()
         self.width_val.setValue(0)
         self.width_val.setRange(-50, 50)
         self.width_val.valueChanged.connect(self.width_val_changed)
-        self.height_val = QDoubleSpinBox()
+        self.height_val = QtWidgets.QDoubleSpinBox()
         self.height_val.setValue(0)
         self.height_val.setRange(-50, 50)
         self.height_val.valueChanged.connect(self.height_val_changed)
-        self.distance_val = QDoubleSpinBox()
+        self.distance_val = QtWidgets.QDoubleSpinBox()
         self.distance_val.setValue(0)
         self.distance_val.setRange(-50, 50)
         self.distance_val.valueChanged.connect(self.distance_val_changed)
 
         # ok button, used to close window
-        ok_btn = QDialogButtonBox(QDialogButtonBox.Ok)
+        ok_btn = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.StandardButton.OK)
         ok_btn.accepted.connect(self.accept)
 
         # add widget to layout
-        content_frame = QFrame()
-        content_layout = QGridLayout(content_frame)
+        content_frame = QtWidgets.QFrame()
+        content_layout = QtWidgets.QGridLayout(content_frame)
         content_layout.addWidget(self.cut_combo, 0, 0, 1, 2)
         content_layout.addWidget(width_label, 1, 0, 1, 1)
         content_layout.addWidget(self.width_val, 1, 1, 1, 1)
@@ -113,7 +113,7 @@ class SliceSettingDialog(QDialog):
         content_layout.addWidget(distance_label, 3, 0, 1, 1)
         content_layout.addWidget(self.distance_val, 3, 1, 1, 1)
 
-        layout = QVBoxLayout()
+        layout = QtWidgets.QVBoxLayout()
         layout.addWidget(content_frame)
         layout.addWidget(ok_btn)
         self.setLayout(layout)
@@ -134,10 +134,10 @@ class SliceSettingDialog(QDialog):
         self.distance = self.distance_val.value()
 
 
-class QDoubleButton(QPushButton):
-    right_clicked = pyqtSignal()
-    left_clicked = pyqtSignal()
-    double_clicked = pyqtSignal()
+class QDoubleButton(QtWidgets.QPushButton):
+    right_clicked = QtCore.pyqtSignal()
+    left_clicked = QtCore.pyqtSignal()
+    double_clicked = QtCore.pyqtSignal()
 
     def __init__(self, *args, **kwargs):
         super(QDoubleButton, self).__init__(*args, **kwargs)
@@ -181,12 +181,12 @@ class QDoubleButton(QPushButton):
         self.is_double = False
 
 
-class QLabelClickable(QLabel):
-    # doubleClicked = pyqtSignal(object)
-    clicked = pyqtSignal(object)
+class QtWidgets.QLabelClickable(QtWidgets.QLabel):
+    # doubleClicked = QtCore.pyqtSignal(object)
+    clicked = QtCore.pyqtSignal(object)
 
     def __init__(self, parent=None):
-        super(QLabelClickable, self).__init__(parent)
+        super(QtWidgets.QLabelClickable, self).__init__(parent)
 
     def mousePressEvent(self, event):
         self.ultimo = 'Click'
@@ -208,8 +208,8 @@ class QLabelClickable(QLabel):
             self.update()
 
 
-class QFrameClickable(QFrame):
-    clicked = pyqtSignal(object)
+class QtWidgets.QFrameClickable(QFrame):
+    clicked = QtCore.pyqtSignal(object)
 
     def __init__(self, parent=None):
         super(QFrameClickable, self).__init__(parent)
@@ -242,10 +242,10 @@ class QFrameClickable(QFrame):
 
 
 class LineEditEntered(QLineEdit):
-    sig_return_pressed = pyqtSignal()
+    sig_return_pressed = QtCore.pyqtSignal()
 
     def __init__(self):
-        QLineEdit.__init__(self)
+       QtWidgets.QLineEdit.__init__(self)
 
     def keyPressEvent(self, event):
         super(LineEditEntered, self).keyPressEvent(event)

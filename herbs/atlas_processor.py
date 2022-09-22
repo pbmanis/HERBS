@@ -10,15 +10,13 @@ import nibabel as nib
 import numpy as np
 import pandas as pd
 import cv2
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
-from PyQt5.QtWidgets import *
+from pyqtgraph.Qt import QtWidgets, QtGui, QtCore
 
 from .uuuuuu import make_contour_img, render_volume, render_small_volume
 from .atlas_loader import process_atlas_raw_data, AtlasLoader
 
 
-class AtlasProcessor(QDialog):
+class AtlasProcessor(QtWidgets.QDialog):
     def __init__(self):
         super().__init__()
         self.setStyleSheet('color: black;')
@@ -34,70 +32,70 @@ class AtlasProcessor(QDialog):
         self.voxel_size = 0
         self.factor_val = 2
 
-        layout = QGridLayout(self)
+        layout = QtWidgets.QGridLayout(self)
 
-        data_label = QLabel('Volume File:')
-        self.data_btn = QPushButton('Select File')
-        self.data_line = QLineEdit()
+        data_label = QtWidgets.QLabel('Volume File:')
+        self.data_btn = QtWidgets.QPushButton('Select File')
+        self.data_line = QtWidgets.QLineEdit()
 
-        seg_label = QLabel('Segmentation File: ')
-        self.seg_btn = QPushButton('Select File')
-        self.seg_line = QLineEdit()
+        seg_label = QtWidgets.QLabel('Segmentation File: ')
+        self.seg_btn = QtWidgets.QPushButton('Select File')
+        self.seg_line = QtWidgets.QLineEdit()
 
-        mask_label = QLabel('Mask File (optional): ')
-        self.mask_btn = QPushButton('Select File')
-        self.mask_line = QLineEdit()
+        mask_label = QtWidgets.QLabel('Mask File (optional): ')
+        self.mask_btn = QtWidgets.QPushButton('Select File')
+        self.mask_line = QtWidgets.QLineEdit()
 
-        labinf_label = QLabel('Label Information File:')
-        self.labinf_btn = QPushButton('Select File')
-        self.labinf_line = QLineEdit()
+        labinf_label = QtWidgets.QLabel('Label Information File:')
+        self.labinf_btn = QtWidgets.QPushButton('Select File')
+        self.labinf_line = QtWidgets.QLineEdit()
 
-        valid_input = QIntValidator(0, 99999)
+        valid_input = QtGui.QIntValidator(0, 99999)
 
-        float_input = QRegExpValidator(QRegExp(r'[0-9].+'))
+        float_input = QtGui.QRegularExpressionValidator(QtCore.QRegularExpression(r'[0-9].+'))
         # float_input = QDoubleValidator(0.0, 100.0, 6)
 
-        bregma_label = QLabel('Bregma Coordinates (voxel): ')
-        self.bregma_input1 = QLineEdit('0')
+        bregma_label = QtWidgets.QLabel('Bregma Coordinates (voxel): ')
+        self.bregma_input1 = QtWidgets.QLineEdit('0')
         self.bregma_input1.setValidator(valid_input)
-        self.bregma_input2 = QLineEdit('0')
+        self.bregma_input2 = QtWidgets.QLineEdit('0')
         self.bregma_input2.setValidator(valid_input)
-        self.bregma_input3 = QLineEdit('0')
+        self.bregma_input3 = QtWidgets.QLineEdit('0')
         self.bregma_input3.setValidator(valid_input)
 
-        lambda_label = QLabel('Lambda Coordinates (voxel): ')
-        self.lambda_input1 = QLineEdit('0')
+        lambda_label = QtWidgets.QLabel('Lambda Coordinates (voxel): ')
+        self.lambda_input1 = QtWidgets.QLineEdit('0')
         self.lambda_input1.setValidator(valid_input)
-        self.lambda_input2 = QLineEdit('0')
+        self.lambda_input2 = QtWidgets.QLineEdit('0')
         self.lambda_input2.setValidator(valid_input)
-        self.lambda_input3 = QLineEdit('0')
+        self.lambda_input3 = QtWidgets.QLineEdit('0')
         self.lambda_input3.setValidator(valid_input)
 
-        vox_size_label = QLabel('Voxel Size (um): ')
-        self.vox_size_input1 = QLineEdit('0')
+        vox_size_label = QtWidgets.QLabel('Voxel Size (um): ')
+        self.vox_size_input1 = QtWidgets.QLineEdit('0')
         self.vox_size_input1.setValidator(float_input)
 
-        factor_label = QLabel('Factor (voxel): ')
-        self.factor_input1 = QLineEdit('2')
+        factor_label = QtWidgets.QLabel('Factor (voxel): ')
+        self.factor_input1 = QtWidgets.QLineEdit('2')
         self.factor_input1.setValidator(valid_input)
 
         selector_vals = ['Left --> Right', 'Right --> Left',
                          'Superior --> Inferior', 'Inferior --> Superior',
                          'Posterior --> Anterior', 'Anterior --> Posterior']
 
-        # x_axis_label = QLabel('x-axis: ')
-        # self.x_axis_combo = QComboBox()
+        # x_axis_label = QtWidgets.QLabel('x-axis: ')
+        # self.x_axis_combo = QtWidgets.QComboBox()
         # self.x_axis_combo.addItems(selector_vals)
         #
-        # y_axis_label = QLabel('y-axis: ')
-        # self.y_axis_combo = QComboBox()
+        # y_axis_label = QtWidgets.QLabel('y-axis: ')
+        # self.y_axis_combo = QtWidgets.QComboBox()
         # self.y_axis_combo.addItems(selector_vals)
         #
-        # z_axis_label = QLabel('z-axis: ')
-        # self.z_axis_combo = QComboBox()
+        # z_axis_label = QtWidgets.QLabel('z-axis: ')
+        # self.z_axis_combo = QtWidgets.QComboBox()
         # self.z_axis_combo.addItems(selector_vals)
 
-        self.process_btn = QPushButton('Start Process')
+        self.process_btn = QtWidgets.QPushButton('Start Process')
 
         layout.addWidget(data_label, 0, 0, 1, 1)
         layout.addWidget(self.data_btn, 0, 1, 1, 1)
@@ -153,36 +151,36 @@ class AtlasProcessor(QDialog):
 
     def get_data_file(self):
         if self.folder_path is not None:
-            data_path = QFileDialog.getOpenFileName(self, 'Select Atlas Volume File', self.folder_path)
+            data_path = QtWidgets.QFileDialog.getOpenFileName(self, 'Select Atlas Volume File', self.folder_path)
         else:
-            data_path = QFileDialog.getOpenFileName(self, 'Select Atlas Volume File')
+            data_path = QtWidgets.QFileDialog.getOpenFileName(self, 'Select Atlas Volume File')
             self.get_folder_path(data_path[0])
         self.data_local = os.path.basename(data_path[0])
         self.data_line.setText(self.data_local)
 
     def get_seg_file(self):
         if self.folder_path is not None:
-            seg_path = QFileDialog.getOpenFileName(self, 'Select Segmentation File', self.folder_path)
+            seg_path = QtWidgets.QFileDialog.getOpenFileName(self, 'Select Segmentation File', self.folder_path)
         else:
-            seg_path = QFileDialog.getOpenFileName(self, 'Select Segmentation File')
+            seg_path = QtWidgets.QFileDialog.getOpenFileName(self, 'Select Segmentation File')
             self.get_folder_path(seg_path[0])
         self.segmentation_local = os.path.basename(seg_path[0])
         self.seg_line.setText(self.segmentation_local)
 
     def get_mask_file(self):
         if self.folder_path is not None:
-            mask_path = QFileDialog.getOpenFileName(self, 'Select Mask File', self.folder_path)
+            mask_path = QtWidgets.QFileDialog.getOpenFileName(self, 'Select Mask File', self.folder_path)
         else:
-            mask_path = QFileDialog.getOpenFileName(self, 'Select Mask File')
+            mask_path = QtWidgets.QFileDialog.getOpenFileName(self, 'Select Mask File')
             self.get_folder_path(mask_path[0])
         self.mask_local = os.path.basename(mask_path[0])
         self.mask_line.setText(self.mask_local)
 
     def get_info_file(self):
         if self.folder_path is not None:
-            self.info_path = QFileDialog.getOpenFileName(self, 'Select Label Information File', self.folder_path)
+            self.info_path = QtWidgets.QFileDialog.getOpenFileName(self, 'Select Label Information File', self.folder_path)
         else:
-            self.info_path = QFileDialog.getOpenFileName(self, 'Select Label Information File')
+            self.info_path = QtWidgets.QFileDialog.getOpenFileName(self, 'Select Label Information File')
             self.get_folder_path(self.info_path[0])
         self.labinf_line.setText(os.path.basename(self.info_path[0]))
 

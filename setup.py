@@ -21,7 +21,7 @@ if sys.version_info.minor == 10 and sys.version_info.micro != 5:
     is_problematic = True
 
 if is_problematic:
-    raise RuntimeError("Python version >= 3.8.10 < 3.10.5 / 3.9.0 required.")
+    raise RuntimeError("Python version >= 3.8.10 <= 3.10.7 / 3.9.0 required.")
 
 # Utility function to read the README file.
 def read(fname):
@@ -49,7 +49,8 @@ Operating System :: MacOS
 """
 
 REQUIRES = """
-PyQt5 == 5.14.2
+aicspylibczi >= 3.0.3
+PyQt6 == 6.3.0
 pyqtgraph >= 0.12.3
 PyOpenGL >= 3.1.5
 QtRangeSlider == 0.1.5
@@ -61,10 +62,10 @@ requests >= 2.26.0
 nibabel >= 3.2.1
 pynrrd >= 0.4.3
 tifffile >= 2021.11.2
-aicspylibczi >= 3.0.3
-pandas >= 1.3.5
+
+pandas >= 1.5.0
 natsort >= 8.0.2
-imagecodecs >= 2022.2.22
+
 h5py >= 3.7.0
 tables >= 3.7.0
 """

@@ -2,12 +2,10 @@ import os
 import sys
 import numpy as np
 import pyqtgraph as pg
-from pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtGui, QtCore, QtWidgets
 import pyqtgraph.functions as fn
 import pyqtgraph.opengl as gl
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
+
 
 from .image_stacks import SliceStack
 from .slice_stacks import SliceStacks
@@ -121,48 +119,48 @@ QPushButton:checked{
 '''
 
 
-class PageController(QWidget):
-    class SignalProxy(QObject):
-        sigPageChanged = pyqtSignal(object)
+class PageController(((QtWidgets.QWidget))):
+    class SignalProxy(QtCore.QObject):
+        sigPageChanged = QtCore.pyqtSignal(object)
 
     def __init__(self):
         self._sigprox = PageController.SignalProxy()
         self.sig_page_changed = self._sigprox.sigPageChanged
 
-        QWidget.__init__(self)
+        QtWidgets.QWidget.__init__(self)
 
         self.setStyleSheet(page_control_style)
 
         self.max_val = None
 
-        self.page_slider = QSlider(Qt.Horizontal)
+        self.page_slider = QtWidgets.QSlider(QtCore.Qt.Orientation.Horizontal)
         self.page_slider.setMinimum(0)
         self.page_slider.valueChanged.connect(self.slider_value_changed)
 
-        self.page_label = QLabel()
+        self.page_label = QtWidgets.QLabel()
         self.page_label.setFixedSize(50, 20)
 
-        self.page_left_btn = QPushButton()
+        self.page_left_btn = QtWidgets.QPushButton()
         self.page_left_btn.setIcon(QtGui.QIcon("icons/backward.svg"))
         self.page_left_btn.setIconSize(QtCore.QSize(16, 16))
         self.page_left_btn.clicked.connect(self.left_btn_clicked)
 
-        self.page_right_btn = QPushButton()
+        self.page_right_btn = QtWidgets.QPushButton()
         self.page_right_btn.setIcon(QtGui.QIcon("icons/forward.svg"))
         self.page_right_btn.setIconSize(QtCore.QSize(16, 16))
         self.page_right_btn.clicked.connect(self.right_btn_clicked)
 
-        self.page_fast_left_btn = QPushButton()
+        self.page_fast_left_btn = QtWidgets.QPushButton()
         self.page_fast_left_btn.setIcon(QtGui.QIcon("icons/fast_backward.svg"))
         self.page_fast_left_btn.setIconSize(QtCore.QSize(16, 16))
         self.page_fast_left_btn.clicked.connect(self.fast_left_btn_clicked)
 
-        self.page_fast_right_btn = QPushButton()
+        self.page_fast_right_btn = QtWidgets.QPushButton()
         self.page_fast_right_btn.setIcon(QtGui.QIcon("icons/fast_forward.svg"))
         self.page_fast_right_btn.setIconSize(QtCore.QSize(16, 16))
         self.page_fast_right_btn.clicked.connect(self.fast_right_btn_clicked)
 
-        page_ctrl_layout = QHBoxLayout()
+        page_ctrl_layout = QtWidgets.QHBoxLayout()
         page_ctrl_layout.setSpacing(0)
         page_ctrl_layout.setContentsMargins(10, 5, 10, 5)
         page_ctrl_layout.addWidget(self.page_left_btn)
@@ -215,27 +213,27 @@ class PageController(QWidget):
         self.set_val(val)
 
 
-class SliceRotation(QWidget):
+class SliceRotation(QtWidgets.QWidget):
 
-    class SignalProxy(QObject):
-        sigSliceRotated = pyqtSignal(object)  # id
+    class SignalProxy(QtCore.QObject):
+        sigSliceRotated = QtCore.pyqtSignal(object)  # id
 
     def __init__(self):
         self._sigprox = SliceRotation.SignalProxy()
         self.sig_slice_rotated = self._sigprox.sigSliceRotated
 
-        QWidget.__init__(self)
+        QtWidgets.QWidget.__init__(self)
 
         self.prec = 0.01
         self.rot_range = 30
         self.n_steps = int(self.rot_range / self.prec)
 
-        self.h_slider = QSlider(Qt.Horizontal)
+        self.h_slider = QtWidgets.QSlider(QtCore.Qt.Orientation.Horizontal)
         self.h_slider.sliderMoved.connect(self.h_slider_changed)
         self.h_slider.setValue(0)
         self.h_slider.setRange(-self.n_steps, self.n_steps)
 
-        self.h_spinbox = QDoubleSpinBox()
+        self.h_spinbox = QtWidgets.QDoubleSpinBox()
         self.h_spinbox.lineEdit().setStyleSheet(atlas_tab_spinbox_textedit_style)
         self.h_spinbox.valueChanged.connect(self.h_spinbox_changed)
         self.h_spinbox.setDecimals(2)
@@ -244,12 +242,12 @@ class SliceRotation(QWidget):
         self.h_spinbox.setSingleStep(self.prec)
         self.h_spinbox.setMinimumSize(50, 20)
 
-        self.v_slider = QSlider(Qt.Horizontal)
+        self.v_slider = QtWidgets.QSlider(QtCore.Qt.Orientation.Horizontal)
         self.v_slider.sliderMoved.connect(self.v_slider_changed)
         self.v_slider.setValue(0)
         self.v_slider.setRange(-self.n_steps, self.n_steps)
 
-        self.v_spinbox = QDoubleSpinBox()
+        self.v_spinbox = QtWidgets.QDoubleSpinBox()
         self.v_spinbox.lineEdit().setStyleSheet(atlas_tab_spinbox_textedit_style)
         self.v_spinbox.valueChanged.connect(self.v_spinbox_changed)
         self.v_spinbox.setDecimals(2)
@@ -280,18 +278,20 @@ class SliceRotation(QWidget):
         self.sig_slice_rotated.emit(np.deg2rad([self.h_spinbox.value(), self.v_spinbox.value()]))
 
 
-class ImageLabel(QWidget):
+class ImageLabel(QtWidgets.QWidget):
     def __init__(self, img, title):
-        super(QWidget, self).__init__()
-        layout = QHBoxLayout(self)
-        self.label3 = QLabel(self)
-        self.title = QLabel(title)
-        self.pixmap = QPixmap(img)
-        self.pixmap = self.pixmap.scaled(QSize(20, 10))
+        super(QtWidgets.QWidget, self).__init__()
+        layout = QtWidgets.QHBoxLayout(self)
+        self.label3 = QtWidgets.QLabel(self)
+        self.title = QtWidgets.QLabel(title)
+        self.pixmap = QtGui.QPixmap(img)
+        self.pixmap = self.pixmap.scaled(QtCore.QSize(20, 10))
         self.label3.setPixmap(self.pixmap)
-        self.label3.setAlignment(Qt.AlignCenter)
+        self.label3.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter
+)
         self.title.setMinimumHeight(self.pixmap.height())
-        self.title.setAlignment(Qt.AlignCenter)
+        self.title.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter
+)
         layout.addWidget(self.label3)
         layout.addWidget(self.title)
         self.label3.setStyleSheet('background-color: transparent;')
@@ -304,16 +304,16 @@ class ImageLabel(QWidget):
         layout.addStretch()
 
 
-class RotationBtn(QPushButton):
+class RotationBtn(QtWidgets.QPushButton):
     def __init__(self, icon_path):
-        super(QPushButton, self).__init__()
+        super(QtWidgets.QPushButton, self).__init__()
         self.setStyleSheet(slice_label_btn_style)
         self.setFixedSize(15, 15)
-        self.setIcon(QIcon(icon_path))
-        self.setIconSize(QSize(15, 15))
+        self.setIcon(QtGui.QIcon(icon_path))
+        self.setIconSize(QtCore.QSize(15, 15))
 
 
-class AtlasView(QObject):
+class AtlasView(QtCore.QObject):
     """
     A collection of user interface elements bound together:
 
@@ -321,7 +321,7 @@ class AtlasView(QObject):
     """
     def __init__(self):
         super(AtlasView, self).__init__()
-        QObject.__init__(self)
+        QtCore.QObject.__init__(self)
 
         self.atlas_data = None
         self.atlas_label = None
@@ -452,16 +452,17 @@ class AtlasView(QObject):
 
 
         # radio buttons
-        self.radio_group = QFrame()
+        self.radio_group = QtWidgets.QFrame()
         self.radio_group.setFixedHeight(50)
         self.radio_group.setStyleSheet('QFrame{border: 1px solid gray; border-radius: 3px}')
-        radio_group_layout = QHBoxLayout(self.radio_group)
+        radio_group_layout = QtWidgets.QHBoxLayout(self.radio_group)
         radio_group_layout.setContentsMargins(5, 0, 5, 0)
-        radio_group_layout.setAlignment(Qt.AlignCenter)
-        self.section_rabnt1 = QRadioButton('Coronal')
+        radio_group_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter
+)
+        self.section_rabnt1 = QtWidgets.QRadioButton('Coronal')
         self.section_rabnt1.setChecked(True)
-        self.section_rabnt2 = QRadioButton('Sagittal')
-        self.section_rabnt3 = QRadioButton('Horizontal')
+        self.section_rabnt2 = QtWidgets.QRadioButton('Sagittal')
+        self.section_rabnt3 = QtWidgets.QRadioButton('Horizontal')
         self.section_rabnt1.setStyleSheet('color: white')
         self.section_rabnt2.setStyleSheet('color: white')
         self.section_rabnt3.setStyleSheet('color: white')
@@ -479,15 +480,15 @@ class AtlasView(QObject):
 
 
         # opacity
-        atlas_op_label = QLabel('Opacity: ')
-        self.atlas_op_slider = QSlider(QtCore.Qt.Horizontal)
+        atlas_op_label = QtWidgets.QLabel('Opacity: ')
+        self.atlas_op_slider = QtWidgets.QSlider(QtCore.Qt.Horizontal)
         self.atlas_op_slider.setValue(100)
         self.atlas_op_slider.setMinimum(0)
         self.atlas_op_slider.setMaximum(100)
         self.atlas_op_slider.sliderMoved.connect(self.change_opacity_spinbox_value)
         # self.atlas_op_slider.valueChanged.connect(self.sig_rescale_slider)
 
-        self.atlas_op_spinbox = QDoubleSpinBox()
+        self.atlas_op_spinbox = QtWidgets.QDoubleSpinBox()
         self.atlas_op_spinbox.lineEdit().setStyleSheet(atlas_tab_spinbox_textedit_style)
         self.atlas_op_spinbox.setValue(1)
         self.atlas_op_spinbox.setRange(0, 1)
@@ -495,8 +496,8 @@ class AtlasView(QObject):
         self.atlas_op_spinbox.setMinimumSize(50, 20)
         self.atlas_op_spinbox.valueChanged.connect(self.opacity_changed)
 
-        opacity_wrap = QFrame()
-        opacity_layout = QHBoxLayout(opacity_wrap)
+        opacity_wrap = QtWidgets.QFrame()
+        opacity_layout = QtWidgets.QHBoxLayout(opacity_wrap)
         opacity_layout.setSpacing(2)
         opacity_layout.setContentsMargins(0, 0, 0, 0)
         opacity_layout.addWidget(atlas_op_label)
@@ -504,26 +505,26 @@ class AtlasView(QObject):
         opacity_layout.addWidget(self.atlas_op_spinbox)
 
         # boundary
-        self.show_boundary_btn = QPushButton('Show Boundary')
+        self.show_boundary_btn = QtWidgets.QPushButton('Show Boundary')
         self.show_boundary_btn.setStyleSheet(sidebar_button_style)
         self.show_boundary_btn.setCheckable(True)
 
         #
-        self.navigation_btn = QPushButton('Navigation')
+        self.navigation_btn = QtWidgets.QPushButton('Navigation')
         self.navigation_btn.setStyleSheet(sidebar_button_style)
         self.navigation_btn.setCheckable(True)
         self.navigation_btn.clicked.connect(self.navigation_btn_clicked)
 
         # coronal section control
-        coronal_rotation_wrap = QGroupBox('Coronal Section')
+        coronal_rotation_wrap = QtWidgets.QGroupBox('Coronal Section')
         coronal_rotation_wrap.setStyleSheet(atlas_rotation_gb_style)
-        coronal_wrap_layout = QGridLayout(coronal_rotation_wrap)
+        coronal_wrap_layout = QtWidgets.QGridLayout(coronal_rotation_wrap)
         coronal_wrap_layout.setContentsMargins(0, 0, 0, 0)
         coronal_wrap_layout.setSpacing(10)
 
-        c_section_label_img = QPixmap('icons/sidebar/c_section.png')
-        c_section_label_img = c_section_label_img.scaled(QSize(40, 40))
-        c_section_label = QLabel('Tilt Z: ')
+        c_section_label_img = QtGui.QPixmap('icons/sidebar/c_section.png')
+        c_section_label_img = c_section_label_img.scaled(QtCore.QSize(40, 40))
+        c_section_label = QtWidgets.QLabel('Tilt Z: ')
         c_section_label.setPixmap(c_section_label_img)
 
         c_lr_btn = RotationBtn("icons/sidebar/rotation_horizontal.svg")
@@ -538,15 +539,15 @@ class AtlasView(QObject):
         coronal_wrap_layout.addWidget(self.crotation_ctrl.v_spinbox, 1, 3, 1, 1)
 
         # sagital section control
-        sagital_rotation_wrap = QGroupBox('Sagittal Section')
+        sagital_rotation_wrap = QtWidgets.QGroupBox('Sagittal Section')
         sagital_rotation_wrap.setStyleSheet(atlas_rotation_gb_style)
-        sagital_wrap_layout = QGridLayout(sagital_rotation_wrap)
+        sagital_wrap_layout = QtWidgets.QGridLayout(sagital_rotation_wrap)
         sagital_wrap_layout.setContentsMargins(0, 0, 0, 0)
         sagital_wrap_layout.setSpacing(10)
 
-        s_section_label_img = QPixmap('icons/sidebar/s_section.png')
-        s_section_label_img = s_section_label_img.scaled(QSize(40, 40))
-        s_section_label = QLabel()
+        s_section_label_img = QtGui.QPixmap('icons/sidebar/s_section.png')
+        s_section_label_img = s_section_label_img.scaled(QtCore.QSize(40, 40))
+        s_section_label = QtWidgets.QLabel()
         s_section_label.setPixmap(s_section_label_img)
 
         s_lr_btn = RotationBtn("icons/sidebar/rotation_horizontal.svg")
@@ -561,15 +562,15 @@ class AtlasView(QObject):
         sagital_wrap_layout.addWidget(self.srotation_ctrl.v_spinbox, 1, 3, 1, 1)
 
         # horizontal section control
-        horizontal_rotation_wrap = QGroupBox('Horizontal Section')
+        horizontal_rotation_wrap = QtWidgets.QGroupBox('Horizontal Section')
         horizontal_rotation_wrap.setStyleSheet(atlas_rotation_gb_style)
-        horizontal_wrap_layout = QGridLayout(horizontal_rotation_wrap)
+        horizontal_wrap_layout = QtWidgets.QGridLayout(horizontal_rotation_wrap)
         horizontal_wrap_layout.setContentsMargins(0, 0, 0, 0)
         horizontal_wrap_layout.setSpacing(10)
 
-        h_section_label_img = QPixmap('icons/sidebar/h_section.png')
-        h_section_label_img = h_section_label_img.scaled(QSize(40, 40))
-        h_section_label = QLabel()
+        h_section_label_img = QtGui.QPixmap('icons/sidebar/h_section.png')
+        h_section_label_img = h_section_label_img.scaled(QtCore.QSize(40, 40))
+        h_section_label = QtWidgets.QLabel()
         h_section_label.setPixmap(h_section_label_img)
 
         h_lr_btn = RotationBtn("icons/sidebar/rotation_horizontal.svg")
@@ -583,8 +584,8 @@ class AtlasView(QObject):
         horizontal_wrap_layout.addWidget(self.hrotation_ctrl.v_slider, 1, 2, 1, 1)
         horizontal_wrap_layout.addWidget(self.hrotation_ctrl.v_spinbox, 1, 3, 1, 1)
 
-        self.sidebar_wrap = QFrame()
-        sidebar_wrap_layout = QVBoxLayout(self.sidebar_wrap)
+        self.sidebar_wrap = QtWidgets.QFrame()
+        sidebar_wrap_layout = QtWidgets.QVBoxLayout(self.sidebar_wrap)
         sidebar_wrap_layout.setSpacing(0)
         sidebar_wrap_layout.addWidget(self.radio_group)
         sidebar_wrap_layout.addSpacing(10)

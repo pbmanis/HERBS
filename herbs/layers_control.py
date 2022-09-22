@@ -3,9 +3,7 @@ import sys
 import numpy as np
 import pyqtgraph as pg
 import pyqtgraph.functions as fn
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
+from pyqtgraph.Qt import QtCore, QtGui, QtWidgets
 
 import cv2
 
@@ -84,13 +82,13 @@ QLineEdit {
 '''
 
 
-class SingleLayer(QWidget):
-    sig_clicked = pyqtSignal(object)
-    eye_clicked = pyqtSignal(object)
-    sig_delete = pyqtSignal(object)
+class SingleLayer(QtWidgets.QWidget):
+    sig_clicked = QtCore.pyqtSignal(object)
+    eye_clicked = QtCore.pyqtSignal(object)
+    sig_delete = QtCore.pyqtSignal(object)
 
     def __init__(self, parent=None, layer_id=0, link='None'):
-        QWidget.__init__(self, parent=parent)
+        QtWidgets.QWidget.__init__(self, parent=parent)
 
         self.inactive_style = 'QFrame{background-color:rgb(83, 83, 83); border: 1px solid rgb(128, 128, 128);}'
         self.active_style = 'QFrame{background-color:rgb(107, 107, 107); border: 1px solid rgb(128, 128, 128);}'
@@ -101,48 +99,48 @@ class SingleLayer(QWidget):
         self.active = True
         self.vis = True
         self.thumbnail_data = None
-        self.eye_button = QPushButton()
-        self.eye_button.setFixedSize(QSize(30, 60))
+        self.eye_button = QtWidgets.QPushButton()
+        self.eye_button.setFixedSize(QtCore.QSize(30, 60))
         self.eye_button.setStyleSheet(eye_button_style)
         self.eye_button.setCheckable(True)
-        eye_icon = QIcon()
-        eye_icon.addPixmap(QPixmap("icons/layers/eye_on.png"), QIcon.Normal, QIcon.Off)
-        eye_icon.addPixmap(QPixmap("icons/layers/eye_off.png"), QIcon.Normal, QIcon.On)
+        eye_icon = QtGui.QIcon()
+        eye_icon.addPixmap(QtGui.QPixmap("icons/layers/eye_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        eye_icon.addPixmap(QtGui.QPixmap("icons/layers/eye_off.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
         self.eye_button.setIcon(eye_icon)
-        self.eye_button.setIconSize(QSize(20, 20))
+        self.eye_button.setIconSize(QtCore.QSize(20, 20))
         self.eye_button.clicked.connect(self.eye_on_click)
 
-        self.tbnail = QPushButton()
+        self.tbnail = QtWidgets.QPushButton()
         self.tbnail.setStyleSheet('border:1px solid black; border-radius:0px;')
         self.tbnail.setFixedWidth(50)
         self.tbnail.clicked.connect(self.on_click)
 
-        self.text_btn = QPushButton()
+        self.text_btn = QtWidgets.QPushButton()
         self.text_btn.setStyleSheet(text_btn_style)
         self.text_btn.setText(link)
-        self.text_btn.setFixedSize(QSize(140, 60))
+        self.text_btn.setFixedSize(QtCore.QSize(140, 60))
         self.text_btn.clicked.connect(self.on_click)
         # self.text_btn.double_clicked.connect(self.on_doubleclick)
 
-        # self.l_line_edit = QLineEdit()
+        # self.l_line_edit =QtWidgets.QLineEdit()
         # self.l_line_edit.setStyleSheet(line_edit_style)
-        # self.l_line_edit.setFixedSize(QSize(140, 60))
+        # self.l_line_edit.setFixedSize(QtCore.QSize(140, 60))
         # self.l_line_edit.editingFinished.connect(self.enter_pressed)
         # self.l_line_edit.setVisible(False)
 
-        self.trash_button = QPushButton()
-        self.trash_button.setFixedSize(QSize(25, 60))
+        self.trash_button = QtWidgets.QPushButton()
+        self.trash_button.setFixedSize(QtCore.QSize(25, 60))
         self.trash_button.setStyleSheet(eye_button_style)
-        self.trash_button.setIcon(QIcon('icons/sidebar/trash.png'))
-        self.trash_button.setIconSize(QSize(20, 20))
+        self.trash_button.setIcon(QtGui.QIcon('icons/sidebar/trash.png'))
+        self.trash_button.setIconSize(QtCore.QSize(20, 20))
         self.trash_button.clicked.connect(self.on_delete)
 
-        self.inner_frame = QFrame()
+        self.inner_frame = QtWidgets.QFrame()
         self.inner_frame.setStyleSheet(self.active_style)
-        self.inner_layout = QHBoxLayout(self.inner_frame)
+        self.inner_layout = QtWidgets.QHBoxLayout(self.inner_frame)
         self.inner_layout.setContentsMargins(0, 0, 0, 0)
         self.inner_layout.setSpacing(0)
-        self.inner_layout.setAlignment(Qt.AlignVCenter)
+        self.inner_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.inner_layout.addWidget(self.eye_button)
         self.inner_layout.addSpacing(5)
         self.inner_layout.addWidget(self.tbnail)
@@ -152,10 +150,10 @@ class SingleLayer(QWidget):
         self.inner_layout.addWidget(self.trash_button)
         self.inner_layout.addStretch()
 
-        outer_layout = QHBoxLayout()
+        outer_layout = QtWidgets.QHBoxLayout()
         outer_layout.setContentsMargins(0, 0, 0, 0)
         outer_layout.setSpacing(0)
-        outer_layout.setAlignment(Qt.AlignVCenter)
+        outer_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter)
         outer_layout.addWidget(self.inner_frame)
 
         self.setLayout(outer_layout)
@@ -212,11 +210,11 @@ class SingleLayer(QWidget):
 
         im_shape = np.ravel(im.shape[:2])
 
-        size = QSize(int(im_shape[1] / 2), int(im_shape[0] / 2))
-        image = QImage(im.data, im_shape[1], im_shape[0], im.strides[0], QImage.Format_RGB888)
-        pixmap = QPixmap(image)
+        size = QtCore.QSize(int(im_shape[1] / 2), int(im_shape[0] / 2))
+        image = QtGui.QImage(im.data, im_shape[1], im_shape[0], im.strides[0], QtGui.QImage.Format_RGB888)
+        pixmap = QtGui.QPixmap(image)
 
-        self.tbnail.setIcon(QIcon(pixmap.scaled(size)))
+        self.tbnail.setIcon(QtGui.QIcon(pixmap.scaled(size)))
         self.tbnail.setIconSize(size)
 
     def is_checked(self):
@@ -226,13 +224,13 @@ class SingleLayer(QWidget):
         return self.link
 
 
-class LayersControl(QWidget):
+class LayersControl(QtWidgets.QWidget):
 
-    class SignalProxy(QObject):
-        sigOpacityChanged = pyqtSignal(object)
-        sigVisChanged = pyqtSignal(object)
-        sigBlendModeChanged = pyqtSignal(object)
-        sigDeleteLayer = pyqtSignal(object)
+    class SignalProxy(QtCore.QObject):
+        sigOpacityChanged = QtCore.pyqtSignal(object)
+        sigVisChanged = QtCore.pyqtSignal(object)
+        sigBlendModeChanged = QtCore.pyqtSignal(object)
+        sigDeleteLayer = QtCore.pyqtSignal(object)
 
     def __init__(self, parent=None):
 
@@ -242,7 +240,7 @@ class LayersControl(QWidget):
         self.sig_blend_mode_changed = self._sigprox.sigBlendModeChanged
         self.sig_layer_deleted = self._sigprox.sigDeleteLayer
 
-        QWidget.__init__(self)
+        QtWidgets.QWidget.__init__(self)
 
         self.valid_blendable_link = ['img-mask', 'img-virus', 'img-contour', 'img-overlay', 'Image', 'atlas-overlay']
 
@@ -257,14 +255,14 @@ class LayersControl(QWidget):
 
         self.layer_count = 0
 
-        blend_frame = QFrame()
-        blend_layout = QHBoxLayout(blend_frame)
+        blend_frame = QtWidgets.QFrame()
+        blend_layout = QtWidgets.QHBoxLayout(blend_frame)
         blend_layout.setContentsMargins(0, 0, 0, 0)
         blend_layout.setSpacing(5)
 
-        combo_label = QLabel('Composition:')
-        self.layer_blend_combo = QComboBox()
-        self.layer_blend_combo.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
+        combo_label = QtWidgets.QLabel('Composition:')
+        self.layer_blend_combo = QtWidgets.QComboBox()
+        self.layer_blend_combo.setSizePolicy(QtCore.QSizePolicy.Expanding, QtCore.QSizePolicy.Minimum)
         self.layer_blend_combo.setEditable(False)
         combo_value = ['Plus', 'Multiply', 'Overlay', 'SourceOver']
         self.layer_blend_combo.addItems(combo_value)
@@ -275,66 +273,66 @@ class LayersControl(QWidget):
         blend_layout.addWidget(self.layer_blend_combo)
 
         # opacity wrap
-        opacity_frame = QFrame()
-        opacity_layout = QHBoxLayout(opacity_frame)
+        opacity_frame = QtWidgets.QFrame()
+        opacity_layout = QtWidgets.QHBoxLayout(opacity_frame)
         opacity_layout.setContentsMargins(0, 0, 0, 0)
         opacity_layout.setSpacing(5)
 
-        layer_opacity_label = QLabel('Opacity:')
-        self.layer_opacity_slider = QSlider(Qt.Horizontal)
+        layer_opacity_label = QtWidgets.QLabel('Opacity:')
+        self.layer_opacity_slider = QtWidgets.QSlider(QtCore.Qt.Orientation.Horizontal)
         # self.layer_opacity_slider.setFixedWidth(100)
         self.layer_opacity_slider.setMaximum(100)
         self.layer_opacity_slider.setMinimum(0)
         self.layer_opacity_slider.setValue(100)
         self.layer_opacity_slider.sliderMoved.connect(self.opacity_slider_moved)
         self.layer_opacity_slider.valueChanged.connect(self.change_opacity_label_value)
-        self.layer_opacity_val_label = QLabel('100%')
+        self.layer_opacity_val_label = QtWidgets.QLabel('100%')
 
         opacity_layout.addWidget(layer_opacity_label)
         opacity_layout.addWidget(self.layer_opacity_slider)
         opacity_layout.addWidget(self.layer_opacity_val_label)
 
-        self.layer_frame = QFrame()
+        self.layer_frame = QtWidgets.QFrame()
         self.layer_frame.setStyleSheet('background: transparent; border: 0px;')
-        self.layer_frame.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.layer_layout = QBoxLayout(QBoxLayout.BottomToTop, self.layer_frame)
-        self.layer_layout.setAlignment(Qt.AlignBottom)
+        self.layer_frame.setSizePolicy(QtCore.QSizePolicy.Expanding, QtCore.QSizePolicy.Expanding)
+        self.layer_layout = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.Direction.BottomToTop, self.layer_frame)
+        self.layer_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignBottom)
         self.layer_layout.setContentsMargins(0, 0, 0, 0)
         self.layer_layout.setSpacing(0)
 
-        self.layer_scroll = QScrollArea()
+        self.layer_scroll = QtWidgets.QScrollArea()
         self.layer_scroll.setStyleSheet('background: transparent; border: 0px;')
-        self.layer_scroll.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.layer_scroll.setSizePolicy(QtCore.QSizePolicy.Expanding, QtCore.QSizePolicy.Expanding)
         self.layer_scroll.setWidget(self.layer_frame)
-        self.layer_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-        self.layer_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.layer_scroll.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollbarAlwaysOn)
+        self.layer_scroll.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollbarAlwaysOff)
         self.layer_scroll.setWidgetResizable(True)
 
-        mid_frame = QFrame()
+        mid_frame = QtWidgets.QFrame()
         mid_frame.setStyleSheet('background: transparent; border: 1px solid rgb(128, 128, 128);')
-        mid_frame.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        mid_layout = QGridLayout(mid_frame)
+        mid_frame.setSizePolicy(QtCore.QSizePolicy.Expanding, QtCore.QSizePolicy.Expanding)
+        mid_layout = QtWidgets.QGridLayout(mid_frame)
         mid_layout.setContentsMargins(0, 0, 0, 0)
         mid_layout.setSpacing(0)
-        mid_layout.setAlignment(Qt.AlignBottom)
+        mid_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignBottom)
         mid_layout.addWidget(self.layer_scroll, 0, 0, 1, 1)
 
         # extra btn
-        self.add_layer_btn = QPushButton()
+        self.add_layer_btn = QtWidgets.QPushButton()
         self.add_layer_btn.setFixedSize(24, 24)
         self.add_layer_btn.setStyleSheet(btm_style)
-        self.add_layer_btn.setIcon(QIcon('icons/layers/add.png'))
-        self.add_layer_btn.setIconSize(QSize(20, 20))
+        self.add_layer_btn.setIcon(QtGui.QIcon('icons/layers/add.png'))
+        self.add_layer_btn.setIconSize(QtCore.QSize(20, 20))
         self.add_layer_btn.clicked.connect(lambda: self.add_layer('Layer'))
 
-        self.delete_layer_btn = QPushButton()
+        self.delete_layer_btn = QtWidgets.QPushButton()
         self.delete_layer_btn.setFixedSize(24, 24)
         self.delete_layer_btn.setStyleSheet(btm_style)
-        self.delete_layer_btn.setIcon(QIcon('icons/layers/trash.png'))
-        self.delete_layer_btn.setIconSize(QSize(20, 20))
+        self.delete_layer_btn.setIcon(QtGui.QIcon('icons/layers/trash.png'))
+        self.delete_layer_btn.setIconSize(QtCore.QSize(20, 20))
         self.delete_layer_btn.clicked.connect(self.delete_layer_btn_clicked)
 
-        outer_layout = QVBoxLayout()
+        outer_layout = QtWidgets.QVBoxLayout()
         outer_layout.setSpacing(10)
         outer_layout.addWidget(blend_frame)
         outer_layout.addWidget(opacity_frame)
@@ -398,8 +396,8 @@ class LayersControl(QWidget):
     def layer_clicked(self, clicked_id):
         clicked_index = np.where(np.ravel(self.layer_id) == clicked_id)[0][0]
 
-        modifiers = QApplication.keyboardModifiers()
-        if modifiers == Qt.ControlModifier:
+        modifiers = pg.Qt.QApplication.keyboardModifiers()
+        if modifiers == pg.Qt.ControlModifier:
             if clicked_index in self.current_layer_index:
                 self.layer_list[clicked_index].set_checked(False)
                 remove_ind = np.where(np.ravel(self.current_layer_index) == clicked_index)[0][0]

@@ -2,10 +2,7 @@ import os
 import sys
 import numpy as np
 import pyqtgraph as pg
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
-from pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtGui, QtCore, QtWidgets
 
 from qtrangeslider import QRangeSlider
 import scipy.interpolate
@@ -175,9 +172,9 @@ QDoubleSpinBox::down-arrow {
 
 
 class CurvesPlot(pg.PlotWidget):
-    class SignalProxy(QObject):
-        sigLineChange = pyqtSignal(object)
-        sigBoundChange = pyqtSignal()
+    class SignalProxy(QtCore.QObject):
+        sigLineChange = QtCore.pyqtSignal(object)
+        sigBoundChange = QtCore.pyqtSignal()
 
     def __init__(self, parent=None, background='w'):
         self._sigprox = CurvesPlot.SignalProxy()
@@ -203,8 +200,8 @@ class CurvesPlot(pg.PlotWidget):
         self.hist_data = None
         self.active_index = None
 
-        self.inactive_pen = pg.mkPen(QColor(128, 128, 128, 255), width=3)
-        self.inactive_brush = QColor(128, 128, 128, 10)
+        self.inactive_pen = pg.mkPen(QtGui.QColor(128, 128, 128, 255), width=3)
+        self.inactive_brush = QtGui.QColor(128, 128, 128, 10)
 
         self.active_pen = []
         self.active_brush = []
@@ -254,7 +251,7 @@ class CurvesPlot(pg.PlotWidget):
 
         for i in range(len(self.hist_data)):
             self.enable_channel[i] = True
-            self.active_pen.append(pg.mkPen(QColor(color[i][0], color[i][1], color[i][2], 255), width=3))
+            self.active_pen.append(pg.mkPen(QtGui.QColor(color[i][0], color[i][1], color[i][2], 255), width=3))
             self.active_brush.append((color[i][0], color[i][1], color[i][2], 130))
             self.hist_list[i].setVisible(True)
             self.hist_list[i].setData(self.hist_data[i][0], self.hist_data[i][1],
@@ -305,9 +302,9 @@ class CurvesPlot(pg.PlotWidget):
         if not self.hist_data:
             return
         da_hsv = get_qhsv_from_czi_hsv(color)
-        col = QColor.fromHsv(da_hsv[0], da_hsv[1], da_hsv[2], 255)
+        col = QtGui.QColor.fromHsv(da_hsv[0], da_hsv[1], da_hsv[2], 255)
         self.active_pen[ind] = pg.mkPen(col, width=3)
-        self.active_brush[ind] = QColor.fromHsv(da_hsv[0], da_hsv[1], da_hsv[2], 130)
+        self.active_brush[ind] = QtGui.QColor.fromHsv(da_hsv[0], da_hsv[1], da_hsv[2], 130)
         self.hist_list[ind].setFillBrush(self.active_brush[ind])
         self.hist_list[ind].setPen(self.active_pen[ind])
         self.lut_line[ind].setPen(self.active_pen[ind])
@@ -366,20 +363,20 @@ class CurvesPlot(pg.PlotWidget):
         if self.lut_line[self.active_index].mouseShape().contains(pnts):
             if len(sct) == 0:
                 if data[0, 0] < pnts.x() < data[-1, 0]:
-                    self.setCursor(Qt.CrossCursor)
+                    self.setCursor(QtCore.Qt.CursorShape.CrossCursor)
                     self.adding_allowed = True
                 else:
-                    self.setCursor(Qt.ArrowCursor)
+                    self.setCursor(QtCore.Qt.CursorShape.ArrowCursor)
                     self.adding_allowed = False
             else:
-                self.setCursor(Qt.OpenHandCursor)
+                self.setCursor(QtCore.Qt.CursorShape.OpenHandCursor)
                 self.adding_allowed = False
         else:
             self.adding_allowed = False
             if len(sct) == 0:
-                self.setCursor(Qt.ArrowCursor)
+                self.setCursor(QtCore.Qt.CursorShape.ArrowCursor)
             else:
-                self.setCursor(Qt.OpenHandCursor)
+                self.setCursor(QtCore.Qt.CursorShape.OpenHandCursor)
 
     def update_table(self, data):
         cind = np.logical_and(self.table_input >= data[0, 0], self.table_input <= data[-1, 0])
@@ -402,11 +399,11 @@ class CurvesPlot(pg.PlotWidget):
         return temp_output
 
 
-class CurveWidget(QWidget):
-    class SignalProxy(QObject):
-        sigTableChanged = pyqtSignal(object)
-        sigReSet = pyqtSignal()
-        sigLineTypeChanged = pyqtSignal()
+class CurveWidget(QtWidgets.QWidget):
+    class SignalProxy(QtCore.QObject):
+        sigTableChanged = QtCore.pyqtSignal(object)
+        sigReSet = QtCore.pyqtSignal()
+        sigLineTypeChanged = QtCore.pyqtSignal()
 
     def __init__(self, parent=None):
         self._sigprox = CurveWidget.SignalProxy()
@@ -414,7 +411,7 @@ class CurveWidget(QWidget):
         self.sig_reset = self._sigprox.sigReSet
         self.sig_line_type_changed = self._sigprox.sigLineTypeChanged
 
-        QWidget.__init__(self)
+        QtWidgets.QWidget.__init__(self)
 
         self.gray_max = 65535
         self.gamma = [1, 1, 1, 1]
@@ -431,7 +428,7 @@ class CurveWidget(QWidget):
         self.curve_plot.sig_line_change.connect(self.table_changed)
         # self.curve_plot.sigBoundChange.connect(self.spinbox_bound_changed)
 
-        self.multi_handle_slider = QRangeSlider(Qt.Horizontal)
+        self.multi_handle_slider = QRangeSlider(QtCore.Qt.Orientation.Horizontal)
         self.multi_handle_slider.setStyleSheet(multi_handle_slider_style)
         self.multi_handle_slider.setMinimum(0)
         self.multi_handle_slider.setMaximum(65535)
@@ -465,12 +462,12 @@ class CurveWidget(QWidget):
         self.gamma_spinbox.spin_val.setValue(1.00)
         self.gamma_spinbox.spin_val.valueChanged.connect(self.gamma_spinbox_changed)
 
-        self.reset_btn = QPushButton('Reset')
+        self.reset_btn = QtWidgets.QPushButton('Reset')
         self.reset_btn.setStyleSheet(reset_button_style)
         self.reset_btn.setFixedHeight(25)
         self.reset_btn.clicked.connect(self.reset_pressed)
 
-        self.line_type_combo = QComboBox()
+        self.line_type_combo = QtWidgets.QComboBox()
         self.line_type_combo.setFixedHeight(22)
         ltypes = ['gamma', 'linear', 'spline']
         self.line_type_combo.addItems(ltypes)
@@ -478,32 +475,33 @@ class CurveWidget(QWidget):
         self.line_type = 'gamma'
         self.line_type_combo.currentTextChanged.connect(self.line_type_changed)
 
-        top_wrap = QFrame()
-        top_layout = QGridLayout(top_wrap)
+        top_wrap = QtWidgets.QFrame()
+        top_layout = QtWidgets.QGridLayout(top_wrap)
         top_layout.setContentsMargins(0, 0, 0, 0)
         top_layout.addWidget(self.line_type_combo, 0, 0, 1, 1)
         top_layout.addWidget(self.reset_btn, 0, 1, 1, 1)
 
-        bgw_wrap = QFrame()
-        bgw_wrap_layout = QHBoxLayout(bgw_wrap)
+        bgw_wrap = QtWidgets.QFrame()
+        bgw_wrap_layout = QtWidgets.QHBoxLayout(bgw_wrap)
         bgw_wrap_layout.setContentsMargins(0, 0, 0, 0)
-        bgw_wrap_layout.addWidget(self.black_spinbox, alignment=Qt.AlignLeft)
-        bgw_wrap_layout.addWidget(self.gamma_spinbox, alignment=Qt.AlignCenter)
-        bgw_wrap_layout.addWidget(self.white_spinbox, alignment=Qt.AlignRight)
+        bgw_wrap_layout.addWidget(self.black_spinbox, alignment=QtCore.Qt.AlignmentFlag.AlignLeft)
+        bgw_wrap_layout.addWidget(self.gamma_spinbox, alignment=QtCore.Qt.AlignmentFlag.AlignCenter
+)
+        bgw_wrap_layout.addWidget(self.white_spinbox, alignment=QtCore.Qt.AlignmentFlag.AlignRight)
 
-        slider_wrap = QFrame()
-        slider_wrap_layout = QVBoxLayout(slider_wrap)
+        slider_wrap = QtWidgets.QFrame()
+        slider_wrap_layout = QtWidgets.QVBoxLayout(slider_wrap)
         slider_wrap_layout.setContentsMargins(0, 0, 0, 0)
         slider_wrap_layout.setSpacing(0)
         slider_wrap_layout.addWidget(self.multi_handle_slider)
 
-        bottom_wrap = QFrame()
-        bottom_layout = QVBoxLayout(bottom_wrap)
+        bottom_wrap = QtWidgets.QFrame()
+        bottom_layout = QtWidgets.QVBoxLayout(bottom_wrap)
         bottom_layout.setContentsMargins(0, 0, 0, 0)
         bottom_layout.addWidget(slider_wrap)
         bottom_layout.addWidget(bgw_wrap)
 
-        widget_layout = QVBoxLayout()
+        widget_layout = QtWidgets.QVBoxLayout()
         widget_layout.setContentsMargins(0, 0, 0, 0)
         widget_layout.addWidget(top_wrap)
         widget_layout.addWidget(self.curve_plot)

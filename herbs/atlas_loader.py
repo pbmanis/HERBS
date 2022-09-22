@@ -10,9 +10,8 @@ import nibabel as nib
 import numpy as np
 import pandas as pd
 import cv2
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
-from PyQt5.QtWidgets import *
+import pyqtgraph as pg
+from pyqtgraph.Qt import QtWidgets, QtCore, QtGui
 
 from .uuuuuu import make_contour_img, render_volume, render_small_volume, make_atlas_label_contour
 

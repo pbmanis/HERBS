@@ -1,11 +1,8 @@
 import os
 import sys
 import numpy as np
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
 import pyqtgraph as pg
-from pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtGui, QtCore, QtWidgets
 
 label_tree_style = '''
 QWidget{
@@ -173,12 +170,12 @@ class SignalBlock(object):
         self.signal.connect(self.slot)
         
 
-class LabelTree(QWidget):
+class LabelTree(QtWidgets.QWidget):
 
-    class SignalProxy(QObject):
-        labelColorChanged = pyqtSignal(object)
-        labelsChanged = pyqtSignal()
-        resetLabels = pyqtSignal()
+    class SignalProxy(QtCore.QObject):
+        labelColorChanged = QtCore.pyqtSignal(object)
+        labelsChanged = QtCore.pyqtSignal()
+        resetLabels = QtCore.pyqtSignal()
     
     def __init__(self, parent=None):
         self._sigprox = LabelTree.SignalProxy()
@@ -187,10 +184,10 @@ class LabelTree(QWidget):
         self.reset_labels = self._sigprox.resetLabels
 
         self._block_signals = False
-        QWidget.__init__(self, parent)
+        QtCore.QWidget.__init__(self, parent)
         self.setStyleSheet(label_tree_style)
 
-        self.layout = QVBoxLayout()
+        self.layout = QtWidgets.QVBoxLayout()
         self.setLayout(self.layout)
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
@@ -200,9 +197,9 @@ class LabelTree(QWidget):
         self.root_item = []
         self.root_acronym = []
         
-        self.tree = QTreeWidget(self)
+        self.tree = QtWidgets.QTreeWidget(self)
         self.layout.addWidget(self.tree)
-        self.tree.header().setResizeMode(QHeaderView.ResizeToContents)
+        self.tree.header().setResizeMode(QtCore.Qt.QHeaderView.ResizeToContents)
         self.tree.headerItem().setText(0, "id")
         self.tree.headerItem().setText(1, "name")
         self.tree.headerItem().setText(2, "color")
@@ -212,7 +209,7 @@ class LabelTree(QWidget):
         self.tree.itemChanged.connect(self.item_change)
 
         self.layout.addSpacing(10)
-        self.reset_btn = QPushButton('Reset colors')
+        self.reset_btn = QtWidgets.QPushButton('Reset colors')
         self.reset_btn.setStyleSheet(reset_button_style)
         self.layout.addWidget(self.reset_btn)
         self.reset_btn.clicked.connect(self.reset_colors)
@@ -232,7 +229,7 @@ class LabelTree(QWidget):
                 color = label_data['color'][i]
                 if label_id <= self.label_level:
                     self.current_lut[label_id] = np.array([color[0], color[1], color[2], 255])
-                da_color = QColor(color[0], color[1], color[2]).name(QColor.HexRgb)
+                da_color = QtGui.QColor(color[0], color[1], color[2]).name(QtGui.QColor.HexRgb)
                 da_color = da_color.split('#')[1]
                 name = label_data['label'][i]
                 acronym = label_data['abbrev'][i]
@@ -248,9 +245,9 @@ class LabelTree(QWidget):
         self.labels_changed.emit()
 
     def add_label(self, label_id, parent, name, acronym, color):
-        item = QTreeWidgetItem([acronym.decode(), name.decode(), ''])
-        item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
-        item.setCheckState(0, Qt.Unchecked)
+        item = QtWidgets.QTreeWidgetItem([acronym.decode(), name.decode(), ''])
+        item.setFlags(item.flags() | QtCore.Qt.ItemFlag.ItemIsUserCheckable)
+        item.setCheckState(0, QtCore.Qt.CheckState.Unchecked)
         if parent in self.labels_by_id:
             root = self.labels_by_id[parent]['item']
         else:
@@ -275,7 +272,7 @@ class LabelTree(QWidget):
             (da_item.parent() or root).removeChild(da_item)
 
     def item_change(self, item, col):
-        checked = item.checkState(0) == Qt.Checked
+        checked = item.checkState(0) == QtCore.Qt.CheckState.Checked
         with SignalBlock(self.tree.itemChanged, self.item_change):
             self.check_recursive(item, checked)
     
@@ -285,11 +282,11 @@ class LabelTree(QWidget):
     def check_recursive(self, item, checked):
         if checked:
             self.checked.add(item.id)
-            item.setCheckState(0, Qt.Checked)
+            item.setCheckState(0, QtCore.Qt.CheckState.Checked)
         else:
             if item.id in self.checked:
                 self.checked.remove(item.id)
-            item.setCheckState(0, Qt.Unchecked)
+            item.setCheckState(0, QtCore.Qt.CheckState.Unchecked)
     
         for i in range(item.childCount()):
             self.check_recursive(item.child(i), checked)

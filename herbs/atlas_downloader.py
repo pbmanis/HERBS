@@ -4,10 +4,8 @@ import time
 import os
 import sys
 from os.path import dirname, realpath, join
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
-
+import pyqtgraph as pg
+from pyqtgraph.Qt import QtWidgets, QtCore, QtGui
 import pickle
 import shutil
 import requests
@@ -16,8 +14,8 @@ from .atlas_loader import process_atlas_raw_data
 from .uuuuuu import render_volume, render_small_volume
 
 
-class DownloadThread(QThread):
-    download_process_signal = pyqtSignal(int)
+class DownloadThread(QtCore.QThread):
+    download_process_signal = QtCore.pyqtSignal(int)
 
     def __init__(self, url, filesize, fileobj, buffer):
         super(DownloadThread, self).__init__()
@@ -45,9 +43,9 @@ class DownloadThread(QThread):
             print(e)
 
 
-class WorkerProcessData(QObject):
-    finished = pyqtSignal()
-    progress = pyqtSignal(int)
+class WorkerProcessData(pg.QtCore.QObject):
+    finished = QtCore.pyqtSignal()
+    progress = QtCore.pyqtSignal(int)
 
     def __init__(self):
         super(WorkerProcessData, self).__init__()
@@ -137,10 +135,10 @@ class WorkerProcessData(QObject):
         self.finished.emit()
 
 
-class AtlasDownloader(QDialog):
+class AtlasDownloader(QtGui.QDialog):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        layout = QVBoxLayout(self)
+        layout = QtWidgets.QVBoxLayout(self)
 
         self.setWindowTitle("Waxholm Rat Atlas Downloader")
 
@@ -158,7 +156,7 @@ class AtlasDownloader(QDialog):
 
         self.saving_folder = None
 
-        self.thread = QThread()
+        self.thread = QtCore.QThread()
         self.worker = WorkerProcessData()
 
         self.b_val = (246, 653, 440)
@@ -168,42 +166,42 @@ class AtlasDownloader(QDialog):
         self.finish = [False, False, False, False]
         self.process_finished = False
 
-        self.label_bar = QProgressBar()
+        self.label_bar = QtWidgets.QProgressBar()
         self.label_bar.setMinimumWidth(400)
         self.label_bar.setValue(0)
 
-        self.data_bar = QProgressBar()
+        self.data_bar =QtWidgets.QProgressBar()
         self.data_bar.setMinimumWidth(400)
         self.data_bar.setValue(0)
 
-        self.mask_bar = QProgressBar()
+        self.mask_bar =QtWidgets.QProgressBar()
         self.mask_bar.setMinimumWidth(400)
         self.mask_bar.setValue(0)
 
-        self.segmentation_bar = QProgressBar()
+        self.segmentation_bar =QtWidgets.QProgressBar()
         self.segmentation_bar.setMinimumWidth(400)
         self.segmentation_bar.setValue(0)
 
-        self.download_btn = QPushButton()
+        self.download_btn =QtWidgets.QPushButton()
         self.download_btn. setMinimumWidth(100)
         self.download_btn.setText("Download")
 
-        self.process_btn = QPushButton()
+        self.process_btn =QtWidgets.QPushButton()
         self.process_btn.setMinimumWidth(100)
         self.process_btn.setText("Process")
 
-        self.process_label = QLabel()
+        self.process_label =QtWidgets.QLabel()
         self.process_label.setMinimumWidth(100)
         self.process_label.setText("")
 
-        self.progress = QProgressBar(self)
+        self.progress =QtWidgets.QProgressBar(self)
         self.progress.setMinimumWidth(100)
 
-        self.process_info = QLabel('The whole process takes around 40 min - 1 hour. \n'
+        self.process_info =QtWidgets.QLabel('The whole process takes around 40 min - 1 hour. \n'
                                    'This window will be closed automatically when processing finished.\n')
 
         # ok button, used to close window
-        ok_btn = QDialogButtonBox(QDialogButtonBox.Ok)
+        ok_btn = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.Ok)
         ok_btn.accepted.connect(self.accept)
 
         layout.addWidget(self.label_bar)
@@ -223,7 +221,7 @@ class AtlasDownloader(QDialog):
 
     # Download button event
     def download_start(self):
-        self.saving_folder = str(QFileDialog.getExistingDirectory(self, "Select Folder to Save Atlas"))
+        self.saving_folder = str(QtWidgets.QFileDialog.getExistingDirectory(self, "Select Folder to Save Atlas"))
 
         if self.saving_folder != '':
             self.download_btn.setVisible(False)
@@ -281,7 +279,7 @@ class AtlasDownloader(QDialog):
         if self.saving_folder is not None:
             saving_folder = self.saving_folder
         else:
-            saving_folder = str(QFileDialog.getExistingDirectory(self, "Select Atlas Folder"))
+            saving_folder = str(QtWidgets.QFileDialog.getExistingDirectory(self, "Select Atlas Folder"))
 
         if saving_folder != '':
             self.process_btn.setVisible(False)
@@ -300,10 +298,10 @@ class AtlasDownloader(QDialog):
         self.close()
 
     def closeEvent(self, event):
-        reply = QMessageBox.question(self, 'Message',
-                                     "Do you want to leave?", QMessageBox.Yes, QMessageBox.No)
+        reply = QtWidgets.QMessageBox.question(self, 'Message',
+                                     "Do you want to leave?", QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
 
-        if reply == QMessageBox.Yes:
+        if reply == QtWidgets.QMessageBox.Yes:
             self.continue_process = False
             event.accept()
         else:

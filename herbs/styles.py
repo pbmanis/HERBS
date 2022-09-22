@@ -41,8 +41,8 @@ class Styles(object):
         '''
 
         self.text_combo_style = '''
-            /*---------------------- QComboBox -----------------------*/
-            QComboBox {
+            /*---------------------- QtWidgets.QComboBox -----------------------*/
+            QtWidgets.QComboBox {
                 subcontrol-origin: padding;
                 subcontrol-position: top right;
                 selection-background-color: transparent;
@@ -54,14 +54,14 @@ class Styles(object):
                 margin: 0px;
             }
             
-            QComboBox:item {
+            QtWidgets.QComboBox:item {
                 background: #323232;
                 color: white;
                 min-height: 10px;
                 margin: 0px;
             }
             
-            QComboBox:item:selected
+            QtWidgets.QComboBox:item:selected
             {
                 border: None;
                 background: #232323;
@@ -69,27 +69,27 @@ class Styles(object):
             }
             
             
-            QComboBox:editable {
+            QtWidgets.QComboBox:editable {
                 background: transparent;
             }
             
-            QComboBox:!editable, QComboBox::drop-down:editable {
+            QtWidgets.QComboBox:!editable, QtWidgets.QComboBox::drop-down:editable {
                  background: #656565;
             }
             
-            /* QComboBox gets the "on" state when the popup is open */
-            QComboBox:!editable:on, QComboBox::drop-down:editable:on {
+            /* QtWidgets.QComboBox gets the "on" state when the popup is open */
+            QtWidgets.QComboBox:!editable:on, QtWidgets.QComboBox::drop-down:editable:on {
                 background: transparent;
             }
             
-            QComboBox:on { /* shift the text when the popup opens */
+            QtWidgets.QComboBox:on { /* shift the text when the popup opens */
                 padding: 3px;
                 color: white;
                 background-color: transparent;
                 selection-background-color: transparent;
             }
             
-            QComboBox::drop-down {
+            QtWidgets.QComboBox::drop-down {
                 subcontrol-origin: padding;
                 subcontrol-position: top right;
                 width: 20px;
@@ -98,41 +98,41 @@ class Styles(object):
                 border-left-width: 1px;
                 border-left-color: transparent;
                 border-left-style: solid; /* just a single line */
-                border-top-right-radius: 3px; /* same radius as the QComboBox */
+                border-top-right-radius: 3px; /* same radius as the QtWidgets.QComboBox */
                 border-bottom-right-radius: 3px;
             }
             
-            QComboBox::down-arrow {
+            QtWidgets.QComboBox::down-arrow {
                 image: url(icons/tdown.svg);
                 width: 13px;
                 height: 14px;
                 padding-right: 3px;
             }
             
-            QComboBox::down-arrow:on { /* shift the arrow when popup is open */
+            QtWidgets.QComboBox::down-arrow:on { /* shift the arrow when popup is open */
                 top: 1px;
                 left: 1px;
             }
             
-            QComboBox QAbstractItemView {
+            QtWidgets.QComboBox QAbstractItemView {
                 border: 2px solid darkgray;
             }
             
-            QComboBox QListView {
+            QtWidgets.QComboBox QListView {
                 background: #656565;
                 border: 1px solid gray;
                 color: white;
                 border-radius: 0px;
             }
         
-            QComboBox QListView::item {
+            QtWidgets.QComboBox QListView::item {
                 border: None;
                 background: transparent;
                 margin:3px;
                 height: 24px;
             }                             
         
-            QComboBox QListView::item:selected { 
+            QtWidgets.QComboBox QListView::item:selected { 
                 border: None;
                 margin:3px;
                 color: white;
@@ -140,17 +140,17 @@ class Styles(object):
                 height: 24px;
             }
         
-            QComboBox QListView::item:selected:!active {
+            QtWidgets.QComboBox QListView::item:selected:!active {
                 background: #323232;
                 border: None;
             }
         
-            QComboBox QListView::item:selected:active {
+            QtWidgets.QComboBox QListView::item:selected:active {
                 background: #323232;
                 border: None;
             }
         
-            QComboBox QListView::item:hover {
+            QtWidgets.QComboBox QListView::item:hover {
                 background: #323232;
                 border: None;
             }
@@ -200,7 +200,7 @@ class Styles(object):
                 background: #27292a;
             }
     
-            QGroupBox {
+            QtWidgets.QGroupBox {
                 background-color: transparent; 
                 color: white;
                 border: 1px solid; 
@@ -210,7 +210,7 @@ class Styles(object):
                 margin-top: 0px
             }
     
-            QLabel {
+            QtWidgets.QLabel {
                 color: white;
             }
     
@@ -347,7 +347,7 @@ class Styles(object):
         '''
 
         self.sidebar_title_label_style = '''
-            QLabel{
+            QtWidgets.QLabel{
                 color: white;
                 background: #747a80;
                 width: 300px;

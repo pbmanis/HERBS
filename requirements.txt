@@ -1,0 +1,45 @@
+# HERBS virtural env requirements for Python 3.9.9
+# includes a basic working environment
+# Used by make_env.sh
+
+# development utilities
+black==19.10b0
+flake8
+vulture
+isort==5.0.2
+mypy==0.961
+
+pytest==4.5.0
+docutils<0.18
+sphinx>=4.0
+
+# Cython==0.29.32
+
+aicspylibczi==3.0.5
+
+numba==0.56.2
+numpy==1.23.3
+scipy==1.8.1
+pandas==1.5.0 # 1.3.5
+h5py>=3.7.0
+tables>=3.7.0
+
+requests==2.26.0
+Pathlib==1.0.1
+
+pyqt6==6.3.1
+pyqt6-sip==13.4.0 # 4.19.19
+pyqtgraph>=0.12.4
+PyOpenGL==3.1.5
+# PyOpenGL-accelerate==3.1.5
+QtRangeSlider==0.1.5
+opencv-python==4.5.4.60
+# imagecodecs==2021.4.28 # 2022.2.22
+tifffile==2021.11.2
+
+nibabel==3.2.1
+pynrrd>=0.4.3
+natsort==8.0.2
+
+
+

@@ -641,9 +641,9 @@ def make_color_lut(channel_color: tuple, bit_level: int):
 
 def get_qhsv_from_czi_hsv(hsv_color: tuple):
     """
-    Get QColor HSV color format (360, 255, 255) from czi HSV color format (1, 1, 1).
+    Get QtGui.QColor HSV color format (360, 255, 255) from czi HSV color format (1, 1, 1).
     :param hsv_color: (float [0., 1.], float [0., 1.], float [0., 1.])
-    :return: QColor
+    :return: QtGui.QColor
     """
     h_val = int(hsv_color[0] * 360)
     s_val = int(hsv_color[1] * 255)

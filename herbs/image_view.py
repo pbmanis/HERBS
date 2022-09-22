@@ -8,10 +8,7 @@ import copy
 import pyqtgraph.functions as fn
 import numpy as np
 import pyqtgraph as pg
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
-from pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtGui, QtCore, QtWidgets
 import scipy.ndimage as ndi
 
 from .image_stacks import ImageStacks
@@ -47,38 +44,38 @@ QPushButton:checked{
 '''
 
 
-class ImagePageController(QWidget):
-    class SignalProxy(QObject):
-        sigPageChanged = pyqtSignal(object)
+class ImagePageController(QtWidgets.QWidget):
+    class SignalProxy(QtCore.QObject):
+        sigPageChanged = QtCore.pyqtSignal(object)
 
     def __init__(self):
         self._sigprox = ImagePageController.SignalProxy()
         self.sig_page_changed = self._sigprox.sigPageChanged
 
-        QWidget.__init__(self)
+        QtWidgets.QWidget.__init__(self)
 
         # self.setStyleSheet(page_control_style)
 
         self.max_val = None
 
-        self.page_slider = QSlider(Qt.Horizontal)
+        self.page_slider = QtWidgets.QSlider(QtCore.Qt.Orientation.Horizontal)
         self.page_slider.setMinimum(0)
         self.page_slider.valueChanged.connect(self.slider_value_changed)
 
-        self.page_label = QLabel()
+        self.page_label = QtWidgets.QLabel()
         self.page_label.setFixedSize(50, 20)
 
-        self.page_left_btn = QPushButton()
+        self.page_left_btn = QtWidgets.QPushButton()
         self.page_left_btn.setIcon(QtGui.QIcon("icons/backward.svg"))
         self.page_left_btn.setIconSize(QtCore.QSize(16, 16))
         self.page_left_btn.clicked.connect(self.left_btn_clicked)
 
-        self.page_right_btn = QPushButton()
+        self.page_right_btn = QtWidgets.QPushButton()
         self.page_right_btn.setIcon(QtGui.QIcon("icons/forward.svg"))
         self.page_right_btn.setIconSize(QtCore.QSize(16, 16))
         self.page_right_btn.clicked.connect(self.right_btn_clicked)
 
-        page_ctrl_layout = QHBoxLayout()
+        page_ctrl_layout = QtWidgets.QHBoxLayout()
         page_ctrl_layout.setSpacing(0)
         page_ctrl_layout.setContentsMargins(10, 5, 10, 5)
         page_ctrl_layout.addWidget(self.page_left_btn)
@@ -115,7 +112,7 @@ class ImagePageController(QWidget):
         self.set_val(val)
 
 
-class ImageView(QObject):
+class ImageView(QtCore.QObject):
     """
     A collection of user interface elements bound together:
         for histological images usage.
@@ -129,14 +126,14 @@ class ImageView(QObject):
 
 
     """
-    class SignalProxy(QObject):
-        imageChanged = pyqtSignal()  # id
+    class SignalProxy(QtCore.QObject):
+        imageChanged = QtCore.pyqtSignal()  # id
 
     def __init__(self):
         self._sigprox = ImageView.SignalProxy()
         self.sig_image_changed = self._sigprox.imageChanged
 
-        QObject.__init__(self)
+        QtCore.QObject.__init__(self)
 
         # define the initials
         self.image_file = None
@@ -159,28 +156,28 @@ class ImageView(QObject):
         self.display_img_index = 0
 
         # scene control
-        self.check_scenes = QPushButton('Load ALL Scenes')
+        self.check_scenes = QtWidgets.QPushButton('Load ALL Scenes')
         self.check_scenes.setStyleSheet(sidebar_button_style)
         self.check_scenes.setCheckable(True)
-        self.scene_slider = QSlider(Qt.Horizontal)
+        self.scene_slider = QtWidgets.QSlider(QtCore.Qt.Orientation.Horizontal)
         self.scene_slider.setMinimum(0)
         self.scene_slider.setValue(0)
-        self.scene_slider.setTickPosition(QSlider.TicksBelow)
+        self.scene_slider.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.scene_slider.setTickInterval(1)
         self.scene_slider.valueChanged.connect(self.scene_index_changed)
-        self.scene_label = QLabel('0/ 0')
-        self.scene_wrap = QFrame()
+        self.scene_label = QtWidgets.QLabel('0/ 0')
+        self.scene_wrap = QtWidgets.QFrame()
         # self.scene_wrap.setFixedWidth(290)
-        scene_wrap_layout = QHBoxLayout(self.scene_wrap)
+        scene_wrap_layout = QtWidgets.QHBoxLayout(self.scene_wrap)
         # scene_wrap_layout.setContentsMargins(0, 0, 0, 0)
         # scene_wrap_layout.setSpacing(5)
-        scene_wrap_layout.addWidget(QLabel('Scene: '))
+        scene_wrap_layout.addWidget(QtWidgets.QLabel('Scene: '))
         scene_wrap_layout.addWidget(self.scene_slider)
         scene_wrap_layout.addWidget(self.scene_label)
         # self.scene_wrap.setVisible(False)
 
         # scale control
-        self.scale_slider = QSlider(Qt.Horizontal)
+        self.scale_slider = QtWidgets.QSlider(QtCore.Qt.Orientation.Horizontal)
         self.scale_slider.setMinimum(1)
         self.scale_slider.setMaximum(100)
         self.scale_slider.setValue(10)
@@ -188,10 +185,10 @@ class ImageView(QObject):
         self.scale_slider.setTickInterval(10)
         self.scale_slider.valueChanged.connect(self.scale_value_changed)
         self.scale_slider.sliderReleased.connect(self.scale_slider_released)
-        self.scale_label = QLabel('{}%'.format(10))
-        self.scale_wrap = QFrame()
-        scale_wrap_layout = QHBoxLayout(self.scale_wrap)
-        scale_wrap_layout.addWidget(QLabel('Scale: '))
+        self.scale_label = QtWidgets.QLabel('{}%'.format(10))
+        self.scale_wrap = QtWidgets.QFrame()
+        scale_wrap_layout = QtWidgets.QHBoxLayout(self.scale_wrap)
+        scale_wrap_layout.addWidget(QtWidgets.QLabel('Scale: '))
         scale_wrap_layout.addWidget(self.scale_slider)
         scale_wrap_layout.addWidget(self.scale_label)
 
@@ -212,9 +209,9 @@ class ImageView(QObject):
         self.curve_widget.sig_line_type_changed.connect(self.image_curve_type_changed)
 
         # channel buttons
-        self.chn_widget_wrap = QFrame()
+        self.chn_widget_wrap = QtWidgets.QFrame()
         self.chn_widget_wrap.setStyleSheet('QFrame{border: 1px solid #747a80; border-radius: 5px;}')
-        chn_widget_layout = QHBoxLayout(self.chn_widget_wrap)
+        chn_widget_layout = QtWidgets.QHBoxLayout(self.chn_widget_wrap)
         self.chn_widget_list = []
         for i in range(self.max_num_channels):
             self.chn_widget_list.append(ChannelSelector())
@@ -225,8 +222,8 @@ class ImageView(QObject):
             self.chn_widget_list[i].setVisible(False)
         # self.chn_widget_wrap.setVisible(False)
 
-        self.outer_frame = QFrame()
-        outer_layout = QVBoxLayout(self.outer_frame)
+        self.outer_frame = QtWidgets.QFrame()
+        outer_layout = QtWidgets.QVBoxLayout(self.outer_frame)
         outer_layout.setContentsMargins(0, 0, 0, 0)
         outer_layout.setSpacing(0)
         outer_layout.addWidget(self.check_scenes)

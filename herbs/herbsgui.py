@@ -20,15 +20,15 @@ opencv_ver = (cv2.__version__).split('.')
 from numba import jit
 import colorsys
 
-
-import PyQt5
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtSql import QSqlTableModel
-from PyQt5.QtMultimedia import QSound
-# from PyQt5 import uic
-from PyQt5.uic import loadUiType
+import pyqtgraph as pg
+from pyqtgraph.Qt import QtWidgets, QtCore, QtGui
+from PyQt6 import QtSql, QtMultimedia
+# from pg.QtCore import *
+# from pg.QtGui import *
+# from pg.QtSql import QSqlTableModel
+# from pg.QtMultimedia import QSound
+# # from PyQt5 import uic
+from PyQt6.uic import loadUiType
 import pyqtgraph as pg
 pg.setConfigOption('imageAxisOrder', 'row-major')
 pg.setConfigOption('useNumba', True)
@@ -65,7 +65,7 @@ QMainWindow {
     font-size: 12px;
 }
 
-/*---------------------- QComboBox -----------------------*/
+/*---------------------- QtWidgets.QComboBox -----------------------*/
 QComboBox {
     subcontrol-origin: padding;
     subcontrol-position: top right;
@@ -102,11 +102,11 @@ QComboBox:editable {
     margin: 0px;
 }
 
-QComboBox:!editable, QComboBox::drop-down:editable {
+QComboBox:!editable, QtWidgets.QComboBox::drop-down:editable {
      background: #656565;
 }
 
-QComboBox:!editable:on, QComboBox::drop-down:editable:on {
+QComboBox:!editable:on, QtWidgets.QComboBox::drop-down:editable:on {
     background: #656565;
     margin: 0px;
     padding: 0px;
@@ -129,7 +129,7 @@ QComboBox::drop-down {
     border-left-width: 1px;
     border-left-color: transparent;
     border-left-style: solid; /* just a single line */
-    border-top-right-radius: 3px; /* same radius as the QComboBox */
+    border-top-right-radius: 3px; /* same radius as the QtWidgets.QComboBox */
     border-bottom-right-radius: 3px;
     margin: 0px;
 }
@@ -461,7 +461,7 @@ script_dir = dirname(realpath(__file__))
 FORM_Main, _ = loadUiType((join(dirname(__file__), "main_window.ui")))
 
 
-class HERBS(QMainWindow, FORM_Main):
+class HERBS(QtWidgets.QMainWindow, FORM_Main):
     """
     easier for me to trace:
     connect all menu actions
@@ -502,7 +502,7 @@ class HERBS(QMainWindow, FORM_Main):
     """
     def __init__(self, parent=FORM_Main):
         super(HERBS, self).__init__()
-        QMainWindow.__init__(self)
+        QtWidgets.QMainWindow.__init__(self)
         self.setupUi(self)
         self.setWindowTitle("HERBS - A toolkit for Histological E-data Registration in Brain Space")
 
@@ -850,7 +850,7 @@ class HERBS(QMainWindow, FORM_Main):
         # --------------------------------------------------------
         # --------------------------------------------------------
         # ------------------ coronal
-        coronal_layout = QGridLayout(self.coronalframe)
+        coronal_layout = QtWidgets.QGridLayout(self.coronalframe)
         coronal_layout.setSpacing(0)
         coronal_layout.setContentsMargins(0, 0, 0, 0)
         coronal_layout.addWidget(self.atlas_view.cimg, 0, 0, 1, 1)
@@ -858,7 +858,7 @@ class HERBS(QMainWindow, FORM_Main):
         coronal_layout.addWidget(self.atlas_view.cpage_ctrl, 1, 0, 1, 2)
 
         # ------------------ sagital / image sagital
-        self.sagital_layout = QGridLayout(self.sagitalframe)
+        self.sagital_layout = QtWidgets.QGridLayout(self.sagitalframe)
         self.sagital_layout.setSpacing(0)
         self.sagital_layout.setContentsMargins(0, 0, 0, 0)
         self.sagital_layout.addWidget(self.atlas_view.simg, 0, 0, 1, 1)
@@ -866,7 +866,7 @@ class HERBS(QMainWindow, FORM_Main):
         self.sagital_layout.addWidget(self.atlas_view.spage_ctrl, 1, 0, 1, 2)
 
         # ------------------ horizontal
-        horizontal_layout = QGridLayout(self.horizontalframe)
+        horizontal_layout = QtWidgets.QGridLayout(self.horizontalframe)
         horizontal_layout.setSpacing(0)
         horizontal_layout.setContentsMargins(0, 0, 0, 0)
         horizontal_layout.addWidget(self.atlas_view.himg, 0, 0, 1, 1)
@@ -874,12 +874,12 @@ class HERBS(QMainWindow, FORM_Main):
         horizontal_layout.addWidget(self.atlas_view.hpage_ctrl, 1, 0, 1, 2)
 
         # ------------------ sagital copy / atlas sagital
-        self.sagital_copy_layout = QGridLayout(self.sagitalcopyframe)
+        self.sagital_copy_layout = QtWidgets.QGridLayout(self.sagitalcopyframe)
         self.sagital_copy_layout.setSpacing(0)
         self.sagital_copy_layout.setContentsMargins(0, 0, 0, 0)
 
         # ------------------ image
-        self.image_view_layout = QGridLayout(self.histview)
+        self.image_view_layout = QtWidgets.QGridLayout(self.histview)
         self.image_view_layout.setSpacing(0)
         self.image_view_layout.setContentsMargins(0, 0, 0, 0)
         self.image_view_layout.addWidget(self.image_view.img_stacks, 0, 0, 1, 1)
@@ -887,7 +887,7 @@ class HERBS(QMainWindow, FORM_Main):
 
 
         # ------------------ slice view
-        self.aslice_view_layout = QGridLayout(self.sliceframe)
+        self.aslice_view_layout = QtWidgets.QGridLayout(self.sliceframe)
         self.aslice_view_layout.setSpacing(0)
         self.aslice_view_layout.setContentsMargins(0, 0, 0, 0)
         self.aslice_view_layout.addWidget(self.atlas_view.slice_stack, 0, 0, 1, 1)
@@ -912,20 +912,20 @@ class HERBS(QMainWindow, FORM_Main):
         self.sliceframe.setVisible(False)
 
         self.sidebar.setCurrentIndex(0)
-        tab1_shortcut = QShortcut(QKeySequence('Ctrl+1'), self)
+        tab1_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence('Ctrl+1'), self)
         tab1_shortcut.activated.connect(lambda: self.sidebar_tab_state(0))
-        tab2_shortcut = QShortcut(QKeySequence('Ctrl+2'), self)
+        tab2_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence('Ctrl+2'), self)
         tab2_shortcut.activated.connect(lambda: self.sidebar_tab_state(1))
-        tab3_shortcut = QShortcut(QKeySequence('Ctrl+3'), self)
+        tab3_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence('Ctrl+3'), self)
         tab3_shortcut.activated.connect(lambda: self.sidebar_tab_state(2))
-        tab4_shortcut = QShortcut(QKeySequence('Ctrl+4'), self)
+        tab4_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence('Ctrl+4'), self)
         tab4_shortcut.activated.connect(lambda: self.sidebar_tab_state(3))
-        tab5_shortcut = QShortcut(QKeySequence('Ctrl+5'), self)
+        tab5_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence('Ctrl+5'), self)
         tab5_shortcut.activated.connect(lambda: self.sidebar_tab_state(4))
 
-        undo_shortcut = QShortcut(QKeySequence('Ctrl+Z'), self)
+        undo_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence('Ctrl+Z'), self)
         undo_shortcut.activated.connect(self.undo_called)
-        redo_shortcut = QShortcut(QKeySequence('Ctrl+Shift+Z'), self)
+        redo_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence('Ctrl+Shift+Z'), self)
         redo_shortcut.activated.connect(self.redo_called)
 
         self.print_message('Ready', self.normal_color)
@@ -1684,10 +1684,10 @@ class HERBS(QMainWindow, FORM_Main):
             file_path = self.home_path
         else:
             file_path = self.atlas_img_path
-        file_options = QFileDialog.Options()
-        file_options |= QFileDialog.DontUseNativeDialog
-        file_dialog = QFileDialog()
-        file_dialog.setFileMode(QFileDialog.ExistingFiles)
+        file_options = QtWidgets.QFileDialog.Options()
+        file_options |= QtWidgets.QFileDialog.DontUseNativeDialog
+        file_dialog = QtWidgets.QFileDialog()
+        file_dialog.setFileMode(QtWidgets.QFileDialog.ExistingFiles)
         image_file_path = file_dialog.getOpenFileName(self, file_title, file_path, file_filter, options=file_options)
 
         if image_file_path[0] != '':
@@ -1750,7 +1750,7 @@ class HERBS(QMainWindow, FORM_Main):
         if not self.atlas_view.slice_info_ready:
             self.print_message('No Slice information is given.', self.error_message_color)
             return
-        path = QFileDialog.getSaveFileName(self, "Save Processed Slice", self.home_path, "Pickle File (*.pkl)")
+        path = QtWidgets.QFileDialog.getSaveFileName(self, "Save Processed Slice", self.home_path, "Pickle File (*.pkl)")
         if path[0] != '':
             data = self.atlas_view.save_slice_data_and_info()
             with open(path[0], 'wb') as handle:
@@ -1791,7 +1791,7 @@ class HERBS(QMainWindow, FORM_Main):
 
     # save triangle points for the atlas
     def save_triangulation_points(self):
-        path = QFileDialog.getSaveFileName(self, "Save Triangulation Points Data",
+        path = QtWidgets.QFileDialog.getSaveFileName(self, "Save Triangulation Points Data",
                                            self.home_path, "Pickle File (*.pkl)")
         if path[0] != '':
             data = {'atlas_corner_points': self.atlas_corner_points,
@@ -1810,8 +1810,8 @@ class HERBS(QMainWindow, FORM_Main):
             self.print_message('Atlas need to be loaded first.', self.reminder_color)
             return
         filter = "Pickle File (*.pkl)"
-        dlg = QFileDialog()
-        dlg.setFileMode(QFileDialog.ExistingFiles)
+        dlg = QtWidgets.QFileDialog()
+        dlg.setFileMode(QtWidgets.QFileDialog.ExistingFiles)
         pnt_path = dlg.getOpenFileName(self, "Load Triangulation Points", self.home_path, filter)
         print(pnt_path)
 
@@ -1853,7 +1853,7 @@ class HERBS(QMainWindow, FORM_Main):
         # -------------- ToolBar layout and functions -------------- #
         self.tool_box.add_atlas.triggered.connect(self.load_previous_atlas)
         self.tool_box.add_image_stack.triggered.connect(self.load_image)
-        #     add_cell_act = QAction(QIcon('icons/neuron.png'), 'upload recorded cell activities', self)
+        #     add_cell_act = QAction(QtGui.QIcon('icons/neuron.png'), 'upload recorded cell activities', self)
         self.tool_box.vis2.triggered.connect(self.show_2_windows)
         self.tool_box.vis3.triggered.connect(self.show_3_windows)
         self.tool_box.vis4.triggered.connect(self.show_4_windows)
@@ -2042,43 +2042,43 @@ class HERBS(QMainWindow, FORM_Main):
     # ------------------------------------------------------------------
     def init_side_bar(self):
         self.sidebar.setStyleSheet(self.styles.tab_style)
-        self.sidebar.setIconSize(QSize(24, 24))
-        self.sidebar.setTabIcon(0, QIcon('icons/sidebar/atlascontrol.svg'))
-        self.sidebar.setTabIcon(1, QIcon('icons/sidebar/treeview.svg'))
-        self.sidebar.setTabIcon(2, QIcon('icons/sidebar/tool.svg'))
-        self.sidebar.setTabIcon(3, QIcon('icons/sidebar/layers.svg'))
-        self.sidebar.setTabIcon(4, QIcon('icons/sidebar/object.svg'))
+        self.sidebar.setIconSize(QtCore.QSize(24, 24))
+        self.sidebar.setTabIcon(0, QtGui.QIcon('icons/sidebar/atlascontrol.svg'))
+        self.sidebar.setTabIcon(1, QtGui.QIcon('icons/sidebar/treeview.svg'))
+        self.sidebar.setTabIcon(2, QtGui.QIcon('icons/sidebar/tool.svg'))
+        self.sidebar.setTabIcon(3, QtGui.QIcon('icons/sidebar/layers.svg'))
+        self.sidebar.setTabIcon(4, QtGui.QIcon('icons/sidebar/object.svg'))
 
         # ---------------------------- atlas control panel
-        atlas_panel_layout = QVBoxLayout(self.atlascontrolpanel)
+        atlas_panel_layout = QtWidgets.QVBoxLayout(self.atlascontrolpanel)
         atlas_panel_layout.setContentsMargins(0, 0, 0, 0)
         atlas_panel_layout.setAlignment(Qt.AlignTop)
-        atlas_control_label = QLabel('Atlasing Controller')
+        atlas_control_label = QtWidgets.QLabel('Atlasing Controller')
         atlas_control_label.setStyleSheet(self.styles.sidebar_title_label_style)
 
         atlas_panel_layout.addWidget(atlas_control_label)
         atlas_panel_layout.addWidget(self.atlas_view.sidebar_wrap)
 
         # ---------------------------- Label Panel
-        label_panel_layout = QVBoxLayout(self.treeviewpanel)
+        label_panel_layout = QtWidgets.QVBoxLayout(self.treeviewpanel)
         label_panel_layout.setContentsMargins(0, 0, 0, 0)
         label_panel_layout.setAlignment(Qt.AlignTop)
-        label_control_label = QLabel('Segmentation View Controller')
+        label_control_label = QtWidgets.QLabel('Segmentation View Controller')
         label_control_label.setStyleSheet(self.styles.sidebar_title_label_style)
 
-        label_tree_container = QFrame()
-        label_container_layout = QVBoxLayout(label_tree_container)
+        label_tree_container = QtWidgets.QFrame()
+        label_container_layout = QtWidgets.QVBoxLayout(label_tree_container)
         # label_container_layout.setContentsMargins(0, 0, 0, 0)
         label_container_layout.setSpacing(0)
         label_container_layout.setAlignment(Qt.AlignTop)
-        show_3d_button = QPushButton()
+        show_3d_button = QtWidgets.QPushButton()
         show_3d_button.setStyleSheet(sidebar_button_style)
         show_3d_button.setCheckable(True)
         show_3d_button.setText('Show in 3D view')
         show_3d_button.clicked.connect(self.show_small_area_in_3d)
 
-        composition_label = QLabel('Composition: ')
-        self.composition_combo = QComboBox()
+        composition_label = QtWidgets.QLabel('Composition: ')
+        self.composition_combo = QtWidgets.QComboBox()
         self.composition_combo.setFixedHeight(22)
         self.composition_combo.addItems(['opaque', 'translucent', 'additive'])
         self.composition_combo.currentIndexChanged.connect(self.composition_3d_changed)
@@ -2093,19 +2093,19 @@ class HERBS(QMainWindow, FORM_Main):
         label_panel_layout.addWidget(label_tree_container)
 
         # ---------------------------- image panel
-        image_panel_layout = QVBoxLayout(self.imagecontrolpanel)
+        image_panel_layout = QtWidgets.QVBoxLayout(self.imagecontrolpanel)
         image_panel_layout.setContentsMargins(0, 0, 0, 0)
         image_panel_layout.setSpacing(0)
         image_panel_layout.setAlignment(Qt.AlignTop)
-        image_control_label = QLabel('Image View Controller')
+        image_control_label = QtWidgets.QLabel('Image View Controller')
         image_control_label.setStyleSheet(self.styles.sidebar_title_label_style)
 
         image_panel_layout.addWidget(image_control_label)
 
-        space_item = QSpacerItem(300, 10, QSizePolicy.Expanding)
+        space_item = QSpacerItem(300, 10, QtCore.QSizePolicy.Expanding)
 
-        image_container = QFrame()
-        image_container_layout = QVBoxLayout(image_container)
+        image_container = QtWidgets.QFrame()
+        image_container_layout = QtWidgets.QVBoxLayout(image_container)
         image_container_layout.setSpacing(5)
         image_container_layout.setAlignment(Qt.AlignTop)
         image_container_layout.addWidget(self.image_view.outer_frame)
@@ -2116,17 +2116,17 @@ class HERBS(QMainWindow, FORM_Main):
         image_panel_layout.insertStretch(-1, 1)
 
         # ---------------------------- layer panel
-        layer_panel_layout = QVBoxLayout(self.layerpanel)
+        layer_panel_layout = QtWidgets.QVBoxLayout(self.layerpanel)
         layer_panel_layout.setContentsMargins(0, 0, 0, 0)
         layer_panel_layout.setSpacing(0)
         layer_panel_layout.setAlignment(Qt.AlignTop)
-        layer_control_label = QLabel('Layer View Controller')
+        layer_control_label = QtWidgets.QLabel('Layer View Controller')
         layer_control_label.setStyleSheet(self.styles.sidebar_title_label_style)
 
-        layer_btm_ctrl = QFrame()
+        layer_btm_ctrl = QtWidgets.QFrame()
         layer_btm_ctrl.setStyleSheet('background-color:rgb(65, 65, 65);')
         layer_btm_ctrl.setFixedHeight(24)
-        layer_btm_layout = QHBoxLayout(layer_btm_ctrl)
+        layer_btm_layout = QtWidgets.QHBoxLayout(layer_btm_ctrl)
         layer_btm_layout.setContentsMargins(0, 0, 0, 0)
         layer_btm_layout.setSpacing(5)
         layer_btm_layout.setAlignment(Qt.AlignRight)
@@ -2139,17 +2139,17 @@ class HERBS(QMainWindow, FORM_Main):
         # self.layerpanel.setEnabled(False)
 
         # ---------------------------- object panel
-        object_panel_layout = QVBoxLayout(self.probecontrolpanel)
+        object_panel_layout = QtWidgets.QVBoxLayout(self.probecontrolpanel)
         object_panel_layout.setContentsMargins(0, 0, 0, 0)
         object_panel_layout.setSpacing(0)
         object_panel_layout.setAlignment(Qt.AlignTop)
-        object_control_label = QLabel('Object View Controller')
+        object_control_label = QtWidgets.QLabel('Object View Controller')
         object_control_label.setStyleSheet(self.styles.sidebar_title_label_style)
 
-        object_btm_ctrl = QFrame()
+        object_btm_ctrl = QtWidgets.QFrame()
         object_btm_ctrl.setStyleSheet('background-color:rgb(65, 65, 65);')
         object_btm_ctrl.setFixedHeight(24)
-        object_btm_layout = QHBoxLayout(object_btm_ctrl)
+        object_btm_layout = QtWidgets.QHBoxLayout(object_btm_ctrl)
         object_btm_layout.setContentsMargins(0, 0, 0, 0)
         object_btm_layout.setSpacing(5)
         object_btm_layout.setAlignment(Qt.AlignRight)
@@ -4740,10 +4740,10 @@ class HERBS(QMainWindow, FORM_Main):
             file_path = self.home_path
         else:
             file_path = self.current_img_path
-        file_options = QFileDialog.Options()
-        file_options |= QFileDialog.DontUseNativeDialog
-        file_dialog = QFileDialog()
-        file_dialog.setFileMode(QFileDialog.ExistingFiles)
+        file_options = QtWidgets.QFileDialog.Options()
+        file_options |= QtWidgets.QFileDialog.DontUseNativeDialog
+        file_dialog = QtWidgets.QFileDialog()
+        file_dialog.setFileMode(QtWidgets.QFileDialog.ExistingFiles)
         image_file_path = file_dialog.getOpenFileName(self, file_title, file_path, file_filter, options=file_options)
 
         if image_file_path[0] != '':
@@ -4856,7 +4856,7 @@ class HERBS(QMainWindow, FORM_Main):
     # load multiple images
     def load_images(self):
         self.statusbar.showMessage('Selecte folder to load multiple images, files can not be .czi format ...')
-        images_folder = str(QFileDialog.getExistingDirectory(self, "Select Images Folder"))
+        images_folder = str(QtWidgets.QFileDialog.getExistingDirectory(self, "Select Images Folder"))
         if images_folder != '':
             # image_files_list = os.listdir(images_folder)
             # image_files_list = natsorted(image_files_list)
@@ -5044,7 +5044,7 @@ class HERBS(QMainWindow, FORM_Main):
     def load_atlas_clicked(self):
         self.print_message('Loading Brain Atlas...', self.normal_color)
 
-        atlas_folder = str(QFileDialog.getExistingDirectory(self, "Select Atlas Folder", self.home_path))
+        atlas_folder = str(QtWidgets.QFileDialog.getExistingDirectory(self, "Select Atlas Folder", self.home_path))
         with open('data/atlas_path.txt', 'w') as f:
             f.write(atlas_folder)
 
@@ -5065,18 +5065,18 @@ class HERBS(QMainWindow, FORM_Main):
                     lines = f.readlines()
                 atlas_folder = lines[0]
             except (IOError, OSError, IndexError):
-                atlas_folder = str(QFileDialog.getExistingDirectory(self, "Select Atlas Folder", self.home_path))
+                atlas_folder = str(QtWidgets.QFileDialog.getExistingDirectory(self, "Select Atlas Folder", self.home_path))
                 with open('data/atlas_path.txt', 'w') as f:
                     f.write(atlas_folder)
 
             if not os.path.exists(atlas_folder):
                 msg = 'The previous loaded volume atlas might be moved or deleted. Please selected atlas folder...'
                 self.print_message(msg, self.reminder_color)
-                atlas_folder = str(QFileDialog.getExistingDirectory(self, "Select Atlas Folder", self.home_path))
+                atlas_folder = str(QtWidgets.QFileDialog.getExistingDirectory(self, "Select Atlas Folder", self.home_path))
                 with open('data/atlas_path.txt', 'w') as f:
                     f.write(atlas_folder)
         else:
-            atlas_folder = str(QFileDialog.getExistingDirectory(self, "Select Atlas Folder", self.home_path))
+            atlas_folder = str(QtWidgets.QFileDialog.getExistingDirectory(self, "Select Atlas Folder", self.home_path))
             with open('data/atlas_path.txt', 'w') as f:
                 f.write(atlas_folder)
 
@@ -5102,7 +5102,7 @@ class HERBS(QMainWindow, FORM_Main):
             return
 
         self.print_message('Saving {} objects ...'.format(object_type), self.normal_color)
-        save_path = str(QFileDialog.getExistingDirectory(self, "Select Folder to Save Objects"))
+        save_path = str(QtWidgets.QFileDialog.getExistingDirectory(self, "Select Folder to Save Objects"))
         if save_path != '':
             for da_ind in valid_index:
                 data = {'type': self.object_ctrl.obj_type[da_ind],
@@ -5119,7 +5119,7 @@ class HERBS(QMainWindow, FORM_Main):
         if self.object_ctrl.current_obj_index is None:
             self.print_message('No object is created ...', self.error_message_color)
             return
-        file_name = QFileDialog.getSaveFileName(self, 'Save Current Object File', self.current_img_path,
+        file_name = QtWidgets.QFileDialog.getSaveFileName(self, 'Save Current Object File', self.current_img_path,
                                                 "Pickle File (*.pkl)")
         if file_name[0] != '':
             da_data = {'type': self.object_ctrl.obj_type[self.object_ctrl.current_obj_index],
@@ -5137,8 +5137,8 @@ class HERBS(QMainWindow, FORM_Main):
         if self.atlas_view.atlas_data is None and self.atlas_view.slice_image_data is None:
             self.print_message('Atlas need to be loaded first.', self.error_message_color)
             return
-        dlg = QFileDialog()
-        dlg.setFileMode(QFileDialog.ExistingFiles)
+        dlg = QtWidgets.QFileDialog()
+        dlg.setFileMode(QtWidgets.QFileDialog.ExistingFiles)
         object_file_path = dlg.getOpenFileNames(self, "Load Object Files", self.home_path, "Pickle File (*.pkl)")
 
         if object_file_path[0]:
@@ -5163,7 +5163,7 @@ class HERBS(QMainWindow, FORM_Main):
             self.print_message(msg, self.error_message_color)
             return
         self.print_message('Save current layer...', self.normal_color)
-        path = QFileDialog.getSaveFileName(self, "Save current layer", self.current_img_path)
+        path = QtWidgets.QFileDialog.getSaveFileName(self, "Save current layer", self.current_img_path)
         if path[0] != '':
             da_link = self.layer_ctrl.layer_link[self.layer_ctrl.current_layer_index[0]]
             color = self.layer_ctrl.layer_color[self.layer_ctrl.current_layer_index[0]]
@@ -5181,7 +5181,7 @@ class HERBS(QMainWindow, FORM_Main):
             self.print_message('No layer is created.', self.error_message_color)
             return
         self.print_message('Save all layers...', self.normal_color)
-        path = QFileDialog.getSaveFileName(self, "Save all layer", self.current_img_path)
+        path = QtWidgets.QFileDialog.getSaveFileName(self, "Save all layer", self.current_img_path)
         if path[0] != '':
             for da_link in self.layer_ctrl.layer_link:
                 da_ind = np.where(np.ravel(self.layer_ctrl.layer_link) == da_link)[0][0]
@@ -5442,8 +5442,8 @@ class HERBS(QMainWindow, FORM_Main):
             return
 
     def load_layers_called(self):
-        dlg = QFileDialog()
-        dlg.setFileMode(QFileDialog.ExistingFiles)
+        dlg = QtWidgets.QFileDialog()
+        dlg.setFileMode(QtWidgets.QFileDialog.ExistingFiles)
         layer_files_path = dlg.getOpenFileNames(self, "Load Layer Files", self.home_path, "Pickle File (*.pkl)")
 
         if layer_files_path[0]:
@@ -5484,7 +5484,7 @@ class HERBS(QMainWindow, FORM_Main):
         if self.atlas_view.atlas_data is None and self.atlas_view.slice_image_data is None and self.image_view.current_img is None:
             self.print_message('No project can be saved.', self.reminder_color)
             return
-        file_name = QFileDialog.getSaveFileName(self, 'Save Project', self.save_path, "Pickle File (*.pkl)")
+        file_name = QtWidgets.QFileDialog.getSaveFileName(self, 'Save Project', self.save_path, "Pickle File (*.pkl)")
         if file_name[0] != '':
             if self.current_atlas == 'slice':
                 atlas_ctrl_data = self.atlas_view.save_slice_data_and_info()
@@ -5723,8 +5723,8 @@ class HERBS(QMainWindow, FORM_Main):
 
     def load_project_called(self):
         self.print_message('Loading project....', self.normal_color)
-        dlg = QFileDialog()
-        dlg.setFileMode(QFileDialog.ExistingFiles)
+        dlg = QtWidgets.QFileDialog()
+        dlg.setFileMode(QtWidgets.QFileDialog.ExistingFiles)
         project_path = dlg.getOpenFileName(self, "Load Project", self.home_path, "Pickle File (*.pkl)")
 
         if project_path[0] != '':

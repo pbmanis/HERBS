@@ -2,14 +2,13 @@ import os
 import sys
 import numpy as np
 import pyqtgraph as pg
-from PyQt5.QtCore import *
-from pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtGui, QtCore, QtWidgets
 
 
 class MovablePoints(pg.GraphItem):
-    mouseHovered = pyqtSignal(object)
-    mouseDragged = pyqtSignal(object)
-    mouseClicked = pyqtSignal(object)
+    mouseHovered = QtCore.pyqtSignal(object)
+    mouseDragged = QtCore.pyqtSignal(object)
+    mouseClicked = QtCore.pyqtSignal(object)
 
     def __init__(self):
         self.dragPoint = None
@@ -76,9 +75,9 @@ class MovablePoints(pg.GraphItem):
 
 
 class TriangulationPoints(pg.GraphItem):
-    mouseHovered = pyqtSignal(object)
-    mouseDragged = pyqtSignal(object)
-    mouseClicked = pyqtSignal(object)
+    mouseHovered = QtCore.pyqtSignal(object)
+    mouseDragged = QtCore.pyqtSignal(object)
+    mouseClicked = QtCore.pyqtSignal(object)
 
     def __init__(self):
         self.dragPoint = None
@@ -155,9 +154,9 @@ class TriangulationPoints(pg.GraphItem):
 
 
 class TriangulationPointsTest(pg.ScatterPlotItem):
-    mouseHovered = pyqtSignal(object)
-    mouseDragged = pyqtSignal(object)
-    mouseClicked = pyqtSignal(object)
+    mouseHovered = QtCore.pyqtSignal(object)
+    mouseDragged = QtCore.pyqtSignal(object)
+    mouseClicked = QtCore.pyqtSignal(object)
 
     def __init__(self):
 

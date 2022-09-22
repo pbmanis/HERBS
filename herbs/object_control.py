@@ -2,10 +2,8 @@ import os
 import sys
 import numpy as np
 from random import randint
-from PyQt5.QtWidgets import *
+from pyqtgraph.Qt import QtCore, QtGui, QtWidgets
 import pyqtgraph as pg
-from PyQt5.QtGui import QIcon, QPixmap, QColor
-from PyQt5.QtCore import Qt, QSize
 from .wtiles import *
 
 btm_style = '''
@@ -85,7 +83,7 @@ QLineEdit {
 '''
 
 
-class CompareWindow(QDialog):
+class CompareWindow(QtWidgets.QDialog):
     def __init__(self, obj_names, obj_data):
         super().__init__()
 
@@ -109,23 +107,23 @@ class CompareWindow(QDialog):
                     all_label_color.append(obj_data[i]['label_color'][j])
                     all_label_channels.append(obj_data[i]['region_channels'][j])
 
-        layout = QVBoxLayout()
+        layout = QtWidgets.QVBoxLayout()
         full_name = obj_names[0]
         for i in range(1, n_object):
             full_name = full_name + ', '
             full_name = full_name + obj_names[i]
 
-        self.label = QLabel('Compare {}'.format(full_name))
-        color = QColor(128, 128, 128, 128)
+        self.label = QtWidgets.QLabel('Compare {}'.format(full_name))
+        color = QtGui.QColor(128, 128, 128, 128)
         label_style = 'QLabel {background-color: ' + color.name() + '; font-size: 20px}'
         self.label.setStyleSheet(label_style)
 
-        sec_group = QGroupBox()
-        slayout = QGridLayout(sec_group)
-        lb1 = QLabel('Brain Region')
-        lb2 = QLabel('Acronym')
-        lb3 = QLabel('Channels')
-        lb4 = QLabel('Color')
+        sec_group = QtWidgets.QGroupBox()
+        slayout = QtWidgets.QGridLayout(sec_group)
+        lb1 = QtWidgets.QLabel('Brain Region')
+        lb2 = QtWidgets.QLabel('Acronym')
+        lb3 = QtWidgets.QLabel('Channels')
+        lb4 = QtWidgets.QLabel('Color')
         slayout.addWidget(lb1, 0, 0, 1, 1)
         slayout.addWidget(lb2, 0, 1, 1, 1)
         slayout.addWidget(lb3, 0, 2, 1, 1)
@@ -134,19 +132,19 @@ class CompareWindow(QDialog):
         channels = np.ravel(all_label_channels).astype(int)
 
         for i in range(len(all_label_names)):
-            slayout.addWidget(QLabel(all_label_names[i]), i + 1, 0, 1, 1)
-            slayout.addWidget(QLabel(all_label_acronym[i]), i + 1, 1, 1, 1)
-            slayout.addWidget(QLabel(str(channels[i])), i + 1, 2, 1, 1)
-            clb = QLabel()
-            da_color = QColor(all_label_color[i][0], all_label_color[i][1], all_label_color[i][2], 255).name()
+            slayout.addWidget(QtWidgets.QLabel(all_label_names[i]), i + 1, 0, 1, 1)
+            slayout.addWidget(QtWidgets.QLabel(all_label_acronym[i]), i + 1, 1, 1, 1)
+            slayout.addWidget(QtWidgets.QLabel(str(channels[i])), i + 1, 2, 1, 1)
+            clb = QtWidgets.QLabel()
+            da_color = QtGui.QColor(all_label_color[i][0], all_label_color[i][1], all_label_color[i][2], 255).name()
             clb.setStyleSheet('QLabel {background-color: ' + da_color + '; width: 20px; height: 20px}')
             slayout.addWidget(clb, i + 1, 3, 1, 1)
 
         # make plot data
-        plot_frame = QFrame()
+        plot_frame = QtWidgets.QFrame()
         plot_frame.setMaximumWidth(300)
         plot_frame.setMinimumWidth(300)
-        view_layout = QHBoxLayout(plot_frame)
+        view_layout = QtWidgets.QHBoxLayout(plot_frame)
         view_layout.setSpacing(0)
         view_layout.setContentsMargins(0, 0, 0, 0)
 
@@ -183,26 +181,26 @@ class CompareWindow(QDialog):
             bg_list1 = []
             for j in np.arange(len(plot_data1))[::-1]:
                 bg = pg.BarGraphItem(x=[i - 0.15], height=plot_data1[j], width=0.3,
-                                     brush=QColor(plot_colors1[j][0], plot_colors1[j][1], plot_colors1[j][2], 255))
+                                     brush=QtGui.QColor(plot_colors1[j][0], plot_colors1[j][1], plot_colors1[j][2], 255))
                 bg_list1.append(bg)
                 view.addItem(bg_list1[-1])
 
             bg_list2 = []
             for j in np.arange(len(plot_data2))[::-1]:
                 bg = pg.BarGraphItem(x=[i + 0.15], height=plot_data2[j], width=0.3,
-                                     brush=QColor(plot_colors2[j][0], plot_colors2[j][1], plot_colors2[j][2], 255))
+                                     brush=QtGui.QColor(plot_colors2[j][0], plot_colors2[j][1], plot_colors2[j][2], 255))
                 bg_list2.append(bg)
                 view.addItem(bg_list2[-1])
 
-        channel_info_frame = QFrame()
-        channel_info_layout = QHBoxLayout(channel_info_frame)
+        channel_info_frame = QtWidgets.QFrame()
+        channel_info_layout = QtWidgets.QHBoxLayout(channel_info_frame)
         channel_info_layout.setContentsMargins(0, 0, 0, 0)
         channel_info_layout.setSpacing(10)
         channel_info_layout.addWidget(plot_frame)
         channel_info_layout.addWidget(sec_group)
 
         # ok button, used to close window
-        ok_btn = QDialogButtonBox(QDialogButtonBox.Ok)
+        ok_btn = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.StandardButton.OK)
         ok_btn.accepted.connect(self.accept)
 
         # add widget to layout
@@ -215,41 +213,41 @@ class CompareWindow(QDialog):
         self.close()
 
 
-class CellsInfoWindow(QDialog):
+class CellsInfoWindow(QtWidgets.QDialog):
     def __init__(self, name, data):
         super().__init__()
 
         self.setWindowTitle("Cell Information Window")
 
-        layout = QVBoxLayout()
-        self.label = QLabel(name)
-        color = QColor(data['vis_color'][0], data['vis_color'][1], data['vis_color'][2], data['vis_color'][3])
+        layout = QtWidgets.QVBoxLayout()
+        self.label = QtWidgets.QLabel(name)
+        color = QtGui.QColor(data['vis_color'][0], data['vis_color'][1], data['vis_color'][2], data['vis_color'][3])
         label_style = 'QLabel {background-color: ' + color.name() + '; font-size: 20px}'
         self.label.setStyleSheet(label_style)
 
-        sec_group = QGroupBox('Total Count: {}'.format(len(data['data'])))
-        slayout = QGridLayout(sec_group)
-        lb1 = QLabel('Brain Region')
-        lb2 = QLabel('Acronym')
-        lb3 = QLabel('Color')
-        lb4 = QLabel('Count')
+        sec_group = QtWidgets.QGroupBox('Total Count: {}'.format(len(data['data'])))
+        slayout = QtWidgets.QGridLayout(sec_group)
+        lb1 = QtWidgets.QLabel('Brain Region')
+        lb2 = QtWidgets.QLabel('Acronym')
+        lb3 = QtWidgets.QLabel('Color')
+        lb4 = QtWidgets.QLabel('Count')
         slayout.addWidget(lb1, 0, 0, 1, 1)
         slayout.addWidget(lb2, 0, 1, 1, 1)
         slayout.addWidget(lb3, 0, 2, 1, 1)
         slayout.addWidget(lb4, 0, 3, 1, 1)
 
         for i in range(len(data['label_name'])):
-            slayout.addWidget(QLabel(data['label_name'][i]), i + 1, 0, 1, 1)
-            slayout.addWidget(QLabel(data['label_acronym'][i]), i + 1, 1, 1, 1)
-            clb = QLabel()
-            da_color = QColor(data['label_color'][i][0], data['label_color'][i][1], data['label_color'][i][2],
+            slayout.addWidget(QtWidgets.QLabel(data['label_name'][i]), i + 1, 0, 1, 1)
+            slayout.addWidget(QtWidgets.QLabel(data['label_acronym'][i]), i + 1, 1, 1, 1)
+            clb = QtWidgets.QLabel()
+            da_color = QtGui.QColor(data['label_color'][i][0], data['label_color'][i][1], data['label_color'][i][2],
                               255).name()
             clb.setStyleSheet('QLabel {background-color: ' + da_color + '; width: 20px; height: 20px}')
             slayout.addWidget(clb, i + 1, 2, 1, 1)
-            slayout.addWidget(QLabel(str(data['region_count'][i])), i + 1, 3, 1, 1)
+            slayout.addWidget(QtWidgets.QLabel(str(data['region_count'][i])), i + 1, 3, 1, 1)
 
         # ok button, used to close window
-        ok_btn = QDialogButtonBox(QDialogButtonBox.Ok)
+        ok_btn = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.StandardButton.OK)
         ok_btn.accepted.connect(self.accept)
 
         # add widget to layout
@@ -265,38 +263,38 @@ class CellsInfoWindow(QDialog):
         self.label.setStyleSheet('QLabel {background-color: ' + color + ';}')
 
 
-class VirusInfoWindow(QDialog):
+class VirusInfoWindow(QtWidgets.QDialog):
     def __init__(self, name, data):
         super().__init__()
 
         self.setWindowTitle("Virus Information Window")
 
-        layout = QVBoxLayout()
-        self.label = QLabel(name)
-        color = QColor(data['vis_color'][0], data['vis_color'][1], data['vis_color'][2], data['vis_color'][3])
+        layout = QtWidgets.QVBoxLayout()
+        self.label = QtWidgets.QLabel(name)
+        color = QtGui.QColor(data['vis_color'][0], data['vis_color'][1], data['vis_color'][2], data['vis_color'][3])
         label_style = 'QLabel {background-color: ' + color.name() + '; font-size: 20px}'
         self.label.setStyleSheet(label_style)
 
-        sec_group = QGroupBox()
-        slayout = QGridLayout(sec_group)
-        lb1 = QLabel('Brain Region')
-        lb2 = QLabel('Acronym')
-        lb3 = QLabel('Color')
+        sec_group = QtWidgets.QGroupBox()
+        slayout = QtWidgets.QGridLayout(sec_group)
+        lb1 = QtWidgets.QLabel('Brain Region')
+        lb2 = QtWidgets.QLabel('Acronym')
+        lb3 = QtWidgets.QLabel('Color')
         slayout.addWidget(lb1, 0, 0, 1, 1)
         slayout.addWidget(lb2, 0, 1, 1, 1)
         slayout.addWidget(lb3, 0, 2, 1, 1)
 
         for i in range(len(data['label_name'])):
-            slayout.addWidget(QLabel(data['label_name'][i]), i + 1, 0, 1, 1)
-            slayout.addWidget(QLabel(data['label_acronym'][i]), i + 1, 1, 1, 1)
-            clb = QLabel()
-            da_color = QColor(data['label_color'][i][0], data['label_color'][i][1], data['label_color'][i][2],
+            slayout.addWidget(QtWidgets.QLabel(data['label_name'][i]), i + 1, 0, 1, 1)
+            slayout.addWidget(QtWidgets.QLabel(data['label_acronym'][i]), i + 1, 1, 1, 1)
+            clb = QtWidgets.QLabel()
+            da_color = QtGui.QColor(data['label_color'][i][0], data['label_color'][i][1], data['label_color'][i][2],
                               255).name()
             clb.setStyleSheet('QLabel {background-color: ' + da_color + '; width: 20px; height: 20px}')
             slayout.addWidget(clb, i + 1, 2, 1, 1)
 
         # ok button, used to close window
-        ok_btn = QDialogButtonBox(QDialogButtonBox.Ok)
+        ok_btn = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.StandardButton.OK)
         ok_btn.accepted.connect(self.accept)
 
         # add widget to layout
@@ -312,52 +310,60 @@ class VirusInfoWindow(QDialog):
         self.label.setStyleSheet('QLabel {background-color: ' + color + ';}')
 
 
-class ProbeInfoWindow(QDialog):
+class ProbeInfoWindow(QtWidgets.QDialog):
     def __init__(self, name, data):
         super().__init__()
 
         self.setWindowTitle("Probe Information Window")
 
-        self.label = QLabel(name)
-        # self.label = QLabel("Probe % d " % group_id)
-        color = QColor(data['vis_color'][0], data['vis_color'][1], data['vis_color'][2], data['vis_color'][3])
+        self.label = QtWidgets.QLabel(name)
+        # self.label = QtWidgets.QLabel("Probe % d " % group_id)
+        color = QtGui.QColor(data['vis_color'][0], data['vis_color'][1], data['vis_color'][2], data['vis_color'][3])
         label_style = 'QLabel {background-color: ' + color.name() + '; font-size: 20px}'
         self.label.setStyleSheet(label_style)
 
-        ap_angle_label = QLabel('AP Angle : ')
-        ap_angle_label.setAlignment(Qt.AlignCenter)
-        ml_angle_label = QLabel('ML Angle : ')
-        ml_angle_label.setAlignment(Qt.AlignCenter)
-        probe_length_label = QLabel('Probe Length : ')
-        probe_length_label.setAlignment(Qt.AlignCenter)
-        dv_label = QLabel('DV : ')
-        dv_label.setAlignment(Qt.AlignCenter)
-        insertion_coords_label = QLabel('Insertion coordinates : ')
-        insertion_coords_label.setAlignment(Qt.AlignCenter)
-        insertion_voxels_label = QLabel('Insertion voxels : ')
-        insertion_voxels_label.setAlignment(Qt.AlignCenter)
+        ap_angle_label = QtWidgets.QLabel('AP Angle : ')
+        ap_angle_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter
+)
+        ml_angle_label = QtWidgets.QLabel('ML Angle : ')
+        ml_angle_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter
+)
+        probe_length_label = QtWidgets.QLabel('Probe Length : ')
+        probe_length_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter
+)
+        dv_label = QtWidgets.QLabel('DV : ')
+        dv_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter
+)
+        insertion_coords_label = QtWidgets.QLabel('Insertion coordinates : ')
+        insertion_coords_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter
+)
+        insertion_voxels_label = QtWidgets.QLabel('Insertion voxels : ')
+        insertion_voxels_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter
+)
 
-        terminus_coords_label = QLabel('Terminus coordinates : ')
-        terminus_coords_label.setAlignment(Qt.AlignCenter)
-        terminus_voxels_label = QLabel('Terminus voxels : ')
-        terminus_voxels_label.setAlignment(Qt.AlignCenter)
+        terminus_coords_label = QtWidgets.QLabel('Terminus coordinates : ')
+        terminus_coords_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter
+)
+        terminus_voxels_label = QtWidgets.QLabel('Terminus voxels : ')
+        terminus_voxels_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter
+)
 
-        ap_angle_value = QLabel('{} \u00B0'.format(np.round(data['ap_angle'], 2)))
-        ml_angle_value = QLabel('{} \u00B0'.format(np.round(data['ml_angle'], 2)))
-        probe_length = QLabel('{} \u03BCm'.format(np.round(data['probe_length'], 2)))
-        dv = QLabel('{} \u03BCm'.format(np.round(data['dv'], 2)))
+        ap_angle_value = QtWidgets.QLabel('{} \u00B0'.format(np.round(data['ap_angle'], 2)))
+        ml_angle_value = QtWidgets.QLabel('{} \u00B0'.format(np.round(data['ml_angle'], 2)))
+        probe_length = QtWidgets.QLabel('{} \u03BCm'.format(np.round(data['probe_length'], 2)))
+        dv = QtWidgets.QLabel('{} \u03BCm'.format(np.round(data['dv'], 2)))
         ic_val = np.round(data['insertion_coords'], 2)
-        insertion_coords = QLabel('ML: {}\u03BCm,  AP: {}\u03BCm'.format(ic_val[0], ic_val[1]))
+        insertion_coords = QtWidgets.QLabel('ML: {}\u03BCm,  AP: {}\u03BCm'.format(ic_val[0], ic_val[1]))
         iv_val = data['insertion_vox'].astype(int)
-        insertion_vox = QLabel('({} {} {})'.format(iv_val[0], iv_val[1], iv_val[2]))
+        insertion_vox = QtWidgets.QLabel('({} {} {})'.format(iv_val[0], iv_val[1], iv_val[2]))
 
         tc_val = np.round(data['terminus_coords'], 2)
-        terminus_coords = QLabel('ML: {}\u03BCm,  AP: {}\u03BCm'.format(tc_val[0], tc_val[1]))
+        terminus_coords = QtWidgets.QLabel('ML: {}\u03BCm,  AP: {}\u03BCm'.format(tc_val[0], tc_val[1]))
         tv_val = data['terminus_vox']
-        terminus_vox = QLabel('({} {} {})'.format(tv_val[0], tv_val[1], tv_val[2]))
+        terminus_vox = QtWidgets.QLabel('({} {} {})'.format(tv_val[0], tv_val[1], tv_val[2]))
 
-        coords_info_group = QGroupBox()
-        coords_info_layout = QGridLayout(coords_info_group)
+        coords_info_group = QtWidgets.QGroupBox()
+        coords_info_layout = QtWidgets.QGridLayout(coords_info_group)
         coords_info_layout.addWidget(ap_angle_label, 0, 0, 1, 1)
         coords_info_layout.addWidget(ap_angle_value, 0, 1, 1, 1)
         coords_info_layout.addWidget(ml_angle_label, 0, 2, 1, 1)
@@ -378,12 +384,12 @@ class ProbeInfoWindow(QDialog):
         coords_info_layout.addWidget(terminus_voxels_label, 3, 2, 1, 1)
         coords_info_layout.addWidget(terminus_vox, 3, 3, 1, 1)
 
-        sec_group = QGroupBox()
-        slayout = QGridLayout(sec_group)
-        lb1 = QLabel('Brain Region')
-        lb2 = QLabel('Acronym')
-        lb3 = QLabel('Channels')
-        lb4 = QLabel('Color')
+        sec_group = QtWidgets.QGroupBox()
+        slayout = QtWidgets.QGridLayout(sec_group)
+        lb1 = QtWidgets.QLabel('Brain Region')
+        lb2 = QtWidgets.QLabel('Acronym')
+        lb3 = QtWidgets.QLabel('Channels')
+        lb4 = QtWidgets.QLabel('Color')
         slayout.addWidget(lb1, 0, 0, 1, 1)
         slayout.addWidget(lb2, 0, 1, 1, 1)
         slayout.addWidget(lb3, 0, 2, 1, 1)
@@ -392,11 +398,11 @@ class ProbeInfoWindow(QDialog):
         channels = np.ravel(data['region_channels'].astype(int)).astype(str)
 
         for i in range(len(data['label_name'])):
-            slayout.addWidget(QLabel(data['label_name'][i]), i + 1, 0, 1, 1)
-            slayout.addWidget(QLabel(data['label_acronym'][i]), i + 1, 1, 1, 1)
-            slayout.addWidget(QLabel(channels[i]), i + 1, 2, 1, 1)
-            clb = QLabel()
-            da_color = QColor(data['label_color'][i][0], data['label_color'][i][1], data['label_color'][i][2], 255).name()
+            slayout.addWidget(QtWidgets.QLabel(data['label_name'][i]), i + 1, 0, 1, 1)
+            slayout.addWidget(QtWidgets.QLabel(data['label_acronym'][i]), i + 1, 1, 1, 1)
+            slayout.addWidget(QtWidgets.QLabel(channels[i]), i + 1, 2, 1, 1)
+            clb = QtWidgets.QLabel()
+            da_color = QtGui.QColor(data['label_color'][i][0], data['label_color'][i][1], data['label_color'][i][2], 255).name()
             clb.setStyleSheet('QLabel {background-color: ' + da_color + '; width: 20px; height: 20px}')
             slayout.addWidget(clb, i + 1, 3, 1, 1)
 
@@ -418,10 +424,10 @@ class ProbeInfoWindow(QDialog):
         # self.label = label[::-1]
 
 
-        plot_frame = QFrame()
+        plot_frame = QtWidgets.QFrame()
         plot_frame.setMaximumWidth(300)
         plot_frame.setMinimumWidth(300)
-        view_layout = QHBoxLayout(plot_frame)
+        view_layout = QtWidgets.QHBoxLayout(plot_frame)
         view_layout.setSpacing(0)
         view_layout.setContentsMargins(0, 0, 0, 0)
 
@@ -439,7 +445,7 @@ class ProbeInfoWindow(QDialog):
         bg_list1 = []
         for i in np.arange(len(plot_data1))[::-1]:
             bg = pg.BarGraphItem(x=[1-0.15], height=plot_data1[i], width=0.3,
-                                 brush=QColor(plot_colors1[i][0], plot_colors1[i][1], plot_colors1[i][2], 255))
+                                 brush=QtGui.QColor(plot_colors1[i][0], plot_colors1[i][1], plot_colors1[i][2], 255))
             bg_list1.append(bg)
             view.addItem(bg_list1[-1])
 
@@ -460,7 +466,7 @@ class ProbeInfoWindow(QDialog):
         bg_list2 = []
         for i in np.arange(len(plot_data2))[::-1]:
             bg = pg.BarGraphItem(x=[1+0.15], height=plot_data2[i], width=0.3,
-                                 brush=QColor(plot_colors2[i][0], plot_colors2[i][1], plot_colors2[i][2], 255))
+                                 brush=QtGui.QColor(plot_colors2[i][0], plot_colors2[i][1], plot_colors2[i][2], 255))
             bg_list2.append(bg)
             view.addItem(bg_list2[-1])
 
@@ -480,19 +486,19 @@ class ProbeInfoWindow(QDialog):
 
         view_layout.addWidget(w)
 
-        channel_info_frame = QFrame()
-        channel_info_layout = QHBoxLayout(channel_info_frame)
+        channel_info_frame = QtWidgets.QFrame()
+        channel_info_layout = QtWidgets.QHBoxLayout(channel_info_frame)
         channel_info_layout.setContentsMargins(0, 0, 0, 0)
         channel_info_layout.setSpacing(10)
         channel_info_layout.addWidget(plot_frame)
         channel_info_layout.addWidget(sec_group)
 
         # ok button, used to close window
-        ok_btn = QDialogButtonBox(QDialogButtonBox.Ok)
+        ok_btn = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.StandardButton.OK)
         ok_btn.accepted.connect(self.accept)
 
         # add widget to layout
-        layout = QVBoxLayout()
+        layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.label)
         layout.addWidget(coords_info_group)
         layout.addSpacing(10)
@@ -507,12 +513,12 @@ class ProbeInfoWindow(QDialog):
         self.label.setStyleSheet('QLabel {background-color: ' + color + ';}')
 
 
-class SinglePiece(QWidget):
-    sig_clicked = pyqtSignal(object)
-    sig_name_changed = pyqtSignal(object)
+class SinglePiece(QtWidgets.QWidget):
+    sig_clicked = QtCore.pyqtSignal(object)
+    sig_name_changed = QtCore.pyqtSignal(object)
 
     def __init__(self, parent=None, index=0, obj_name='', obj_type='probe piece', object_icon=None):
-        QWidget.__init__(self, parent=parent)
+        QtWidgets.QWidget.__init__(self, parent=parent)
 
         self.inactive_style = 'QFrame{background-color:rgb(83, 83, 83); border: 1px solid rgb(128, 128, 128);}'
         self.active_style = 'QFrame{background-color:rgb(107, 107, 107); border: 1px solid rgb(128, 128, 128);}'
@@ -522,53 +528,53 @@ class SinglePiece(QWidget):
         self.object_type = obj_type
         self.active = True
 
-        self.tbnail = QPushButton()
-        self.tbnail.setFixedSize(QSize(40, 40))
+        self.tbnail = QtWidgets.QPushButton()
+        self.tbnail.setFixedSize(QtCore.QSize(40, 40))
         self.tbnail.setStyleSheet(eye_button_style)
         self.tbnail.setIcon(object_icon)
-        self.tbnail.setIconSize(QSize(20, 20))
+        self.tbnail.setIconSize(QtCore.QSize(20, 20))
         self.tbnail.clicked.connect(self.on_click)
 
         self.text_btn = QDoubleButton()
         self.text_btn.setStyleSheet(text_btn_style)
-        self.text_btn.setFixedSize(QSize(240, 40))
+        self.text_btn.setFixedSize(QtCore.QSize(240, 40))
         self.text_btn.left_clicked.connect(self.on_click)
         self.text_btn.double_clicked.connect(self.on_doubleclick)
 
-        self.l_line_edit = QLineEdit()
+        self.l_line_edit =QtWidgets.QLineEdit()
         self.l_line_edit.setStyleSheet(line_edit_style)
         self.l_line_edit.setFixedWidth(240)
         self.l_line_edit.editingFinished.connect(self.enter_pressed)
         self.l_line_edit.setVisible(False)
 
-        self.inner_frame = QFrame()
+        self.inner_frame = QtWidgets.QFrame()
         self.inner_frame.setStyleSheet(self.active_style)
-        self.inner_layout = QHBoxLayout(self.inner_frame)
+        self.inner_layout = QtWidgets.QHBoxLayout(self.inner_frame)
         self.inner_layout.setContentsMargins(0, 0, 0, 0)
         self.inner_layout.setSpacing(0)
-        self.inner_layout.setAlignment(Qt.AlignVCenter)
+        self.inner_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.inner_layout.addWidget(self.tbnail)
         self.inner_layout.addSpacing(5)
         self.inner_layout.addWidget(self.text_btn)
         self.inner_layout.addWidget(self.l_line_edit)
         self.inner_layout.addStretch()
 
-        outer_layout = QHBoxLayout()
+        outer_layout = QtWidgets.QHBoxLayout()
         outer_layout.setContentsMargins(0, 0, 0, 0)
         outer_layout.setSpacing(0)
-        outer_layout.setAlignment(Qt.AlignVCenter)
+        outer_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter)
         outer_layout.addWidget(self.inner_frame)
 
         self.setLayout(outer_layout)
         self.setFixedHeight(40)
         # self.show()
 
-    @pyqtSlot()
+    @QtCore.pyqtSlot()
     def on_click(self):
         self.set_checked(True)
         self.sig_clicked.emit(self.id)
 
-    @pyqtSlot()
+    @QtCore.pyqtSlot()
     def on_doubleclick(self):
         self.l_line_edit.setText(self.text_btn.text())
         self.l_line_edit.setVisible(True)
@@ -577,7 +583,7 @@ class SinglePiece(QWidget):
         self.set_checked(True)
         self.sig_clicked.emit(self.id)
 
-    @pyqtSlot()
+    @QtCore.pyqtSlot()
     def enter_pressed(self):
         da_text = self.l_line_edit.text()
         if '-' not in da_text or 'piece' not in da_text:
@@ -599,19 +605,19 @@ class SinglePiece(QWidget):
             self.inner_frame.setStyleSheet(self.active_style)
 
 
-class RegisteredObject(QWidget):
-    sig_object_color_changed = pyqtSignal(object)
-    eye_clicked = pyqtSignal(object)
-    sig_clicked = pyqtSignal(object)
-    sig_link = pyqtSignal(object)
+class RegisteredObject(QtWidgets.QWidget):
+    sig_object_color_changed = QtCore.pyqtSignal(object)
+    eye_clicked = QtCore.pyqtSignal(object)
+    sig_clicked = QtCore.pyqtSignal(object)
+    sig_link = QtCore.pyqtSignal(object)
 
     def __init__(self, parent=None, obj_id=0, obj_name='', obj_type='merged probe', object_icon=None):
-        QWidget.__init__(self, parent=parent)
+        QtWidgets.QWidget.__init__(self, parent=parent)
 
         self.inactive_style = 'QFrame{background-color:rgb(83, 83, 83); border: 1px solid rgb(128, 128, 128);}'
         self.active_style = 'QFrame{background-color:rgb(107, 107, 107); border: 1px solid rgb(128, 128, 128);}'
 
-        self.color = QColor(randint(0, 255), randint(0, 255), randint(0, 255), 255)
+        self.color = QtGui.QColor(randint(0, 255), randint(0, 255), randint(0, 255), 255)
         self.icon_back = 'border:1px solid black; background-color: {}'.format(self.color.name())
 
         self.id = obj_id
@@ -620,45 +626,45 @@ class RegisteredObject(QWidget):
         self.active = True
         self.vis = True
 
-        self.eye_button = QPushButton()
-        self.eye_button.setFixedSize(QSize(40, 40))
+        self.eye_button = QtWidgets.QPushButton()
+        self.eye_button.setFixedSize(QtCore.QSize(40, 40))
         self.eye_button.setStyleSheet(eye_button_style)
         self.eye_button.setCheckable(True)
-        eye_icon = QIcon()
-        eye_icon.addPixmap(QPixmap("icons/layers/eye_on.png"), QIcon.Normal, QIcon.Off)
-        eye_icon.addPixmap(QPixmap("icons/layers/eye_off.png"), QIcon.Normal, QIcon.On)
+        eye_icon = QtGui.QIcon()
+        eye_icon.addPixmap(QtGui.QPixmap("icons/layers/eye_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        eye_icon.addPixmap(QtGui.QPixmap("icons/layers/eye_off.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
         self.eye_button.setIcon(eye_icon)
-        self.eye_button.setIconSize(QSize(20, 20))
+        self.eye_button.setIconSize(QtCore.QSize(20, 20))
         self.eye_button.clicked.connect(self.eye_on_click)
 
-        self.tbnail = QPushButton()
+        self.tbnail = QtWidgets.QPushButton()
         self.tbnail.setStyleSheet(self.icon_back)
         self.tbnail.setIcon(object_icon)
-        self.tbnail.setIconSize(QSize(20, 20))
+        self.tbnail.setIconSize(QtCore.QSize(20, 20))
         self.tbnail.clicked.connect(self.change_object_color)
 
-        self.text_btn = QPushButton(self.object_name)
+        self.text_btn = QtWidgets.QPushButton(self.object_name)
         self.text_btn.setStyleSheet(text_btn_style)
-        self.text_btn.setFixedSize(QSize(150, 40))
-        # self.text_btn.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Ignored)
+        self.text_btn.setFixedSize(QtCore.QSize(150, 40))
+        # self.text_btn.setSizePolicy(QtCore.QSizePolicy.Expanding, QtCore.QSizePolicy.Ignored)
         self.text_btn.clicked.connect(self.on_click)
 
-        self.link_button = QPushButton()
-        self.link_button.setFixedSize(QSize(25, 40))
+        self.link_button = QtWidgets.QPushButton()
+        self.link_button.setFixedSize(QtCore.QSize(25, 40))
         self.link_button.setCheckable(True)
-        link_icon = QIcon()
-        link_icon.addPixmap(QPixmap("icons/sidebar/link_off.svg"), QIcon.Normal, QIcon.Off)
-        link_icon.addPixmap(QPixmap("icons/sidebar/link.svg"), QIcon.Normal, QIcon.On)
+        link_icon = QtGui.QIcon()
+        link_icon.addPixmap(QtGui.QPixmap("icons/sidebar/link_off.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        link_icon.addPixmap(QtGui.QPixmap("icons/sidebar/link.svg"), QtGui.QIcon.Normal, QtGui.QIcon.On)
         self.link_button.setIcon(link_icon)
-        self.link_button.setIconSize(QSize(20, 20))
+        self.link_button.setIconSize(QtCore.QSize(20, 20))
         self.link_button.clicked.connect(self.on_linked)
 
-        self.inner_frame = QFrame()
+        self.inner_frame = QtWidgets.QFrame()
         self.inner_frame.setStyleSheet(self.active_style)
-        self.inner_layout = QHBoxLayout(self.inner_frame)
+        self.inner_layout = QtWidgets.QHBoxLayout(self.inner_frame)
         self.inner_layout.setContentsMargins(0, 0, 0, 0)
         self.inner_layout.setSpacing(0)
-        self.inner_layout.setAlignment(Qt.AlignVCenter)
+        self.inner_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.inner_layout.addWidget(self.eye_button)
         self.inner_layout.addSpacing(5)
         self.inner_layout.addWidget(self.tbnail)
@@ -667,10 +673,10 @@ class RegisteredObject(QWidget):
         self.inner_layout.addWidget(self.link_button)
         self.inner_layout.addStretch()
 
-        outer_layout = QHBoxLayout()
+        outer_layout = QtWidgets.QHBoxLayout()
         outer_layout.setContentsMargins(0, 0, 0, 0)
         outer_layout.setSpacing(0)
-        outer_layout.setAlignment(Qt.AlignVCenter)
+        outer_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter)
         outer_layout.addWidget(self.inner_frame)
 
         self.setLayout(outer_layout)
@@ -713,18 +719,18 @@ class RegisteredObject(QWidget):
         self.sig_link.emit(self.id)
 
 
-class ObjectControl(QObject):
+class ObjectControl(QtCore.QObject):
     """
     only pieces' name can be changed, the merged can not, so far
     """
 
-    class SignalProxy(QObject):
-        sigOpacityChanged = pyqtSignal(object)
-        sigVisChanged = pyqtSignal(object)
-        sigDeleteObject = pyqtSignal(object)
-        sigColorChanged = pyqtSignal(object)
-        sigSizeChanged = pyqtSignal(object)
-        sigBlendModeChanged = pyqtSignal(object)
+    class SignalProxy(QtCore.QObject):
+        sigOpacityChanged = QtCore.pyqtSignal(object)
+        sigVisChanged = QtCore.pyqtSignal(object)
+        sigDeleteObject = QtCore.pyqtSignal(object)
+        sigColorChanged = QtCore.pyqtSignal(object)
+        sigSizeChanged = QtCore.pyqtSignal(object)
+        sigBlendModeChanged = QtCore.pyqtSignal(object)
 
     def __init__(self, parent=None):
 
@@ -736,7 +742,7 @@ class ObjectControl(QObject):
         self.sig_size_changed = self._sigprox.sigSizeChanged
         self.sig_blend_mode_changed = self._sigprox.sigBlendModeChanged
 
-        QObject.__init__(self)
+        QtCore.QObject.__init__(self)
 
         self.default_size_val = 2
         self.default_opacity_val = 100
@@ -761,67 +767,68 @@ class ObjectControl(QObject):
         self.obj_opacity = []
         self.obj_comp_mode = []
 
-        self.probe_icon = QIcon('icons/sidebar/probe.svg')
-        self.virus_icon = QIcon('icons/sidebar/virus.svg')
-        self.drawing_icon = QIcon('icons/toolbar/pencil.svg')
-        self.cell_icon = QIcon('icons/toolbar/location.svg')
-        self.contour_icon = QIcon('icons/sidebar/contour.svg')
-        self.compare_icon = QIcon('icons/sidebar/compare.svg')
+        self.probe_icon = QtGui.QIcon('icons/sidebar/probe.svg')
+        self.virus_icon = QtGui.QIcon('icons/sidebar/virus.svg')
+        self.drawing_icon = QtGui.QIcon('icons/toolbar/pencil.svg')
+        self.cell_icon = QtGui.QIcon('icons/toolbar/location.svg')
+        self.contour_icon = QtGui.QIcon('icons/sidebar/contour.svg')
+        self.compare_icon = QtGui.QIcon('icons/sidebar/compare.svg')
 
-        combo_label = QLabel('Composition:')
+        combo_label = QtWidgets.QLabel('Composition:')
         combo_label.setFixedWidth(80)
-        self.obj_blend_combo = QComboBox()
+        self.obj_blend_combo = QtWidgets.QComboBox()
         self.obj_blend_combo.setEditable(False)
         combo_value = ['opaque', 'translucent', 'additive']
         self.obj_blend_combo.addItems(combo_value)
         self.obj_blend_combo.setCurrentText('opaque')
         self.obj_blend_combo.currentTextChanged.connect(self.blend_mode_changed)
-        combo_wrap = QFrame()
-        combo_wrap_layout = QHBoxLayout(combo_wrap)
+        combo_wrap = QtWidgets.QFrame()
+        combo_wrap_layout = QtWidgets.QHBoxLayout(combo_wrap)
         combo_wrap_layout.setContentsMargins(0, 0, 0, 0)
         combo_wrap_layout.setSpacing(5)
         combo_wrap_layout.addWidget(combo_label)
         combo_wrap_layout.addWidget(self.obj_blend_combo)
 
-        obj_opacity_label = QLabel('Opacity:')
+        obj_opacity_label = QtWidgets.QLabel('Opacity:')
         obj_opacity_label.setFixedWidth(80)
-        self.obj_opacity_slider = QSlider(Qt.Horizontal)
+        self.obj_opacity_slider = QtWidgets.QSlider(QtCore.Qt.Orientation.Horizontal)
         self.obj_opacity_slider.setMaximum(100)
         self.obj_opacity_slider.setMinimum(0)
         self.obj_opacity_slider.setValue(100)
         self.obj_opacity_slider.valueChanged.connect(self.change_opacity_label_value)
         self.obj_opacity_slider.sliderMoved.connect(self.send_opacity_changed_signal)
-        self.obj_opacity_val_label = QLabel('100%')
+        self.obj_opacity_val_label = QtWidgets.QLabel('100%')
         self.obj_opacity_val_label.setFixedWidth(40)
-        opacity_wrap = QFrame()
-        opacity_wrap_layout = QHBoxLayout(opacity_wrap)
+        opacity_wrap = QtWidgets.QFrame()
+        opacity_wrap_layout = QtWidgets.QHBoxLayout(opacity_wrap)
         opacity_wrap_layout.setContentsMargins(0, 0, 0, 0)
         opacity_wrap_layout.setSpacing(5)
         opacity_wrap_layout.addWidget(obj_opacity_label)
         opacity_wrap_layout.addWidget(self.obj_opacity_slider)
         opacity_wrap_layout.addWidget(self.obj_opacity_val_label)
 
-        obj_size_label = QLabel('Size/Width: ')
+        obj_size_label = QtWidgets.QLabel('Size/Width: ')
         obj_size_label.setFixedWidth(80)
-        self.obj_size_slider = QSlider(Qt.Horizontal)
+        self.obj_size_slider = QtWidgets.QSlider(QtCore.Qt.Orientation.Horizontal)
         self.obj_size_slider.setValue(2)
         self.obj_size_slider.setMinimum(1)
         self.obj_size_slider.setMaximum(10)
         self.obj_size_slider.valueChanged.connect(self.change_size_label_value)
         self.obj_size_slider.sliderMoved.connect(self.send_size_changed_signal)
-        self.obj_size_val_label = QLabel('2')
-        self.obj_size_val_label.setAlignment(Qt.AlignCenter)
+        self.obj_size_val_label = QtWidgets.QLabel('2')
+        self.obj_size_val_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter
+)
         self.obj_size_val_label.setFixedWidth(40)
-        size_wrap = QFrame()
-        size_wrap_layout = QHBoxLayout(size_wrap)
+        size_wrap = QtWidgets.QFrame()
+        size_wrap_layout = QtWidgets.QHBoxLayout(size_wrap)
         size_wrap_layout.setContentsMargins(0, 0, 0, 0)
         size_wrap_layout.setSpacing(5)
         size_wrap_layout.addWidget(obj_size_label)
         size_wrap_layout.addWidget(self.obj_size_slider)
         size_wrap_layout.addWidget(self.obj_size_val_label)
 
-        top_frame = QFrame()
-        top_layout = QVBoxLayout(top_frame)
+        top_frame = QtWidgets.QFrame()
+        top_layout = QtWidgets.QVBoxLayout(top_frame)
         top_layout.setContentsMargins(0, 0, 0, 0)
         top_layout.setSpacing(0)
         top_layout.addWidget(combo_wrap)
@@ -831,86 +838,86 @@ class ObjectControl(QObject):
         top_layout.addWidget(size_wrap)
         top_layout.addSpacing(10)
 
-        self.layer_frame = QFrame()
+        self.layer_frame = QtWidgets.QFrame()
         self.layer_frame.setStyleSheet('background: transparent; border: 0px;')
-        self.layer_frame.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.layer_layout = QBoxLayout(QBoxLayout.BottomToTop, self.layer_frame)
-        self.layer_layout.setAlignment(Qt.AlignBottom)
+        self.layer_frame.setSizePolicy(QtCore.QSizePolicy.Expanding, QtCore.QSizePolicy.Expanding)
+        self.layer_layout = QtWidgets.QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.BottomToTop, self.layer_frame)
+        self.layer_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignBottom)
         self.layer_layout.setContentsMargins(0, 0, 0, 0)
         self.layer_layout.setSpacing(5)
 
-        self.layer_scroll = QScrollArea()
+        self.layer_scroll =QtWidgets.QScrollArea()
         self.layer_scroll.setStyleSheet('background: transparent; border: 0px;')
-        self.layer_scroll.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.layer_scroll.setSizePolicy(QtCore.QSizePolicy.Expanding, QtCore.QSizePolicy.Expanding)
         self.layer_scroll.setWidget(self.layer_frame)
-        self.layer_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-        self.layer_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.layer_scroll.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollbarAlwaysOn)
+        self.layer_scroll.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollbarAlwaysOff)
         self.layer_scroll.setWidgetResizable(True)
 
-        mid_frame = QFrame()
+        mid_frame = QtWidgets.QFrame()
         mid_frame.setStyleSheet('background: transparent; border: 1px solid rgb(128, 128, 128);')
-        mid_frame.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        mid_layout = QGridLayout(mid_frame)
+        mid_frame.setSizePolicy(QtCore.QSizePolicy.Expanding, QtCore.QSizePolicy.Expanding)
+        mid_layout = QtWidgets.QGridLayout(mid_frame)
         mid_layout.setContentsMargins(0, 0, 0, 0)
         mid_layout.setSpacing(0)
-        mid_layout.setAlignment(Qt.AlignBottom)
+        mid_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignBottom)
         mid_layout.addWidget(self.layer_scroll, 0, 0, 1, 1)
 
-        self.outer_frame = QFrame()
-        self.outer_frame.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        outer_layout = QVBoxLayout(self.outer_frame)
+        self.outer_frame = QtWidgets.QFrame()
+        self.outer_frame.setSizePolicy(QtCore.QSizePolicy.Expanding, QtCore.QSizePolicy.Expanding)
+        outer_layout = QtWidgets.QVBoxLayout(self.outer_frame)
         outer_layout.setSpacing(0)
         outer_layout.addWidget(top_frame)
         outer_layout.addWidget(mid_frame)
 
         # bottom buttons
-        self.compare_btn = QPushButton()
+        self.compare_btn = QtWidgets.QPushButton()
         self.compare_btn.setFixedSize(24, 24)
         self.compare_btn.setStyleSheet(btm_style)
-        self.compare_btn.setIcon(QIcon('icons/sidebar/compare.svg'))
-        self.compare_btn.setIconSize(QSize(20, 20))
+        self.compare_btn.setIcon(QtGui.QIcon('icons/sidebar/compare.svg'))
+        self.compare_btn.setIconSize(QtCore.QSize(20, 20))
 
-        self.merge_probe_btn = QPushButton()
+        self.merge_probe_btn = QtWidgets.QPushButton()
         self.merge_probe_btn.setFixedSize(24, 24)
         self.merge_probe_btn.setStyleSheet(btm_style)
-        self.merge_probe_btn.setIcon(QIcon('icons/sidebar/probe.svg'))
-        self.merge_probe_btn.setIconSize(QSize(20, 20))
+        self.merge_probe_btn.setIcon(QtGui.QIcon('icons/sidebar/probe.svg'))
+        self.merge_probe_btn.setIconSize(QtCore.QSize(20, 20))
 
-        self.merge_drawing_btn = QPushButton()
+        self.merge_drawing_btn = QtWidgets.QPushButton()
         self.merge_drawing_btn.setFixedSize(24, 24)
         self.merge_drawing_btn.setStyleSheet(btm_style)
-        self.merge_drawing_btn.setIcon(QIcon('icons/toolbar/pencil.svg'))
-        self.merge_drawing_btn.setIconSize(QSize(20, 20))
+        self.merge_drawing_btn.setIcon(QtGui.QIcon('icons/toolbar/pencil.svg'))
+        self.merge_drawing_btn.setIconSize(QtCore.QSize(20, 20))
 
-        self.merge_cell_btn = QPushButton()
+        self.merge_cell_btn = QtWidgets.QPushButton()
         self.merge_cell_btn.setFixedSize(24, 24)
         self.merge_cell_btn.setStyleSheet(btm_style)
-        self.merge_cell_btn.setIcon(QIcon('icons/toolbar/location.svg'))
-        self.merge_cell_btn.setIconSize(QSize(20, 20))
+        self.merge_cell_btn.setIcon(QtGui.QIcon('icons/toolbar/location.svg'))
+        self.merge_cell_btn.setIconSize(QtCore.QSize(20, 20))
 
-        self.merge_virus_btn = QPushButton()
+        self.merge_virus_btn = QtWidgets.QPushButton()
         self.merge_virus_btn.setFixedSize(24, 24)
         self.merge_virus_btn.setStyleSheet(btm_style)
-        self.merge_virus_btn.setIcon(QIcon('icons/sidebar/virus.svg'))
-        self.merge_virus_btn.setIconSize(QSize(20, 20))
+        self.merge_virus_btn.setIcon(QtGui.QIcon('icons/sidebar/virus.svg'))
+        self.merge_virus_btn.setIconSize(QtCore.QSize(20, 20))
 
-        self.merge_contour_btn = QPushButton()
+        self.merge_contour_btn = QtWidgets.QPushButton()
         self.merge_contour_btn.setFixedSize(24, 24)
         self.merge_contour_btn.setStyleSheet(btm_style)
-        self.merge_contour_btn.setIcon(QIcon('icons/sidebar/contour.svg'))
-        self.merge_contour_btn.setIconSize(QSize(20, 20))
+        self.merge_contour_btn.setIcon(QtGui.QIcon('icons/sidebar/contour.svg'))
+        self.merge_contour_btn.setIconSize(QtCore.QSize(20, 20))
 
-        self.add_object_btn = QPushButton()
+        self.add_object_btn = QtWidgets.QPushButton()
         self.add_object_btn.setFixedSize(24, 24)
         self.add_object_btn.setStyleSheet(btm_style)
-        self.add_object_btn.setIcon(QIcon('icons/sidebar/add.png'))
-        self.add_object_btn.setIconSize(QSize(20, 20))
+        self.add_object_btn.setIcon(QtGui.QIcon('icons/sidebar/add.png'))
+        self.add_object_btn.setIconSize(QtCore.QSize(20, 20))
 
-        self.delete_object_btn = QPushButton()
+        self.delete_object_btn = QtWidgets.QPushButton()
         self.delete_object_btn.setFixedSize(24, 24)
         self.delete_object_btn.setStyleSheet(btm_style)
-        self.delete_object_btn.setIcon(QIcon('icons/sidebar/trash.png'))
-        self.delete_object_btn.setIconSize(QSize(20, 20))
+        self.delete_object_btn.setIcon(QtGui.QIcon('icons/sidebar/trash.png'))
+        self.delete_object_btn.setIconSize(QtCore.QSize(20, 20))
         self.delete_object_btn.clicked.connect(self.delete_object_btn_clicked)
 
     def blend_mode_changed(self):
@@ -1004,7 +1011,7 @@ class ObjectControl(QObject):
 
     def obj_color_changed(self, clicked_id):
         self.set_active_layer_to_current(clicked_id)
-        color = QColorDialog.getColor()
+        color = QtGui.QColorDialog.getColor()
         if color.isValid():
             self.obj_list[self.current_obj_index].set_icon_style(color)
             da_color = (color.red(), color.green(), color.blue(), 255)

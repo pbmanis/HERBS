@@ -2,19 +2,17 @@ import os
 import sys
 import numpy as np
 import pyqtgraph as pg
-from pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtGui, QtCore, QtWidgets
 import pyqtgraph.functions as fn
 import pyqtgraph.functions as fn
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
+
 from .movable_points import TriangulationPoints
 
 
 class ClickableSlice(pg.ImageItem):
-    class SignalProxy(QObject):
-        mouseHovered = pyqtSignal(object)  # id
-        mouseClicked = pyqtSignal(object)  # id
+    class SignalProxy(QtCore.QObject):
+        mouseHovered = QtCore.pyqtSignal(object)  # id
+        mouseClicked = QtCore.pyqtSignal(object)  # id
 
     def __init__(self):
         self._sigprox = ClickableSlice.SignalProxy()
@@ -53,9 +51,9 @@ class ClickableSlice(pg.ImageItem):
 
 
 class SliceStacks(pg.GraphicsLayoutWidget):
-    class SignalProxy(QObject):
-        mouseHovered = pyqtSignal(object)  # id
-        mouseClicked = pyqtSignal(object)  # id
+    class SignalProxy(QtCore.QObject):
+        mouseHovered = QtCore.pyqtSignal(object)  # id
+        mouseClicked = QtCore.pyqtSignal(object)  # id
 
     def __init__(self):
         self._sigprox = SliceStacks.SignalProxy()

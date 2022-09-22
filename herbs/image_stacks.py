@@ -2,19 +2,16 @@ import colorsys
 import os
 import sys
 import numpy as np
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
+from pyqtgraph.Qt import QtGui, QtCore, QtWidgets
 import pyqtgraph as pg
-from pyqtgraph.Qt import QtGui, QtCore
 import pyqtgraph.functions as fn
 from .movable_points import TriangulationPoints, TriangulationPointsTest
 
 
 class ClickableImage(pg.ImageItem):
-    class SignalProxy(QObject):
-        mouseHovered = pyqtSignal(object)  # id
-        mouseClicked = pyqtSignal(object)  # id
+    class SignalProxy(QtCore.QObject):
+        mouseHovered = QtCore.pyqtSignal(object)  # id
+        mouseClicked = QtCore.pyqtSignal(object)  # id
 
     def __init__(self):
         self._sigprox = ClickableImage.SignalProxy()
@@ -54,10 +51,10 @@ class ClickableImage(pg.ImageItem):
 
 
 class SliceStack(pg.GraphicsLayoutWidget):
-    class SignalProxy(QObject):
-        mouseHovered = pyqtSignal(object)  # id
-        mouseClicked = pyqtSignal(object)  # id
-        sigKeyPressed = pyqtSignal(object)  # event
+    class SignalProxy(QtCore.QObject):
+        mouseHovered = QtCore.pyqtSignal(object)  # id
+        mouseClicked = QtCore.pyqtSignal(object)  # id
+        sigKeyPressed = QtCore.pyqtSignal(object)  # event
 
     def __init__(self):
         self._sigprox = SliceStack.SignalProxy()
@@ -173,10 +170,10 @@ class SliceStack(pg.GraphicsLayoutWidget):
 
 
 class ImageStacks(pg.GraphicsLayoutWidget):
-    class SignalProxy(QObject):
-        sigMouseHovered = pyqtSignal(object)  # id
-        sigMouseClicked = pyqtSignal(object)  # id
-        sigKeyPressed = pyqtSignal(object)  # event
+    class SignalProxy(QtCore.QObject):
+        sigMouseHovered = QtCore.pyqtSignal(object)  # id
+        sigMouseClicked = QtCore.pyqtSignal(object)  # id
+        sigKeyPressed = QtCore.pyqtSignal(object)  # event
 
     def __init__(self):
         self._sigprox = ImageStacks.SignalProxy()

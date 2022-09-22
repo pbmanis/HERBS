@@ -2,9 +2,7 @@ import time
 import os
 import sys
 from os.path import dirname, realpath, join
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
+from pyqtgraph.Qt import QtWidgets, QtGui, QtCore
 import pyqtgraph.opengl as gl
 
 import nrrd
@@ -19,9 +17,9 @@ from .uuuuuu import render_volume, render_small_volume, hex2rgb, obj_data_to_mes
 from .atlas_downloader import DownloadThread
 
 
-class WorkerProcessAllen(QObject):
-    finished = pyqtSignal()
-    progress = pyqtSignal(int)
+class WorkerProcessAllen(QtCore.QObject):
+    finished = QtCore.pyqtSignal()
+    progress = QtCore.pyqtSignal(int)
 
     def __init__(self):
         super(WorkerProcessAllen, self).__init__()
@@ -221,9 +219,9 @@ class WorkerProcessAllen(QObject):
         self.finished.emit()
 
 
-class MeshDownloader(QObject):
-    finished = pyqtSignal()
-    progress = pyqtSignal(int)
+class MeshDownloader(QtCore.QObject):
+    finished = QtCore.pyqtSignal()
+    progress = QtCore.pyqtSignal(int)
 
     def __init__(self):
         super(MeshDownloader, self).__init__()
@@ -260,31 +258,31 @@ class MeshDownloader(QObject):
         self.finished.emit()
 
 
-class AllenDownloader(QDialog):
+class AllenDownloader(QtWidgets.QDialog):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        layout = QVBoxLayout(self)
+        layout = QtWidgets.QVBoxLayout(self)
 
         self.setWindowTitle("Allen Mice Atlas Downloader")
 
-        self.thread = QThread()
+        self.thread = QtCore.QThread()
         self.worker = WorkerProcessAllen()
-        self.mesh_thread = QThread()
+        self.mesh_thread = QtCore.QThread()
         self.mesh_worker = MeshDownloader()
 
         self.continue_process = True
 
         self.voxel_size = 10
         self.bregma_coord = [0, 0, 0]
-        radio_group = QFrame()
+        radio_group = QtWidgets.QFrame()
         radio_group.setStyleSheet('QFrame{border: 1px solid gray; border-radius: 3px}')
-        radio_group_layout = QHBoxLayout(radio_group)
+        radio_group_layout = QtWidgets.QHBoxLayout(radio_group)
         radio_group_layout.setContentsMargins(5, 0, 5, 0)
-        radio_group_layout.setAlignment(Qt.AlignCenter)
-        self.vs_rabnt1 = QRadioButton('10 um')
+        radio_group_layout.setAlignment(QtCore.AlignmentFlag.AlignCenter)
+        self.vs_rabnt1 = QtWidgets.QRadioButton('10 um')
         self.vs_rabnt1.setChecked(True)
-        self.vs_rabnt2 = QRadioButton('25 um')
-        self.vs_rabnt3 = QRadioButton('50 um')
+        self.vs_rabnt2 = QtWidgets.QRadioButton('25 um')
+        self.vs_rabnt3 = QtWidgets.QRadioButton('50 um')
         radio_group_layout.addWidget(self.vs_rabnt1)
         radio_group_layout.addWidget(self.vs_rabnt2)
         radio_group_layout.addWidget(self.vs_rabnt3)
@@ -307,43 +305,43 @@ class AllenDownloader(QDialog):
         self.finish = [False, False, False]
         self.process_finished = False
 
-        self.label_bar = QProgressBar()
+        self.label_bar = QtWidgets.QProgressBar()
         self.label_bar.setMinimumWidth(400)
         self.label_bar.setValue(0)
 
-        self.data_bar = QProgressBar()
+        self.data_bar = QtWidgets.QProgressBar()
         self.data_bar.setMinimumWidth(400)
         self.data_bar.setValue(0)
 
-        self.segmentation_bar = QProgressBar()
+        self.segmentation_bar = QtWidgets.QProgressBar()
         self.segmentation_bar.setMinimumWidth(400)
         self.segmentation_bar.setValue(0)
 
-        self.mesh_bar = QProgressBar()
+        self.mesh_bar = QtWidgets.QProgressBar()
         self.mesh_bar.setMinimumWidth(400)
         self.mesh_bar.setValue(0)
 
-        self.download_btn = QPushButton()
+        self.download_btn = QtWidgets.QPushButton()
         self.download_btn. setMinimumWidth(100)
         self.download_btn.setText("Download")
 
-        self.download_mesh_btn = QPushButton()
+        self.download_mesh_btn = QtWidgets.QPushButton()
         self.download_mesh_btn.setMinimumWidth(100)
         self.download_mesh_btn.setText("Download Meshes")
 
-        valid_input = QIntValidator(0, 99999)
+        valid_input = QtGui.QIntValidator(0, 99999)
 
-        b_wrap = QFrame()
-        b_layout = QHBoxLayout(b_wrap)
+        b_wrap = QtWidgets.QFrame()
+        b_layout = QtWidgets.QHBoxLayout(b_wrap)
 
-        b_label = QLabel('Bregma Coordinates (voxel): ')
-        self.b_input1 = QLineEdit('0')
+        b_label = QtWidgets.QLabel('Bregma Coordinates (voxel): ')
+        self.b_input1 = QtWidgets.QLineEdit('0')
         self.b_input1.setStyleSheet('color: black')
         self.b_input1.setValidator(valid_input)
-        self.b_input2 = QLineEdit('0')
+        self.b_input2 = QtWidgets.QLineEdit('0')
         self.b_input2.setStyleSheet('color: black')
         self.b_input2.setValidator(valid_input)
-        self.b_input3 = QLineEdit('0')
+        self.b_input3 = QtWidgets.QLineEdit('0')
         self.b_input3.setStyleSheet('color: black')
         self.b_input3.setValidator(valid_input)
 
@@ -352,18 +350,18 @@ class AllenDownloader(QDialog):
         b_layout.addWidget(self.b_input2)
         b_layout.addWidget(self.b_input3)
 
-        self.process_btn = QPushButton()
+        self.process_btn = QtWidgets.QPushButton()
         self.process_btn.setMinimumWidth(100)
         self.process_btn.setText("Process")
 
-        self.process_info = QLabel('The whole process takes some time. \n'
+        self.process_info = QtWidgets.QLabel('The whole process takes some time. \n'
                                    'This window will be closed automatically when processing finished.')
 
-        self.progress = QProgressBar(self)
+        self.progress = QtWidgets.QProgressBar(self)
         self.progress.setMinimumWidth(100)
 
         # ok button, used to close window
-        ok_btn = QDialogButtonBox(QDialogButtonBox.Ok)
+        ok_btn = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.Ok)
         ok_btn.accepted.connect(self.accept)
 
         layout.addWidget(radio_group)
@@ -425,7 +423,7 @@ class AllenDownloader(QDialog):
 
     # Download button event
     def download_start(self):
-        self.saving_folder = str(QFileDialog.getExistingDirectory(self, "Select Folder to Save Atlas"))
+        self.saving_folder = str(QtWidgets.QFileDialog.getExistingDirectory(self, "Select Folder to Save Atlas"))
 
         if self.saving_folder != '':
             self.download_btn.setVisible(False)
@@ -449,7 +447,7 @@ class AllenDownloader(QDialog):
         if self.saving_folder is not None:
             saving_folder = self.saving_folder
         else:
-            saving_folder = str(QFileDialog.getExistingDirectory(self, "Select Atlas Folder"))
+            saving_folder = str(QtWidgets.QFileDialog.getExistingDirectory(self, "Select Atlas Folder"))
 
         if saving_folder != '':
             self.mesh_worker.set_data(self.saving_folder, self.segmentation_local)
@@ -496,7 +494,7 @@ class AllenDownloader(QDialog):
         if self.saving_folder is not None:
             saving_folder = self.saving_folder
         else:
-            saving_folder = str(QFileDialog.getExistingDirectory(self, "Select Atlas Folder"))
+            saving_folder = str(QtWidgets.QFileDialog.getExistingDirectory(self, "Select Atlas Folder"))
 
         if saving_folder != '':
             self.process_btn.setVisible(False)
@@ -515,10 +513,10 @@ class AllenDownloader(QDialog):
         self.close()
 
     def closeEvent(self, event):
-        reply = QMessageBox.question(self, 'Message',
-                                     "Do you want to leave?", QMessageBox.Yes, QMessageBox.No)
+        reply = QtWidgets.QMessageBox.question(self, 'Message',
+                                     "Do you want to leave?", QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
 
-        if reply == QMessageBox.Yes:
+        if reply == QtWidgets.QMessageBox.Yes:
             self.continue_process = False
             event.accept()
         else:

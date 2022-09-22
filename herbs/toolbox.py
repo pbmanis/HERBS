@@ -3,7 +3,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 import pyqtgraph as pg
 import numpy as np
-from pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtGui, QtCore, QtWidgets
 
 
 toolbar_spinbox_textedit_style = '''
@@ -15,7 +15,7 @@ QLineEdit {
 '''
 
 
-class ToolBox(QObject):
+class ToolBox(QtCore.QObject):
 
     def __init__(self):
 
@@ -27,48 +27,48 @@ class ToolBox(QObject):
         self.remove_inside = True
 
         # action version
-        self.add_atlas = QAction(QIcon('icons/toolbar/atlas_icon.png'), 'Upload Previous Loaded Volume Atlas', self)
-        self.add_image_stack = QAction(QIcon('icons/toolbar/image_icon.svg'), 'Upload Histological Image', self)
+        self.add_atlas = QAction(QtGui.QIcon('icons/toolbar/atlas_icon.png'), 'Upload Previous Loaded Volume Atlas', self)
+        self.add_image_stack = QAction(QtGui.QIcon('icons/toolbar/image_icon.svg'), 'Upload Histological Image', self)
 
-        self.vis2 = QAction(QIcon('icons/toolbar/two_window.png'), 'Show 2 Windows', self)
-        self.vis4 = QAction(QIcon('icons/toolbar/window4.png'), 'Show 4 Windows', self)
-        self.vis3 = QAction(QIcon('icons/toolbar/window3.png'), 'Show 3 Windows', self)
+        self.vis2 = QAction(QtGui.QIcon('icons/toolbar/two_window.png'), 'Show 2 Windows', self)
+        self.vis4 = QAction(QtGui.QIcon('icons/toolbar/window4.png'), 'Show 4 Windows', self)
+        self.vis3 = QAction(QtGui.QIcon('icons/toolbar/window3.png'), 'Show 3 Windows', self)
 
-        self.toa_btn_off_icon = QIcon('icons/toolbar/toa.svg')
-        self.toa_btn_on_icon = QIcon('icons/toolbar/toa_delete.svg')
+        self.toa_btn_off_icon = QtGui.QIcon('icons/toolbar/toa.svg')
+        self.toa_btn_on_icon = QtGui.QIcon('icons/toolbar/toa_delete.svg')
 
-        self.toh_btn_off_icon = QIcon('icons/toolbar/toh.svg')
-        self.toh_btn_on_icon = QIcon('icons/toolbar/toh_delete.svg')
+        self.toh_btn_off_icon = QtGui.QIcon('icons/toolbar/toh.svg')
+        self.toh_btn_on_icon = QtGui.QIcon('icons/toolbar/toh_delete.svg')
 
-        self.toa_btn = QAction(QIcon('icons/toolbar/toa.svg'), 'Transform to Atlas Slice Window', self)
-        self.toh_btn = QAction(QIcon('icons/toolbar/toh.svg'), 'Transform to Histologist Image Window', self)
-        self.check_btn = QAction(QIcon('icons/toolbar/accept.svg'), 'Accept and Transfer', self)
+        self.toa_btn = QAction(QtGui.QIcon('icons/toolbar/toa.svg'), 'Transform to Atlas Slice Window', self)
+        self.toh_btn = QAction(QtGui.QIcon('icons/toolbar/toh.svg'), 'Transform to Histologist Image Window', self)
+        self.check_btn = QAction(QtGui.QIcon('icons/toolbar/accept.svg'), 'Accept and Transfer', self)
 
-        lasso_btn = QAction(QIcon('icons/toolbar/lasso.svg'), 'Polygon Lasso', self)
+        lasso_btn = QAction(QtGui.QIcon('icons/toolbar/lasso.svg'), 'Polygon Lasso', self)
         lasso_btn.setCheckable(True)
 
-        magic_wand_btn = QAction(QIcon('icons/toolbar/magic-wand.svg'), 'Magic Wand', self)
+        magic_wand_btn = QAction(QtGui.QIcon('icons/toolbar/magic-wand.svg'), 'Magic Wand', self)
         magic_wand_btn.setCheckable(True)
 
-        pencil_btn = QAction(QIcon('icons/toolbar/pencil.svg'), 'Pencil', self)
+        pencil_btn = QAction(QtGui.QIcon('icons/toolbar/pencil.svg'), 'Pencil', self)
         pencil_btn.setCheckable(True)
 
-        eraser_btn = QAction(QIcon('icons/toolbar/eraser.svg'), 'Eraser', self)
+        eraser_btn = QAction(QtGui.QIcon('icons/toolbar/eraser.svg'), 'Eraser', self)
         eraser_btn.setCheckable(True)
 
-        mask_btn = QAction(QIcon('icons/toolbar/mask.svg'), 'Mask Maker', self)
+        mask_btn = QAction(QtGui.QIcon('icons/toolbar/mask.svg'), 'Mask Maker', self)
         mask_btn.setCheckable(True)
 
-        probe_btn = QAction(QIcon('icons/toolbar/probe.svg'), 'Probe Marker', self)
+        probe_btn = QAction(QtGui.QIcon('icons/toolbar/probe.svg'), 'Probe Marker', self)
         probe_btn.setCheckable(True)
 
-        triang_btn = QAction(QIcon('icons/toolbar/triangulation.svg'), 'Triangulation', self)
+        triang_btn = QAction(QtGui.QIcon('icons/toolbar/triangulation.svg'), 'Triangulation', self)
         triang_btn.setCheckable(True)
 
-        loc_btn = QAction(QIcon('icons/toolbar/location.svg'), 'Cell Selector', self)
+        loc_btn = QAction(QtGui.QIcon('icons/toolbar/location.svg'), 'Cell Selector', self)
         loc_btn.setCheckable(True)
 
-        ruler_btn = QAction(QIcon('icons/toolbar/ruler.svg'), 'Ruler', self)
+        ruler_btn = QAction(QtGui.QIcon('icons/toolbar/ruler.svg'), 'Ruler', self)
         ruler_btn.setCheckable(True)
 
         self.checkable_btn_dict = {'ruler_btn': ruler_btn,
@@ -83,29 +83,29 @@ class ToolBox(QObject):
         self.toolbox_btn_keys = list(self.checkable_btn_dict.keys())
 
         # for ruler_btn, ruler wrap
-        ruler_color_label = QLabel('Color:')
+        ruler_color_label = QtWidgets.QLabel('Color:')
         self.ruler_color_btn = pg.ColorButton(padding=0)
         self.ruler_color_btn.setColor('yellow')
         self.ruler_color_btn.setFixedSize(60, 15)
-        ruler_width_label = QLabel('Size:')
-        self.ruler_width_slider = QSlider(Qt.Horizontal)
+        ruler_width_label = QtWidgets.QLabel('Size:')
+        self.ruler_width_slider = QtWidgets.QSlider(QtCore.Qt.Orientation.Horizontal)
         self.ruler_width_slider.setFixedWidth(100)
         self.ruler_width_slider.setMinimum(1)
         self.ruler_width_slider.setMaximum(5)
         self.ruler_width_slider.setValue(3)
         self.ruler_width_slider.sliderMoved.connect(self.change_ruler_slider)
 
-        self.ruler_size_valt = QLineEdit()
+        self.ruler_size_valt =QtWidgets.QLineEdit()
         self.ruler_size_valt.setFixedSize(50, 24)
         self.ruler_size_valt.setAlignment(Qt.AlignLeft)
         self.ruler_size_valt.setValidator(QIntValidator(1, 5))
         self.ruler_size_valt.setText('3')
 
-        self.ruler_length_label = QLabel('Length: ')
+        self.ruler_length_label = QtWidgets.QLabel('Length: ')
 
-        self.ruler_wrap = QFrame()
-        ruler_layout = QHBoxLayout(self.ruler_wrap)
-        ruler_layout.setAlignment(Qt.AlignVCenter)
+        self.ruler_wrap = QtWidgets.QFrame()
+        ruler_layout = QtWidgets.QHBoxLayout(self.ruler_wrap)
+        ruler_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter)
         ruler_layout.setContentsMargins(0, 0, 0, 0)
         ruler_layout.setSpacing(10)
         ruler_layout.addWidget(ruler_color_label)
@@ -119,40 +119,40 @@ class ToolBox(QObject):
         ruler_layout.addStretch(1)
 
         # for magic wand, magic wand wrap
-        magic_color_label = QLabel('Color:')
+        magic_color_label = QtWidgets.QLabel('Color:')
         self.magic_color_btn = pg.ColorButton(padding=0)
         self.magic_color_btn.setFixedSize(60, 15)
-        self.magic_color_btn.setColor(QColor(255, 0, 255, 255))
-        magic_tol_label = QLabel('Tolerance:')
-        self.magic_tol_val = QLineEdit()
+        self.magic_color_btn.setColor(QtGui.QColor(255, 0, 255, 255))
+        magic_tol_label = QtWidgets.QLabel('Tolerance:')
+        self.magic_tol_val =QtWidgets.QLineEdit()
         self.magic_tol_val.setFixedWidth(40)
         # self.magic_tol_val.setAlignment(Qt.AlignLeft)
         self.magic_tol_val.setValidator(QIntValidator())
         self.magic_tol_val.setText('0')
 
-        self.magic_wand_kernel = QComboBox()
+        self.magic_wand_kernel = QtWidgets.QComboBox()
         self.magic_wand_kernel.setFixedSize(150, 20)
         self.magic_wand_kernel.addItems(["Kernel", "Rectangular", "Elliptical", "Cross-shaped"])
 
-        magic_wand_ksize_label = QLabel('Size:')
+        magic_wand_ksize_label = QtWidgets.QLabel('Size:')
         self.magic_wand_ksize = QSpinBox()
         self.magic_wand_ksize.setFixedSize(80, 20)
         self.magic_wand_ksize.setValue(0)
         self.magic_wand_ksize.setMinimum(0)
 
-        self.magic_wand_virus_register = QPushButton()
+        self.magic_wand_virus_register = QtWidgets.QPushButton()
         self.magic_wand_virus_register.setFocusPolicy(Qt.NoFocus)
-        self.magic_wand_virus_register.setIcon(QIcon('icons/toolbar/virus_register.svg'))
-        self.magic_wand_virus_register.setIconSize(QSize(20, 20))
-        self.magic_wand_bnd_register = QPushButton()
+        self.magic_wand_virus_register.setIcon(QtGui.QIcon('icons/toolbar/virus_register.svg'))
+        self.magic_wand_virus_register.setIconSize(QtCore.QSize(20, 20))
+        self.magic_wand_bnd_register = QtWidgets.QPushButton()
         self.magic_wand_bnd_register.setFocusPolicy(Qt.NoFocus)
-        self.magic_wand_bnd_register.setIcon(QIcon('icons/toolbar/boundary_register.svg'))
-        self.magic_wand_bnd_register.setIconSize(QSize(20, 20))
+        self.magic_wand_bnd_register.setIcon(QtGui.QIcon('icons/toolbar/boundary_register.svg'))
+        self.magic_wand_bnd_register.setIconSize(QtCore.QSize(20, 20))
 
-        self.magic_wand_wrap = QFrame()
+        self.magic_wand_wrap = QtWidgets.QFrame()
         # self.magic_wand_wrap.setFixedHeight(32)
-        magic_wand_layout = QHBoxLayout(self.magic_wand_wrap)
-        magic_wand_layout.setAlignment(Qt.AlignVCenter)
+        magic_wand_layout = QtWidgets.QHBoxLayout(self.magic_wand_wrap)
+        magic_wand_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter)
         magic_wand_layout.setContentsMargins(0, 0, 0, 0)
         magic_wand_layout.setSpacing(10)
         magic_wand_layout.addWidget(magic_color_label)
@@ -169,38 +169,38 @@ class ToolBox(QObject):
         # magic_wand_layout.insertStretch(1, -1)
 
         # for pencil_btn, pencil wrap
-        pencil_size_label = QLabel('Size:')
-        self.pencil_size_slider = QSlider(Qt.Horizontal)
+        pencil_size_label = QtWidgets.QLabel('Size:')
+        self.pencil_size_slider = QtWidgets.QSlider(QtCore.Qt.Orientation.Horizontal)
         self.pencil_size_slider.setFixedWidth(100)
         self.pencil_size_slider.setMinimum(1)
         self.pencil_size_slider.setMaximum(5)
         self.pencil_size_slider.setValue(2)
         self.pencil_size_slider.sliderMoved.connect(self.change_pencil_slider)
 
-        self.pencil_size_valt = QLineEdit()
+        self.pencil_size_valt =QtWidgets.QLineEdit()
         self.pencil_size_valt.setFixedSize(50, 24)
         self.pencil_size_valt.setAlignment(Qt.AlignLeft)
         self.pencil_size_valt.setValidator(QIntValidator(1, 5))
         self.pencil_size_valt.setText('2')
 
-        pencil_color_label = QLabel('Color:')
+        pencil_color_label = QtWidgets.QLabel('Color:')
         self.pencil_color_btn = pg.ColorButton(padding=0)
         self.pencil_color_btn.setFixedSize(60, 15)
-        self.pencil_color_btn.setColor(QColor(255, 102, 0))
+        self.pencil_color_btn.setColor(QtGui.QColor(255, 102, 0))
 
-        pencil_path_label = QLabel('Path Type:')
-        self.pencil_path_btn = QPushButton()
+        pencil_path_label = QtWidgets.QLabel('Path Type:')
+        self.pencil_path_btn = QtWidgets.QPushButton()
         self.pencil_path_btn.setCheckable(True)
-        da_icon = QIcon()
-        da_icon.addPixmap(QPixmap("icons/toolbar/closed_path.svg"), QIcon.Normal, QIcon.On)
-        da_icon.addPixmap(QPixmap("icons/toolbar/open_path.svg"), QIcon.Normal, QIcon.Off)
+        da_icon = QtGui.QIcon()
+        da_icon.addPixmap(QtGui.QPixmap("icons/toolbar/closed_path.svg"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        da_icon.addPixmap(QtGui.QPixmap("icons/toolbar/open_path.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pencil_path_btn.setIcon(da_icon)
-        self.pencil_path_btn.setIconSize(QSize(20, 20))
+        self.pencil_path_btn.setIconSize(QtCore.QSize(20, 20))
         self.pencil_path_btn.clicked.connect(self.pencil_path_btn_clicked)
 
-        self.pencil_wrap = QFrame()
-        pencil_layout = QHBoxLayout(self.pencil_wrap)
-        pencil_layout.setAlignment(Qt.AlignVCenter)
+        self.pencil_wrap = QtWidgets.QFrame()
+        pencil_layout = QtWidgets.QHBoxLayout(self.pencil_wrap)
+        pencil_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter)
         pencil_layout.setContentsMargins(0, 0, 0, 0)
         pencil_layout.setSpacing(10)
         pencil_layout.addWidget(pencil_color_label)
@@ -215,28 +215,28 @@ class ToolBox(QObject):
         pencil_layout.addStretch(1)
 
         # for eraser_btn, eraser wrap
-        eraser_color_label = QLabel('Color:')
+        eraser_color_label = QtWidgets.QLabel('Color:')
         self.eraser_color_btn = pg.ColorButton(padding=0)
         self.eraser_color_btn.setColor('red')
         self.eraser_color_btn.setFixedSize(60, 15)
-        eraser_size_label = QLabel('Size:')
-        self.eraser_size_slider = QSlider(Qt.Horizontal)
+        eraser_size_label = QtWidgets.QLabel('Size:')
+        self.eraser_size_slider = QtWidgets.QSlider(QtCore.Qt.Orientation.Horizontal)
         self.eraser_size_slider.setFixedWidth(100)
         self.eraser_size_slider.setMinimum(1)
         self.eraser_size_slider.setMaximum(500)
         self.eraser_size_slider.setValue(20)
         self.eraser_size_slider.valueChanged.connect(self.change_eraser_slider)
 
-        self.eraser_size_valt = QLineEdit()
+        self.eraser_size_valt =QtWidgets.QLineEdit()
         self.eraser_size_valt.setFixedSize(50, 24)
         self.eraser_size_valt.setAlignment(Qt.AlignLeft)
         self.eraser_size_valt.setValidator(QIntValidator(1, 500))
         self.eraser_size_valt.setText('20')
         self.eraser_size_valt.textChanged.connect(self.change_eraser_val)
 
-        self.eraser_wrap = QFrame()
-        eraser_layout = QHBoxLayout(self.eraser_wrap)
-        eraser_layout.setAlignment(Qt.AlignVCenter)
+        self.eraser_wrap = QtWidgets.QFrame()
+        eraser_layout = QtWidgets.QHBoxLayout(self.eraser_wrap)
+        eraser_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter)
         eraser_layout.setContentsMargins(0, 0, 0, 0)
         eraser_layout.setSpacing(10)
         eraser_layout.addWidget(eraser_color_label)
@@ -248,23 +248,23 @@ class ToolBox(QObject):
         eraser_layout.addStretch(1)
 
         # for lasso_btn, lasso wrap
-        lasso_color_label = QLabel('Color:')
+        lasso_color_label = QtWidgets.QLabel('Color:')
         self.lasso_color_btn = pg.ColorButton(padding=0)
         self.lasso_color_btn.setFixedSize(60, 15)
-        self.lasso_color_btn.setColor(QColor(0, 255, 255))
+        self.lasso_color_btn.setColor(QtGui.QColor(0, 255, 255))
 
-        self.lasso_type_btn = QPushButton()
+        self.lasso_type_btn = QtWidgets.QPushButton()
         self.lasso_type_btn.setCheckable(True)
-        lt_icon = QIcon()
-        lt_icon.addPixmap(QPixmap('icons/toolbar/outpart.svg'), QIcon.Normal, QIcon.On)
-        lt_icon.addPixmap(QPixmap('icons/toolbar/inpart.svg'), QIcon.Normal, QIcon.Off)
+        lt_icon = QtGui.QIcon()
+        lt_icon.addPixmap(QtGui.QPixmap('icons/toolbar/outpart.svg'), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        lt_icon.addPixmap(QtGui.QPixmap('icons/toolbar/inpart.svg'), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.lasso_type_btn.setIcon(lt_icon)
-        self.lasso_type_btn.setIconSize(QSize(20, 20))
+        self.lasso_type_btn.setIconSize(QtCore.QSize(20, 20))
         self.lasso_type_btn.clicked.connect(self.lasso_type_changed)
 
-        self.lasso_wrap = QFrame()
-        lasso_layout = QHBoxLayout(self.lasso_wrap)
-        lasso_layout.setAlignment(Qt.AlignVCenter)
+        self.lasso_wrap = QtWidgets.QFrame()
+        lasso_layout = QtWidgets.QHBoxLayout(self.lasso_wrap)
+        lasso_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter)
         lasso_layout.setContentsMargins(0, 0, 0, 0)
         lasso_layout.setSpacing(10)
         lasso_layout.addWidget(lasso_color_label)
@@ -274,16 +274,16 @@ class ToolBox(QObject):
         lasso_layout.addStretch(1)
 
         # mask wrap
-        kernel_size_label = QLabel('Kernel Size: ')
-        self.kernel_size_slider = QSlider(Qt.Horizontal)
+        kernel_size_label = QtWidgets.QLabel('Kernel Size: ')
+        self.kernel_size_slider = QtWidgets.QSlider(QtCore.Qt.Orientation.Horizontal)
         self.kernel_size_slider.setFixedWidth(100)
         self.kernel_size_slider.setMinimum(1)
         self.kernel_size_slider.setMaximum(50)
         self.kernel_size_slider.setValue(10)
 
-        self.mask_wrap = QFrame()
-        mask_layout = QHBoxLayout(self.mask_wrap)
-        mask_layout.setAlignment(Qt.AlignVCenter)
+        self.mask_wrap = QtWidgets.QFrame()
+        mask_layout = QtWidgets.QHBoxLayout(self.mask_wrap)
+        mask_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter)
         mask_layout.setContentsMargins(0, 0, 0, 0)
         mask_layout.setSpacing(10)
         mask_layout.addWidget(kernel_size_label)
@@ -291,33 +291,33 @@ class ToolBox(QObject):
         mask_layout.addStretch(1)
 
         # for probe_btn, probe wrap
-        probe_color_label = QLabel('Color:')
+        probe_color_label = QtWidgets.QLabel('Color:')
         self.probe_color_btn = pg.ColorButton(padding=0)
-        self.probe_color_btn.setColor(QColor(0, 0, 255))
+        self.probe_color_btn.setColor(QtGui.QColor(0, 0, 255))
         self.probe_color_btn.setFixedSize(60, 15)
-        probe_type_label = QLabel('Type:')
-        self.probe_type_combo = QComboBox()
+        probe_type_label = QtWidgets.QLabel('Type:')
+        self.probe_type_combo = QtWidgets.QComboBox()
         self.probe_type_combo.setFixedSize(150, 20)
         self.probe_type_combo.addItems(["Neuropixel 1.0", "Neuropixel 2.0", "Tetrode"])
         self.probe_type_combo.setCurrentText("Neuropixel 1.0")
-        site_face_label = QLabel('Site-face:')
-        self.site_face_combo = QComboBox()
+        site_face_label = QtWidgets.QLabel('Site-face:')
+        self.site_face_combo = QtWidgets.QComboBox()
         self.site_face_combo.setFixedSize(150, 20)
         self.site_face_combo.addItems(["Face", "Side"])
         self.site_face_combo.setCurrentText("Face")
-        # self.probe_type1 = QRadioButton("Neuropixel 1.0")
+        # self.probe_type1 = QtWidgets.QRadioButton("Neuropixel 1.0")
         # self.probe_type1.setChecked(True)
-        # self.probe_type2 = QRadioButton("Neuropixel 2.0")
-        # self.probe_type3 = QRadioButton("Tetrode")
-        # self.probe_style_circle = QRadioButton("Circle")
+        # self.probe_type2 = QtWidgets.QRadioButton("Neuropixel 2.0")
+        # self.probe_type3 = QtWidgets.QRadioButton("Tetrode")
+        # self.probe_style_circle = QtWidgets.QRadioButton("Circle")
         # self.probe_style_circle.setChecked(True)
         # self.probe_style_circle.toggled.connect(self.probe_style_changed)
-        # self.probe_style_square = QRadioButton("Square")
+        # self.probe_style_square = QtWidgets.QRadioButton("Square")
         # self.probe_style_square.toggled.connect(self.probe_style_changed)
 
-        self.probe_wrap = QFrame()
-        probe_layout = QHBoxLayout(self.probe_wrap)
-        probe_layout.setAlignment(Qt.AlignVCenter)
+        self.probe_wrap = QtWidgets.QFrame()
+        probe_layout = QtWidgets.QHBoxLayout(self.probe_wrap)
+        probe_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter)
         probe_layout.setContentsMargins(0, 0, 0, 0)
         probe_layout.setSpacing(10)
         probe_layout.addWidget(probe_color_label)
@@ -338,30 +338,30 @@ class ToolBox(QObject):
         probe_layout.addStretch(1)
 
         # for triang_btn, triang wrap
-        triang_color_label = QLabel('Color:')
+        triang_color_label = QtWidgets.QLabel('Color:')
         self.triang_color_btn = pg.ColorButton(padding=0)
         self.triang_color_btn.setFixedSize(60, 15)
-        bound_pnts_num_label = QLabel('Points Number:')
-        self.bound_pnts_num = QLineEdit()
+        bound_pnts_num_label = QtWidgets.QLabel('Points Number:')
+        self.bound_pnts_num =QtWidgets.QLineEdit()
         self.bound_pnts_num.setFixedSize(50, 24)
         self.bound_pnts_num.setAlignment(Qt.AlignLeft)
         self.bound_pnts_num.setValidator(QIntValidator(2, 15))
         self.bound_pnts_num.setText('2')
-        self.triang_vis_btn = QPushButton()
+        self.triang_vis_btn = QtWidgets.QPushButton()
         self.triang_vis_btn.setCheckable(True)
-        vis_icon = QIcon()
-        vis_icon.addPixmap(QPixmap("icons/toolbar/eye.svg"), QIcon.Normal, QIcon.On)
-        vis_icon.addPixmap(QPixmap("icons/toolbar/eye_closed.svg"), QIcon.Normal, QIcon.Off)
+        vis_icon = QtGui.QIcon()
+        vis_icon.addPixmap(QtGui.QPixmap("icons/toolbar/eye.svg"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        vis_icon.addPixmap(QtGui.QPixmap("icons/toolbar/eye_closed.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.triang_vis_btn.setIcon(vis_icon)
-        self.triang_vis_btn.setIconSize(QSize(20, 20))
-        self.triang_match_bnd = QPushButton()
-        self.triang_match_bnd.setIcon(QIcon('icons/toolbar/matchbnd.svg'))
-        self.triang_match_bnd.setIconSize(QSize(20, 20))
+        self.triang_vis_btn.setIconSize(QtCore.QSize(20, 20))
+        self.triang_match_bnd = QtWidgets.QPushButton()
+        self.triang_match_bnd.setIcon(QtGui.QIcon('icons/toolbar/matchbnd.svg'))
+        self.triang_match_bnd.setIconSize(QtCore.QSize(20, 20))
 
-        self.triang_wrap = QFrame()
-        self.triang_wrap.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
-        triang_layout = QHBoxLayout(self.triang_wrap)
-        triang_layout.setAlignment(Qt.AlignVCenter)
+        self.triang_wrap = QtWidgets.QFrame()
+        self.triang_wrap.setSizePolicy(QtCore.QSizePolicy.Minimum, QtCore.QSizePolicy.Minimum)
+        triang_layout = QtWidgets.QHBoxLayout(self.triang_wrap)
+        triang_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter)
         triang_layout.setContentsMargins(0, 0, 0, 0)
         triang_layout.setSpacing(10)
         triang_layout.addWidget(self.triang_vis_btn)
@@ -377,47 +377,47 @@ class ToolBox(QObject):
         triang_layout.addStretch(1)
 
         # cell count wrap
-        cell_color_label = QLabel('Color:')
+        cell_color_label = QtWidgets.QLabel('Color:')
         self.cell_color_btn = pg.ColorButton(padding=0)
-        self.cell_color_btn.setColor(QColor(0, 255, 0))
+        self.cell_color_btn.setColor(QtGui.QColor(0, 255, 0))
         self.cell_color_btn.setFixedSize(60, 15)
 
         self.cell_count_label_list = [QLabel('Count: ')]
         self.cell_count_val_list = [QLabel('0')]
 
         for i in range(4):
-            self.cell_count_label_list.append(QLabel('Count {}: '.format(i+1)))
-            self.cell_count_val_list.append(QLabel('0'))
+            self.cell_count_label_list.append(QtWidgets.QLabel('Count {}: '.format(i+1)))
+            self.cell_count_val_list.append(QtWidgets.QLabel('0'))
 
         for i in range(5):
             self.cell_count_label_list[i].setVisible(False)
             self.cell_count_val_list[i].setVisible(False)
 
-        self.cell_selector_btn = QPushButton()
+        self.cell_selector_btn = QtWidgets.QPushButton()
         self.cell_selector_btn.setToolTip('select cells manually')
         self.cell_selector_btn.setCheckable(True)
-        selector_icon = QIcon()
-        selector_icon.addPixmap(QPixmap("icons/toolbar/cell_select_not.svg"), QIcon.Normal, QIcon.Off)
-        selector_icon.addPixmap(QPixmap("icons/toolbar/cell_select.svg"), QIcon.Normal, QIcon.On)
+        selector_icon = QtGui.QIcon()
+        selector_icon.addPixmap(QtGui.QPixmap("icons/toolbar/cell_select_not.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        selector_icon.addPixmap(QtGui.QPixmap("icons/toolbar/cell_select.svg"), QtGui.QIcon.Normal, QtGui.QIcon.On)
         self.cell_selector_btn.setIcon(selector_icon)
-        self.cell_selector_btn.setIconSize(QSize(20, 20))
+        self.cell_selector_btn.setIconSize(QtCore.QSize(20, 20))
 
-        self.cell_aim_btn = QPushButton()
+        self.cell_aim_btn = QtWidgets.QPushButton()
         self.cell_aim_btn.setToolTip('select single cell body area')
         self.cell_aim_btn.setCheckable(True)
-        aim_icon = QIcon()
-        aim_icon.addPixmap(QPixmap("icons/toolbar/aim_not.svg"), QIcon.Normal, QIcon.Off)
-        aim_icon.addPixmap(QPixmap("icons/toolbar/aim.svg"), QIcon.Normal, QIcon.On)
+        aim_icon = QtGui.QIcon()
+        aim_icon.addPixmap(QtGui.QPixmap("icons/toolbar/aim_not.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        aim_icon.addPixmap(QtGui.QPixmap("icons/toolbar/aim.svg"), QtGui.QIcon.Normal, QtGui.QIcon.On)
         self.cell_aim_btn.setIcon(aim_icon)
-        self.cell_aim_btn.setIconSize(QSize(20, 20))
-        self.cell_radar_btn = QPushButton()
+        self.cell_aim_btn.setIconSize(QtCore.QSize(20, 20))
+        self.cell_radar_btn = QtWidgets.QPushButton()
         self.cell_radar_btn.setToolTip('automatically search for similar cell bodies')
-        self.cell_radar_btn.setIcon(QIcon('icons/toolbar/radar.svg'))
-        self.cell_radar_btn.setIconSize(QSize(20, 20))
+        self.cell_radar_btn.setIcon(QtGui.QIcon('icons/toolbar/radar.svg'))
+        self.cell_radar_btn.setIconSize(QtCore.QSize(20, 20))
 
-        self.cell_count_wrap = QFrame()
-        cell_layout = QHBoxLayout(self.cell_count_wrap)
-        cell_layout.setAlignment(Qt.AlignVCenter)
+        self.cell_count_wrap = QtWidgets.QFrame()
+        cell_layout = QtWidgets.QHBoxLayout(self.cell_count_wrap)
+        cell_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter)
         cell_layout.setContentsMargins(0, 0, 0, 0)
         cell_layout.setSpacing(10)
         cell_layout.addWidget(cell_color_label)
@@ -438,8 +438,8 @@ class ToolBox(QObject):
         cell_layout.addStretch(1)
 
         # separator
-        self.sep_label = QLabel()
-        self.sep_label.setPixmap(QPixmap('icons/toolbar/handle.png'))
+        self.sep_label = QtWidgets.QLabel()
+        self.sep_label.setPixmap(QtGui.QPixmap('icons/toolbar/handle.png'))
 
         # circle
         r = int(self.eraser_size_valt.text())
@@ -453,7 +453,7 @@ class ToolBox(QObject):
         self.tri_line_style = pg.mkPen(color=(128, 128, 128), width=0.5, style=Qt.DashLine)
 
         # ---------------------------- define all cursor shape
-        # self.eraser_cursor = QCursor(QPixmap('icons/eraser_cursor.png'), hotX=7, hotY=27)
+        # self.eraser_cursor = QCursor(QtGui.QPixmap('icons/eraser_cursor.png'), hotX=7, hotY=27)
 
     def lasso_type_changed(self):
         if self.lasso_type_btn.isChecked():
