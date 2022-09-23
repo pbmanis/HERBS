@@ -278,7 +278,7 @@ class AllenDownloader(QtWidgets.QDialog):
         radio_group.setStyleSheet('QFrame{border: 1px solid gray; border-radius: 3px}')
         radio_group_layout = QtWidgets.QHBoxLayout(radio_group)
         radio_group_layout.setContentsMargins(5, 0, 5, 0)
-        radio_group_layout.setAlignment(QtCore.AlignmentFlag.AlignCenter)
+        radio_group_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.vs_rabnt1 = QtWidgets.QRadioButton('10 um')
         self.vs_rabnt1.setChecked(True)
         self.vs_rabnt2 = QtWidgets.QRadioButton('25 um')
@@ -361,7 +361,7 @@ class AllenDownloader(QtWidgets.QDialog):
         self.progress.setMinimumWidth(100)
 
         # ok button, used to close window
-        ok_btn = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.Ok)
+        ok_btn = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.StandardButton.Ok)
         ok_btn.accepted.connect(self.accept)
 
         layout.addWidget(radio_group)
@@ -514,9 +514,11 @@ class AllenDownloader(QtWidgets.QDialog):
 
     def closeEvent(self, event):
         reply = QtWidgets.QMessageBox.question(self, 'Message',
-                                     "Do you want to leave?", QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+                                     "Do you want to leave?",
+                                     QtWidgets.QMessageBox.Standardbutton.Yes, 
+                                     QtWidgets.QMessageBox.StandardButton.No)
 
-        if reply == QtWidgets.QMessageBox.Yes:
+        if reply == QtWidgets.QMessageBox.StandardButton.Yes:
             self.continue_process = False
             event.accept()
         else:

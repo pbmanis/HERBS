@@ -104,8 +104,8 @@ class SingleLayer(QtWidgets.QWidget):
         self.eye_button.setStyleSheet(eye_button_style)
         self.eye_button.setCheckable(True)
         eye_icon = QtGui.QIcon()
-        eye_icon.addPixmap(QtGui.QPixmap("icons/layers/eye_on.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        eye_icon.addPixmap(QtGui.QPixmap("icons/layers/eye_off.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        eye_icon.addPixmap(QtGui.QPixmap("icons/layers/eye_on.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        eye_icon.addPixmap(QtGui.QPixmap("icons/layers/eye_off.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.On)
         self.eye_button.setIcon(eye_icon)
         self.eye_button.setIconSize(QtCore.QSize(20, 20))
         self.eye_button.clicked.connect(self.eye_on_click)
@@ -211,7 +211,7 @@ class SingleLayer(QtWidgets.QWidget):
         im_shape = np.ravel(im.shape[:2])
 
         size = QtCore.QSize(int(im_shape[1] / 2), int(im_shape[0] / 2))
-        image = QtGui.QImage(im.data, im_shape[1], im_shape[0], im.strides[0], QtGui.QImage.Format_RGB888)
+        image = QtGui.QImage(im.data, im_shape[1], im_shape[0], im.strides[0], QtGui.QImage.Format.Format_RGB888)
         pixmap = QtGui.QPixmap(image)
 
         self.tbnail.setIcon(QtGui.QIcon(pixmap.scaled(size)))
@@ -262,7 +262,7 @@ class LayersControl(QtWidgets.QWidget):
 
         combo_label = QtWidgets.QLabel('Composition:')
         self.layer_blend_combo = QtWidgets.QComboBox()
-        self.layer_blend_combo.setSizePolicy(QtCore.QSizePolicy.Expanding, QtCore.QSizePolicy.Minimum)
+        self.layer_blend_combo.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.layer_blend_combo.setEditable(False)
         combo_value = ['Plus', 'Multiply', 'Overlay', 'SourceOver']
         self.layer_blend_combo.addItems(combo_value)
@@ -294,7 +294,7 @@ class LayersControl(QtWidgets.QWidget):
 
         self.layer_frame = QtWidgets.QFrame()
         self.layer_frame.setStyleSheet('background: transparent; border: 0px;')
-        self.layer_frame.setSizePolicy(QtCore.QSizePolicy.Expanding, QtCore.QSizePolicy.Expanding)
+        self.layer_frame.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         self.layer_layout = QtWidgets.QBoxLayout(QtWidgets.QBoxLayout.Direction.BottomToTop, self.layer_frame)
         self.layer_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignBottom)
         self.layer_layout.setContentsMargins(0, 0, 0, 0)
@@ -302,15 +302,15 @@ class LayersControl(QtWidgets.QWidget):
 
         self.layer_scroll = QtWidgets.QScrollArea()
         self.layer_scroll.setStyleSheet('background: transparent; border: 0px;')
-        self.layer_scroll.setSizePolicy(QtCore.QSizePolicy.Expanding, QtCore.QSizePolicy.Expanding)
+        self.layer_scroll.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         self.layer_scroll.setWidget(self.layer_frame)
-        self.layer_scroll.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollbarAlwaysOn)
-        self.layer_scroll.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollbarAlwaysOff)
+        self.layer_scroll.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+        self.layer_scroll.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.layer_scroll.setWidgetResizable(True)
 
         mid_frame = QtWidgets.QFrame()
         mid_frame.setStyleSheet('background: transparent; border: 1px solid rgb(128, 128, 128);')
-        mid_frame.setSizePolicy(QtCore.QSizePolicy.Expanding, QtCore.QSizePolicy.Expanding)
+        mid_frame.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         mid_layout = QtWidgets.QGridLayout(mid_frame)
         mid_layout.setContentsMargins(0, 0, 0, 0)
         mid_layout.setSpacing(0)
@@ -396,8 +396,8 @@ class LayersControl(QtWidgets.QWidget):
     def layer_clicked(self, clicked_id):
         clicked_index = np.where(np.ravel(self.layer_id) == clicked_id)[0][0]
 
-        modifiers = pg.Qt.QApplication.keyboardModifiers()
-        if modifiers == pg.Qt.ControlModifier:
+        modifiers = QtWidgets.QApplication.keyboardModifiers()
+        if modifiers == QtCore.Qt.KeyboardModifier.ControlModifier:
             if clicked_index in self.current_layer_index:
                 self.layer_list[clicked_index].set_checked(False)
                 remove_ind = np.where(np.ravel(self.current_layer_index) == clicked_index)[0][0]

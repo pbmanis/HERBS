@@ -912,20 +912,20 @@ class HERBS(QtWidgets.QMainWindow, FORM_Main):
         self.sliceframe.setVisible(False)
 
         self.sidebar.setCurrentIndex(0)
-        tab1_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence('Ctrl+1'), self)
+        tab1_shortcut = QtGui.QShortcut(QtGui.QKeySequence('Ctrl+1'), self)
         tab1_shortcut.activated.connect(lambda: self.sidebar_tab_state(0))
-        tab2_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence('Ctrl+2'), self)
+        tab2_shortcut = QtGui.QShortcut(QtGui.QKeySequence('Ctrl+2'), self)
         tab2_shortcut.activated.connect(lambda: self.sidebar_tab_state(1))
-        tab3_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence('Ctrl+3'), self)
+        tab3_shortcut = QtGui.QShortcut(QtGui.QKeySequence('Ctrl+3'), self)
         tab3_shortcut.activated.connect(lambda: self.sidebar_tab_state(2))
-        tab4_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence('Ctrl+4'), self)
+        tab4_shortcut = QtGui.QShortcut(QtGui.QKeySequence('Ctrl+4'), self)
         tab4_shortcut.activated.connect(lambda: self.sidebar_tab_state(3))
-        tab5_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence('Ctrl+5'), self)
+        tab5_shortcut = QtGui.QShortcut(QtGui.QKeySequence('Ctrl+5'), self)
         tab5_shortcut.activated.connect(lambda: self.sidebar_tab_state(4))
 
-        undo_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence('Ctrl+Z'), self)
+        undo_shortcut = QtGui.QShortcut(QtGui.QKeySequence('Ctrl+Z'), self)
         undo_shortcut.activated.connect(self.undo_called)
-        redo_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence('Ctrl+Shift+Z'), self)
+        redo_shortcut = QtGui.QShortcut(QtGui.QKeySequence('Ctrl+Shift+Z'), self)
         redo_shortcut.activated.connect(self.redo_called)
 
         self.print_message('Ready', self.normal_color)
@@ -2052,7 +2052,7 @@ class HERBS(QtWidgets.QMainWindow, FORM_Main):
         # ---------------------------- atlas control panel
         atlas_panel_layout = QtWidgets.QVBoxLayout(self.atlascontrolpanel)
         atlas_panel_layout.setContentsMargins(0, 0, 0, 0)
-        atlas_panel_layout.setAlignment(Qt.AlignTop)
+        atlas_panel_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
         atlas_control_label = QtWidgets.QLabel('Atlasing Controller')
         atlas_control_label.setStyleSheet(self.styles.sidebar_title_label_style)
 
@@ -2062,7 +2062,7 @@ class HERBS(QtWidgets.QMainWindow, FORM_Main):
         # ---------------------------- Label Panel
         label_panel_layout = QtWidgets.QVBoxLayout(self.treeviewpanel)
         label_panel_layout.setContentsMargins(0, 0, 0, 0)
-        label_panel_layout.setAlignment(Qt.AlignTop)
+        label_panel_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
         label_control_label = QtWidgets.QLabel('Segmentation View Controller')
         label_control_label.setStyleSheet(self.styles.sidebar_title_label_style)
 
@@ -2070,7 +2070,7 @@ class HERBS(QtWidgets.QMainWindow, FORM_Main):
         label_container_layout = QtWidgets.QVBoxLayout(label_tree_container)
         # label_container_layout.setContentsMargins(0, 0, 0, 0)
         label_container_layout.setSpacing(0)
-        label_container_layout.setAlignment(Qt.AlignTop)
+        label_container_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
         show_3d_button = QtWidgets.QPushButton()
         show_3d_button.setStyleSheet(sidebar_button_style)
         show_3d_button.setCheckable(True)
@@ -2096,18 +2096,18 @@ class HERBS(QtWidgets.QMainWindow, FORM_Main):
         image_panel_layout = QtWidgets.QVBoxLayout(self.imagecontrolpanel)
         image_panel_layout.setContentsMargins(0, 0, 0, 0)
         image_panel_layout.setSpacing(0)
-        image_panel_layout.setAlignment(Qt.AlignTop)
+        image_panel_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
         image_control_label = QtWidgets.QLabel('Image View Controller')
         image_control_label.setStyleSheet(self.styles.sidebar_title_label_style)
 
         image_panel_layout.addWidget(image_control_label)
 
-        space_item = QSpacerItem(300, 10, QtCore.QSizePolicy.Expanding)
+        space_item = QtWidgets.QSpacerItem(300, 10, QtWidgets.QSizePolicy.Expanding)
 
         image_container = QtWidgets.QFrame()
         image_container_layout = QtWidgets.QVBoxLayout(image_container)
         image_container_layout.setSpacing(5)
-        image_container_layout.setAlignment(Qt.AlignTop)
+        image_container_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
         image_container_layout.addWidget(self.image_view.outer_frame)
         # image_container_layout.addSpacerItem(space_item)
         # image_container_layout.addWidget(self.image_view.chn_widget_wrap)
@@ -2119,7 +2119,7 @@ class HERBS(QtWidgets.QMainWindow, FORM_Main):
         layer_panel_layout = QtWidgets.QVBoxLayout(self.layerpanel)
         layer_panel_layout.setContentsMargins(0, 0, 0, 0)
         layer_panel_layout.setSpacing(0)
-        layer_panel_layout.setAlignment(Qt.AlignTop)
+        layer_panel_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
         layer_control_label = QtWidgets.QLabel('Layer View Controller')
         layer_control_label.setStyleSheet(self.styles.sidebar_title_label_style)
 
@@ -2129,7 +2129,7 @@ class HERBS(QtWidgets.QMainWindow, FORM_Main):
         layer_btm_layout = QtWidgets.QHBoxLayout(layer_btm_ctrl)
         layer_btm_layout.setContentsMargins(0, 0, 0, 0)
         layer_btm_layout.setSpacing(5)
-        layer_btm_layout.setAlignment(Qt.AlignRight)
+        layer_btm_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight)
         layer_btm_layout.addWidget(self.layer_ctrl.add_layer_btn)
         layer_btm_layout.addWidget(self.layer_ctrl.delete_layer_btn)
 
@@ -2142,7 +2142,7 @@ class HERBS(QtWidgets.QMainWindow, FORM_Main):
         object_panel_layout = QtWidgets.QVBoxLayout(self.probecontrolpanel)
         object_panel_layout.setContentsMargins(0, 0, 0, 0)
         object_panel_layout.setSpacing(0)
-        object_panel_layout.setAlignment(Qt.AlignTop)
+        object_panel_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
         object_control_label = QtWidgets.QLabel('Object View Controller')
         object_control_label.setStyleSheet(self.styles.sidebar_title_label_style)
 
@@ -2152,7 +2152,7 @@ class HERBS(QtWidgets.QMainWindow, FORM_Main):
         object_btm_layout = QtWidgets.QHBoxLayout(object_btm_ctrl)
         object_btm_layout.setContentsMargins(0, 0, 0, 0)
         object_btm_layout.setSpacing(5)
-        object_btm_layout.setAlignment(Qt.AlignRight)
+        object_btm_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight)
 
         object_btm_layout.addWidget(self.object_ctrl.compare_btn)
         object_btm_layout.addWidget(self.object_ctrl.merge_probe_btn)
@@ -2175,11 +2175,11 @@ class HERBS(QtWidgets.QMainWindow, FORM_Main):
     def change_ruler_color(self, ev):
         color = np.ravel(ev.color().getRgb())
         width = self.tool_box.ruler_width_slider.value()
-        self.image_view.img_stacks.image_dict['ruler_path'].setPen(pg.mkPen(color, width=width, style=Qt.DashLine))
-        self.atlas_view.cimg.image_dict['ruler_path'].setPen(pg.mkPen(color, width=width, style=Qt.DashLine))
-        self.atlas_view.himg.image_dict['ruler_path'].setPen(pg.mkPen(color, width=width, style=Qt.DashLine))
-        self.atlas_view.simg.image_dict['ruler_path'].setPen(pg.mkPen(color, width=width, style=Qt.DashLine))
-        self.atlas_view.slice_stack.image_dict['ruler_path'].setPen(pg.mkPen(color, width=width, style=Qt.DashLine))
+        self.image_view.img_stacks.image_dict['ruler_path'].setPen(pg.mkPen(color, width=width, style=QtCore.Qt.DashLine))
+        self.atlas_view.cimg.image_dict['ruler_path'].setPen(pg.mkPen(color, width=width, style=QtCore.Qt.DashLine))
+        self.atlas_view.himg.image_dict['ruler_path'].setPen(pg.mkPen(color, width=width, style=QtCore.Qt.DashLine))
+        self.atlas_view.simg.image_dict['ruler_path'].setPen(pg.mkPen(color, width=width, style=QtCore.Qt.DashLine))
+        self.atlas_view.slice_stack.image_dict['ruler_path'].setPen(pg.mkPen(color, width=width, style=QtCore.Qt.DashLine))
         self.image_view.img_stacks.image_dict['ruler_path'].setSymbolPen(color=color)
         self.atlas_view.cimg.image_dict['ruler_path'].setSymbolPen(color=color)
         self.atlas_view.himg.image_dict['ruler_path'].setSymbolPen(color=color)
@@ -2195,11 +2195,11 @@ class HERBS(QtWidgets.QMainWindow, FORM_Main):
         width = int(self.tool_box.ruler_size_valt.text())
         self.tool_box.ruler_width_slider.setValue(width)
         color = np.ravel(self.tool_box.ruler_color_btn.color().getRgb())
-        self.image_view.img_stacks.image_dict['ruler_path'].setPen(pg.mkPen(color, width=width, style=Qt.DashLine))
-        self.atlas_view.cimg.image_dict['ruler_path'].setPen(pg.mkPen(color, width=width, style=Qt.DashLine))
-        self.atlas_view.himg.image_dict['ruler_path'].setPen(pg.mkPen(color, width=width, style=Qt.DashLine))
-        self.atlas_view.simg.image_dict['ruler_path'].setPen(pg.mkPen(color, width=width, style=Qt.DashLine))
-        self.atlas_view.slice_stack.image_dict['ruler_path'].setPen(pg.mkPen(color, width=width, style=Qt.DashLine))
+        self.image_view.img_stacks.image_dict['ruler_path'].setPen(pg.mkPen(color, width=width, style=QtCore.Qt.DashLine))
+        self.atlas_view.cimg.image_dict['ruler_path'].setPen(pg.mkPen(color, width=width, style=QtCore.Qt.DashLine))
+        self.atlas_view.himg.image_dict['ruler_path'].setPen(pg.mkPen(color, width=width, style=QtCore.Qt.DashLine))
+        self.atlas_view.simg.image_dict['ruler_path'].setPen(pg.mkPen(color, width=width, style=QtCore.Qt.DashLine))
+        self.atlas_view.slice_stack.image_dict['ruler_path'].setPen(pg.mkPen(color, width=width, style=QtCore.Qt.DashLine))
         self.image_view.img_stacks.image_dict['ruler_path'].setSymbolSize(width)
         self.atlas_view.cimg.image_dict['ruler_path'].setSymbolSize(width)
         self.atlas_view.himg.image_dict['ruler_path'].setSymbolSize(width)
@@ -2277,14 +2277,14 @@ class HERBS(QtWidgets.QMainWindow, FORM_Main):
                 pg.mkPen(color=self.lasso_color, width=3, style=Qt.SolidLine))
         else:
             self.image_view.img_stacks.image_dict['lasso_path'].setPen(
-                pg.mkPen(color=self.lasso_color, width=3, style=Qt.DashLine))
+                pg.mkPen(color=self.lasso_color, width=3, style=QtCore.Qt.DashLine))
         self.image_view.img_stacks.image_dict['lasso_path'].setSymbolPen(color=self.lasso_color)
         if self.atlas_lasso_is_closure:
             self.atlas_view.slice_stack.image_dict['lasso_path'].setPen(
                 pg.mkPen(color=self.lasso_color, width=3, style=Qt.SolidLine))
         else:
             self.atlas_view.slice_stack.image_dict['lasso_path'].setPen(
-                pg.mkPen(color=self.lasso_color, width=3, style=Qt.DashLine))
+                pg.mkPen(color=self.lasso_color, width=3, style=QtCore.Qt.DashLine))
         self.atlas_view.working_atlas.image_dict['lasso_path'].setSymbolPen(color=self.lasso_color)
 
     def inactive_lasso(self):
@@ -2292,7 +2292,7 @@ class HERBS(QtWidgets.QMainWindow, FORM_Main):
         self.image_view.img_stacks.image_dict['lasso_path'].clear()
         self.image_view.img_stacks.image_dict['lasso_path'].updateItems()
         self.image_view.img_stacks.image_dict['lasso_path'].setPen(
-            pg.mkPen(color=self.lasso_color, width=3, style=Qt.DashLine))
+            pg.mkPen(color=self.lasso_color, width=3, style=QtCore.Qt.DashLine))
         self.img_lasso_is_closure = False
 
     def lasso_points_clicked(self, points, ev):
@@ -2311,7 +2311,7 @@ class HERBS(QtWidgets.QMainWindow, FORM_Main):
         self.atlas_view.slice_stack.image_dict['lasso_path'].clear()
         self.atlas_view.slice_stack.image_dict['lasso_path'].updateItems()
         self.atlas_view.slice_stack.image_dict['lasso_path'].setPen(
-            pg.mkPen(color=self.lasso_color, width=3, style=Qt.DashLine))
+            pg.mkPen(color=self.lasso_color, width=3, style=QtCore.Qt.DashLine))
         self.atlas_lasso_is_closure = False
 
     def slice_window_lasso_points_clicked(self, points, ev):
@@ -3357,13 +3357,13 @@ class HERBS(QtWidgets.QMainWindow, FORM_Main):
                     continue
                 temp = src_img[:, :, i]
                 selected_color = temp[int(y), int(x)]
-                print(selected_color)
+                # print(selected_color)
                 lower_val, upper_val = get_bound_color(selected_color, tol_val, self.image_view.image_file.level,
                                                        'gray')
                 ret, thresh = cv2.threshold(temp, lower_val, upper_val, cv2.THRESH_BINARY)
                 mask_img = cv2.bitwise_and(mask_img, mask_img, mask=thresh.astype(np.uint8))
-            modifiers = QApplication.keyboardModifiers()
-            if modifiers == Qt.ShiftModifier:
+            modifiers = QtWidgets.keyboardModifiers()
+            if modifiers == QtCore.Qt.KeyboardModifier.ShiftModifier:
                 if self.working_img_data['img-mask'] is None:
                     self.working_img_data['img-mask'] = cv2.bitwise_or(mask_img, mask_img, mask=self.white_img)
                 else:
@@ -4740,10 +4740,10 @@ class HERBS(QtWidgets.QMainWindow, FORM_Main):
             file_path = self.home_path
         else:
             file_path = self.current_img_path
-        file_options = QtWidgets.QFileDialog.Options()
-        file_options |= QtWidgets.QFileDialog.DontUseNativeDialog
         file_dialog = QtWidgets.QFileDialog()
-        file_dialog.setFileMode(QtWidgets.QFileDialog.ExistingFiles)
+        file_options = file_dialog.options()
+        file_options |= QtWidgets.QFileDialog.Option.DontUseNativeDialog
+        file_dialog.setFileMode(QtWidgets.QFileDialog.FileMode.ExistingFiles)
         image_file_path = file_dialog.getOpenFileName(self, file_title, file_path, file_filter, options=file_options)
 
         if image_file_path[0] != '':
@@ -5763,7 +5763,7 @@ class HERBS(QtWidgets.QMainWindow, FORM_Main):
 
 
 def main():
-    app = QApplication(argv)
+    app = QtWidgets.QApplication(argv)
     app.setStyleSheet(herbs_style)
     # print(sys.flags.interactive)  # 0
     # print(hasattr(QtCore, 'PYQT_VERSION')) # true

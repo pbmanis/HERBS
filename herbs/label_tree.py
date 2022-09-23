@@ -184,7 +184,7 @@ class LabelTree(QtWidgets.QWidget):
         self.reset_labels = self._sigprox.resetLabels
 
         self._block_signals = False
-        QtCore.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
         self.setStyleSheet(label_tree_style)
 
         self.layout = QtWidgets.QVBoxLayout()
@@ -199,7 +199,8 @@ class LabelTree(QtWidgets.QWidget):
         
         self.tree = QtWidgets.QTreeWidget(self)
         self.layout.addWidget(self.tree)
-        self.tree.header().setResizeMode(QtCore.Qt.QHeaderView.ResizeToContents)
+        self.tree.header().resizeSections(QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
+        #setResizeMode(QtCore.Qt.QHeaderView.ResizeMode.ResizeToContents)
         self.tree.headerItem().setText(0, "id")
         self.tree.headerItem().setText(1, "name")
         self.tree.headerItem().setText(2, "color")
@@ -229,7 +230,7 @@ class LabelTree(QtWidgets.QWidget):
                 color = label_data['color'][i]
                 if label_id <= self.label_level:
                     self.current_lut[label_id] = np.array([color[0], color[1], color[2], 255])
-                da_color = QtGui.QColor(color[0], color[1], color[2]).name(QtGui.QColor.HexRgb)
+                da_color = QtGui.QColor(color[0], color[1], color[2]).name(QtGui.QColor.NameFormat.HexRgb)
                 da_color = da_color.split('#')[1]
                 name = label_data['label'][i]
                 acronym = label_data['abbrev'][i]

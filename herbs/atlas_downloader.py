@@ -201,7 +201,7 @@ class AtlasDownloader(QtGui.QDialog):
                                    'This window will be closed automatically when processing finished.\n')
 
         # ok button, used to close window
-        ok_btn = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.Ok)
+        ok_btn = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.StandardButton.Ok)
         ok_btn.accepted.connect(self.accept)
 
         layout.addWidget(self.label_bar)
@@ -299,9 +299,11 @@ class AtlasDownloader(QtGui.QDialog):
 
     def closeEvent(self, event):
         reply = QtWidgets.QMessageBox.question(self, 'Message',
-                                     "Do you want to leave?", QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+                                     "Do you want to leave?",
+                                     QtWidgets.QMessageBox.StandardButton.Yes, 
+                                     QtWidgets.QMessageBox.StandardButton.No)
 
-        if reply == QtWidgets.QMessageBox.Yes:
+        if reply == QtCore.Qt.StandardButton.Yes:
             self.continue_process = False
             event.accept()
         else:

@@ -72,18 +72,18 @@ class SliceStacks(pg.GraphicsLayoutWidget):
         self.img.mouseClicked.connect(self.mouse_clicked)
         self.img.mouseHovered.connect(self.mouse_hovered)
         self.label_img = pg.ImageItem()
-        self.label_img.setCompositionMode(QPainter.CompositionMode.CompositionMode_Multiply)
+        self.label_img.setCompositionMode(QtGui.QPainter.CompositionMode.CompositionMode_Multiply)
         self.boundary = pg.ImageItem()
-        self.boundary.setCompositionMode(QPainter.CompositionMode.CompositionMode_Plus)
+        self.boundary.setCompositionMode(QtGui.QPainter.CompositionMode.CompositionMode_Plus)
         self.boundary.setVisible(False)
 
         tri_pnts = TriangulationPoints()
         self.tri_lines_list = []
 
-        circle_follow = pg.PlotDataItem(pen=pg.mkPen('r', width=2, style=Qt.DashLine))
-        lasso_path = pg.PlotDataItem(pen=pg.mkPen(color=(0, 255, 255), width=3, style=Qt.DashLine),
+        circle_follow = pg.PlotDataItem(pen=pg.mkPen('r', width=2, style=QtCore.Qt.DashLine))
+        lasso_path = pg.PlotDataItem(pen=pg.mkPen(color=(0, 255, 255), width=3, style=QtCore.Qt.DashLine),
                                      symbolPen=(0, 255, 255), symbol='o', symbolSize=4)
-        ruler_path = pg.PlotDataItem(pen=pg.mkPen(color='y', width=3, style=Qt.DashLine),
+        ruler_path = pg.PlotDataItem(pen=pg.mkPen(color='y', width=3, style=QtCore.Qt.DashLine),
                                      symbolPen='y', symbolBrush='y', symbol='s', symbolSize=3)
 
         overlay_img = pg.ImageItem()

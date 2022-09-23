@@ -1,9 +1,6 @@
 import os
 import sys
 import numpy as np
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
 from pyqtgraph.Qt import QtGui, QtCore, QtWidgets
 from .uuuuuu import hsv2rgb, gamma_line, get_qhsv_from_czi_hsv, make_hist_data
 from .styles import Styles
@@ -170,7 +167,7 @@ class BWSpin(QtWidgets.QWidget):
         self.spin_nam = QtWidgets.QLabel()
         self.spin_nam.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter
 )
-        self.spin_val = QSpinBox()
+        self.spin_val = QtWidgets.QSpinBox()
 
         wrap_layout.addWidget(self.spin_nam)
         wrap_layout.addWidget(self.spin_val)
@@ -194,7 +191,7 @@ class GammaSpin(QtWidgets.QWidget):
         wrap_layout.addWidget(self.spin_val)
 
 
-class ColorCombo(QComboBox):
+class ColorCombo(QtWidgets.QComboBox):
     def __init__(self, parent=None):
         QtWidgets.QComboBox.__init__(self)
         # styles = Styles()
@@ -215,7 +212,7 @@ class ColorCombo(QComboBox):
             self.px.fill(QtGui.QColor.fromHsv(h_vals[i], s_vals[i], v_vals[i]))
             self.addItem(QtGui.QIcon(self.px), n_vals[i])
 
-        combo_list = QListView(self)
+        combo_list = QtWidgets.QListView(self)
         combo_list.setStyleSheet(text_combo_list_style)
         self.setView(combo_list)
 

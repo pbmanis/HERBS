@@ -77,17 +77,17 @@ class SliceStack(pg.GraphicsLayoutWidget):
         self.base_layer.mouseHovered.connect(self.mouse_hovered)
 
         self.img_layer = pg.ImageItem()
-        self.img_layer.setCompositionMode(QPainter.CompositionMode_Plus)
+        self.img_layer.setCompositionMode(QtGui.QPainter.CompositionMode.CompositionMode_Plus)
 
-        circle_follow = pg.PlotDataItem(pen=pg.mkPen('r', width=2, style=Qt.DashLine))
-        lasso_path = pg.PlotDataItem(pen=pg.mkPen(color=(0, 255, 255), width=3, style=Qt.DashLine),
+        circle_follow = pg.PlotDataItem(pen=pg.mkPen('r', width=2, style=QtCore.Qt.DashLine))
+        lasso_path = pg.PlotDataItem(pen=pg.mkPen(color=(0, 255, 255), width=3, style=QtCore.Qt.DashLine),
                                      symbolPen=(0, 255, 255), symbol='o', symbolSize=4)
 
-        ruler_path = pg.PlotDataItem(pen=pg.mkPen(color='y', width=3, style=Qt.DashLine),
+        ruler_path = pg.PlotDataItem(pen=pg.mkPen(color='y', width=3, style=QtCore.Qt.DashLine),
                                      symbolPen='y', symbolBrush='y', symbol='s', symbolSize=4)
 
         overlay_img = pg.ImageItem()
-        overlay_img.setCompositionMode(QPainter.CompositionMode_Plus)
+        overlay_img.setCompositionMode(QtGui.QPainter.CompositionMode.CompositionMode_Plus)
         overlay_contour = pg.ImageItem()
         overlay_contour.setLevels(levels=(0, 1))
 
@@ -196,22 +196,22 @@ class ImageStacks(pg.GraphicsLayoutWidget):
         self.base_layer.mouseHovered.connect(self.mouse_hovered)
 
         img1 = pg.ImageItem()
-        img1.setCompositionMode(QPainter.CompositionMode_Plus)
+        img1.setCompositionMode(QtGui.QPainter.CompositionMode.CompositionMode_Plus)
         img2 = pg.ImageItem()
-        img2.setCompositionMode(QPainter.CompositionMode_Plus)
+        img2.setCompositionMode(QtGui.QPainter.CompositionMode.CompositionMode_Plus)
         img3 = pg.ImageItem()
-        img3.setCompositionMode(QPainter.CompositionMode_Plus)
+        img3.setCompositionMode(QtGui.QPainter.CompositionMode.CompositionMode_Plus)
         img4 = pg.ImageItem()
-        img4.setCompositionMode(QPainter.CompositionMode_Plus)
+        img4.setCompositionMode(QtGui.QPainter.CompositionMode.CompositionMode_Plus)
 
-        circle_follow = pg.PlotDataItem(pen=pg.mkPen('r', width=2, style=Qt.DashLine))
-        lasso_path = pg.PlotDataItem(pen=pg.mkPen(color=(0, 255, 255), width=3, style=Qt.DashLine),
+        circle_follow = pg.PlotDataItem(pen=pg.mkPen('r', width=2, style=QtCore.Qt.DashLine))
+        lasso_path = pg.PlotDataItem(pen=pg.mkPen(color=(0, 255, 255), width=3, style=QtCore.Qt.DashLine),
                                      symbolPen=(0, 255, 255), symbol='o', symbolSize=4)
-        ruler_path = pg.PlotDataItem(pen=pg.mkPen(color='y', width=3, style=Qt.DashLine),
+        ruler_path = pg.PlotDataItem(pen=pg.mkPen(color='y', width=3, style=QtCore.Qt.DashLine),
                                      symbolPen='y', symbolBrush='y', symbol='s', symbolSize=4)
 
         overlay_img = pg.ImageItem()
-        overlay_img.setCompositionMode(QPainter.CompositionMode_Plus)
+        overlay_img.setCompositionMode(QtGui.QPainter.CompositionMode.CompositionMode_Plus)
         overlay_contour = pg.ImageItem()
         overlay_contour.setLevels(levels=(0, 1))
 

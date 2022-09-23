@@ -1,16 +1,13 @@
-import PyQt5
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
+from pyqtgraph.Qt import QtWidgets
 
 
-class PopupMessage(QMessageBox):
+class PopupMessage(QtWidgets.QMessageBox):
 
     def __init__(self, parent=None):
-        QMessageBox.__init__(self)
+        QtWidgets.QMessageBox.__init__(self)
 
         self.setWindowTitle("Caution!")
         self.setText('Histological image: is oversized.')
         button = self.exec()
-        if button == QMessageBox.Ok:
+        if button == QtWidgets.QMessageBox.StandardButton.Ok:
             print('222')
