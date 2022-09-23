@@ -1,5 +1,4 @@
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
+from pyqtgraph.Qt import QtGui, QtCore, QtWidgets
 
 dialog_style = '''
 QDialog {
@@ -142,7 +141,7 @@ class QDoubleButton(QtWidgets.QPushButton):
     def __init__(self, *args, **kwargs):
         super(QDoubleButton, self).__init__(*args, **kwargs)
 
-        self.timer = QTimer()
+        self.timer = QtCore.QTimer()
         self.timer.setSingleShot(True)
         self.timer.setInterval(150)
         self.timer.timeout.connect(self.timeout)
@@ -153,17 +152,17 @@ class QDoubleButton(QtWidgets.QPushButton):
         self.installEventFilter(self)
 
     def eventFilter(self, obj, event):
-        if event.type() == QEvent.MouseButtonPress:
+        if event.type() == QtCore.QEvent.Type.MouseButtonPress:
             if not self.timer.isActive():
                 self.timer.start()
 
             self.is_left_click = False
-            if event.button() == Qt.LeftButton:
+            if event.button() == QtCore.Qt.MouseButton.LeftButton:
                 self.is_left_click = True
 
             return True
 
-        elif event.type() == QEvent.MouseButtonDblClick:
+        elif event.type() == QtCore.QEvent.Type.MouseButtonDblClick:
             self.is_double = True
             return True
 
@@ -181,19 +180,19 @@ class QDoubleButton(QtWidgets.QPushButton):
         self.is_double = False
 
 
-class QtWidgets.QLabelClickable(QtWidgets.QLabel):
+class QLabelClickable(QtWidgets.QLabel):
     # doubleClicked = QtCore.pyqtSignal(object)
     clicked = QtCore.pyqtSignal(object)
 
     def __init__(self, parent=None):
-        super(QtWidgets.QLabelClickable, self).__init__(parent)
+        super(QLabelClickable, self).__init__(parent)
 
     def mousePressEvent(self, event):
         self.ultimo = 'Click'
 
     def mouseReleaseEvent(self, event):
         if self.ultimo == 'Click':
-            QTimer.singleShot(QApplication.instance().doubleClickInterval(),
+            QtCore.QTimer.singleShot(QtWidgets.QApplication.instance().doubleClickInterval(),
                               self.performSingleClickAction)
         else:
             self.ultimo = 'doubleClick'
@@ -208,7 +207,7 @@ class QtWidgets.QLabelClickable(QtWidgets.QLabel):
             self.update()
 
 
-class QtWidgets.QFrameClickable(QFrame):
+class QFrameClickable(QtWidgets.QFrame):
     clicked = QtCore.pyqtSignal(object)
 
     def __init__(self, parent=None):
@@ -241,7 +240,7 @@ class QtWidgets.QFrameClickable(QFrame):
             self.update()
 
 
-class LineEditEntered(QLineEdit):
+class LineEditEntered(QtWidgets.QLineEdit):
     sig_return_pressed = QtCore.pyqtSignal()
 
     def __init__(self):

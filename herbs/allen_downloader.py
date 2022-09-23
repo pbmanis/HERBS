@@ -515,7 +515,7 @@ class AllenDownloader(QtWidgets.QDialog):
     def closeEvent(self, event):
         reply = QtWidgets.QMessageBox.question(self, 'Message',
                                      "Do you want to leave?",
-                                     QtWidgets.QMessageBox.Standardbutton.Yes, 
+                                     QtWidgets.QMessageBox.StandardButton.Yes, 
                                      QtWidgets.QMessageBox.StandardButton.No)
 
         if reply == QtWidgets.QMessageBox.StandardButton.Yes:
