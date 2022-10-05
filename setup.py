@@ -3,21 +3,22 @@
 """
 import os
 import sys
-
+from sys import platform
 from setuptools import setup, find_packages
+
 
 is_problematic = False
 
 if sys.version_info[:2] < (3, 8) or sys.version_info[:2] > (3, 11):
     is_problematic = True
 
-if sys.version_info.minor == 8 and sys.version_info.micro != 10:
+if sys.version_info.minor == 8 and sys.version_info.micro < 10:
     is_problematic = True
 
-if sys.version_info.minor == 9 and sys.version_info.micro != 0:
+if sys.version_info.minor == 9 and sys.version_info.micro == 0:
     is_problematic = True
 
-if sys.version_info.minor == 10 and sys.version_info.micro != 5:
+if sys.version_info.minor == 10 and sys.version_info.micro >= 5:
     is_problematic = True
 
 if is_problematic:
@@ -70,7 +71,6 @@ h5py >= 3.7.0
 tables >= 3.7.0
 """
 
-
 PACKAGE_DATA = """
 main_window.ui
 data/query.csv
@@ -83,12 +83,13 @@ icons/sidebar/*.svg
 icons/sidebar/*.png
 icons/toolbar/*.svg
 icons/toolbar/*.png
+qss/*.qss
 """
 
 
 setup(
     name="herbs",
-    version="0.0.9",
+    version="0.0.18",
     author="Jingyi GF",
     author_email="jingyi.g.fuglstad@gmail.com",
     description="A Python-based GUI for Histological E-data Registration in Brain Space",
