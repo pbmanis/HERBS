@@ -4699,7 +4699,7 @@ class HERBS(QtWidgets.QMainWindow, FORM_Main):
 
         for id in unique_label:
             id = int(id)
-            if id == 0:
+            if id in [0, 545]:
                 continue
             if id in self.atlas_view.label_info['index']:
                 color_to_set = self.atlas_view.label_info['color'][(self.atlas_view.label_info['index'] == id)][0] / 255
@@ -5517,7 +5517,7 @@ class HERBS(QtWidgets.QMainWindow, FORM_Main):
 
 
 def main():
-    app = QApplication(argv)
+    app = QtWidgets.QApplication(argv)
     qss_file_name = "qss/main_window.qss"
     herbs_style = read_qss_file(qss_file_name)
     app.setStyleSheet(herbs_style)

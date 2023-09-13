@@ -340,6 +340,8 @@ class LabelTree(QtWidgets.QWidget):
         name = str(item.text(1))
         while item not in self.root_item:
             # self.labels_by_acronym[b'Brain']['item'], self.labels_by_acronym[b'SpC']['item'], self.labels_by_acronym[b'IE']['item']
+            if item is None:
+                raise ValueError()
             descr.insert(0, str(item.text(0)))
             item = item.parent()
         return '[%d]' % label_id + ' > '.join(descr) + "  :  " + name

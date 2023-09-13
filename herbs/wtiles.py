@@ -31,7 +31,7 @@ class LayerSettingDialog(QtWidgets.QDialog):
         self.val_slider.setSingleStep(1)
         self.val_slider.sliderMoved.connect(self.val_spinbox_changed)
 
-        self.val_spinbox = QSpinBox()
+        self.val_spinbox = QtWidgets.SpinBox()
         self.val_spinbox.setValue(val)
         self.val_spinbox.setMaximum(max_val)
         self.val_spinbox.setMinimum(min_val)
@@ -39,7 +39,7 @@ class LayerSettingDialog(QtWidgets.QDialog):
         self.val_spinbox.valueChanged.connect(self.value_changed)
 
         # ok button, used to close window
-        ok_btn = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.StandardButton.OK)
+        ok_btn = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.StandardButton.Ok)
         ok_btn.accepted.connect(self.accept)
 
         # add widget to layout
@@ -98,7 +98,7 @@ class SliceSettingDialog(QtWidgets.QDialog):
         self.distance_val.valueChanged.connect(self.distance_val_changed)
 
         # ok button, used to close window
-        ok_btn = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.StandardButton.OK)
+        ok_btn = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.StandardButton.Ok)
         ok_btn.accepted.connect(self.accept)
 
         # add widget to layout

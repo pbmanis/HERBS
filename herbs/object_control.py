@@ -200,7 +200,7 @@ class CompareWindow(QtWidgets.QDialog):
         channel_info_layout.addWidget(sec_group)
 
         # ok button, used to close window
-        ok_btn = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.StandardButton.OK)
+        ok_btn = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.StandardButton.Ok)
         ok_btn.accepted.connect(self.accept)
 
         # add widget to layout
@@ -247,7 +247,7 @@ class CellsInfoWindow(QtWidgets.QDialog):
             slayout.addWidget(QtWidgets.QLabel(str(data['region_count'][i])), i + 1, 3, 1, 1)
 
         # ok button, used to close window
-        ok_btn = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.StandardButton.OK)
+        ok_btn = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.StandardButton.Ok)
         ok_btn.accepted.connect(self.accept)
 
         # add widget to layout
@@ -294,7 +294,7 @@ class VirusInfoWindow(QtWidgets.QDialog):
             slayout.addWidget(clb, i + 1, 2, 1, 1)
 
         # ok button, used to close window
-        ok_btn = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.StandardButton.OK)
+        ok_btn = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.StandardButton.Ok)
         ok_btn.accepted.connect(self.accept)
 
         # add widget to layout
@@ -494,7 +494,7 @@ class ProbeInfoWindow(QtWidgets.QDialog):
         channel_info_layout.addWidget(sec_group)
 
         # ok button, used to close window
-        ok_btn = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.StandardButton.OK)
+        ok_btn = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.StandardButton.Ok)
         ok_btn.accepted.connect(self.accept)
 
         # add widget to layout
